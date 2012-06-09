@@ -1,0 +1,192 @@
+%==============================================================================%
+%  THE PROJECT GROUP LATEX TEMPLATE
+%  Complex and Distributed IT-Systems
+%  Technische Universiaet Berlin
+%------------------------------------------------------------------------------%
+%  FILE HISTORY: 
+%    o 2005-12-21 HSL/TF: Initial version
+%    o 2006-03-14 HSL   : Different headings for odd and even pages,
+%                         simple setup mechanism (see @SETTINGS).
+%    o 2009-06-09 DW:			Adapted to match TUB/CIT layout
+%------------------------------------------------------------------------------%
+%  QUICK START:
+%  You need to perform few settings in order to use this LaTeX template.
+%  Look for comments starting with @SETTINGS to locate the lines that
+%  require modifications.  Basically, this is what needs to be done:
+%    o Select the right encoding (for most users either applemac or latin1
+%      will do).
+%    o Enter your name in the definition of the command \pgauthor.
+%    o Enter the title of the document in the definition of the command
+%      \pgtitle.
+%    o If you're using this template for your seminar paper, make sure that
+%      \cfoot{} is not commented!  This disables all page numbers.
+%    o Decide whether you want a table of contents and/or a list of figures.
+%      Do not use them for the seminar paper.
+%    o Enter the name of your BibTeX file.
+%==============================================================================%
+
+\documentclass[12pt,a4paper,twoside]{article}
+
+% @SETTINGS: Choose the right input encoding!
+% Apple Macintosh users need to uncomment the following line:
+%\usepackage[applemac]{inputenc}
+% Linux/BSD/Windoze users need to uncomment the following line:
+\usepackage[utf8]{inputenc} 
+
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{a4}
+\usepackage{url}
+\usepackage[hyperfootnotes=false]{hyperref}
+\usepackage{latexsym}
+\usepackage{amsmath}
+\usepackage[perpage]{footmisc}
+\usepackage{amsfonts}
+\usepackage{textcomp}         
+\usepackage{ngerman}
+\usepackage[T1]{fontenc} 
+%pseudocode import
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
+\usepackage{listings}
+
+
+% Define paper margins.
+\usepackage[lmargin=3cm,rmargin=3cm,tmargin=4cm,head=2cm,headsep=0.5cm]{geometry}
+
+% Define the name of our project group and university.
+\newcommand{\pgtextlarge}{\large{Projekt Telematik}}
+\newcommand{\pgtextsmall}{\small{Fachbereicht Technische Informatik, FU Berlin}}
+
+% @SETTINGS: Enter your name(s) here!
+\newcommand{\pgauthor}{Anne Haase, Dominik Weidemann}
+\newcommand{\pgtitle}{Implementation of a wifi based home monitoring system}
+
+% @SETTINGS: If you're writing the seminar paper, uncomment this line to get
+% rid of all page numbers!  Otherwise don't touch.
+%\cfoot{}
+
+% Set up the headings.
+\setlength{\headwidth}{\textwidth}
+\fancyhead[RE,LO]{}
+\fancyhead[RO]{%
+   \begin{tabular}{r}
+      \pgtitle\\
+      \pgauthor\\
+   \end{tabular}
+}
+\fancyhead[LE]{%
+   \includegraphics*[width=1.5cm]{fig/FULogo.jpg}
+   \raisebox{5mm}{
+      \begin{tabular}{l}
+         \pgtextlarge\\
+         \pgtextsmall\\
+       \end{tabular}
+   }
+}
+\pagestyle{fancy}
+
+
+% Some useful commands. (At the moment there is just one but...)
+\newcommand{\code}[1]{\texttt{#1}}
+% eine Randnote fuer fehlende Teile
+\usepackage[usenames,dvipsnames]{color}
+\newcommand{\missing}[1]{\marginpar[\hfill \colorbox{Red}{\bfseries ! $\longrightarrow$}]{\colorbox{Red}{\bfseries $\longleftarrow$ !}}\textcolor{Red}{\{Fehlt: \emph{#1}\}}}
+\newcommand{\note}[1]{\marginpar[\hfill \colorbox{Orange}{\bfseries ! $\longrightarrow$}]{\colorbox{Orange}{\bfseries $\longleftarrow$ !}}\textcolor{Orange}{\{\emph{#1}\}}}
+
+\newcommand{\labelSec}[1]{\label{sec:#1}}
+\newcommand{\refSec}[1]{Abschnitt~\ref{sec:#1}}
+\newcommand{\labelFig}[1]{\label{fig:#1}}
+\newcommand{\refFig}[1]{Abbildung~\ref{fig:#1}}
+\newcommand{\labelEq}[1]{\label{eq:#1}}
+\newcommand{\refEq}[1]{Gleichung~\ref{eq:#1}}
+\newcommand{\labelTab}[1]{\label{tab:#1}}
+\newcommand{\refTab}[1]{Tabelle~\ref{tab:#1}}
+\newcommand{\labelListing}[1]{listing:#1}
+\newcommand{\refListing}[1]{Listing~\ref{listing:#1}}
+\newcommand{\labelLine}[1]{\label{line:#1}}
+\newcommand{\refLine}[1]{Zeile~\ref{line:#1}}
+
+% Here is space to define YOUR commands. (...you may invent more)
+%\newcommand{\myniftycommand}[numberofarguments]{....}
+\newcommand{\cmd}[1]{{\tt #1}}
+%\newcommand{\cmd}[1]{ \verbatim #1 \endverbatim } % does not work!
+
+% The logo to be inserted on the title page.
+\newcommand{\titlepagelogo}{%
+  \begin{table}[t]
+    \begin{center}
+      \begin{tabular}{ll}
+        \includegraphics*[width=2.5cm]{fig/FULogo.jpg}
+        & \raisebox{5mm}{
+          \begin{tabular}{l}
+            \pgtextlarge\\
+            \pgtextsmall\\
+          \end{tabular}
+        }\\
+        \hline
+      \end{tabular}
+    \end{center}
+  \end{table}
+}
+
+% Title and author are defined via the \pgauthor and \pgtitle commands.
+% DO NOT INSERT THEM HERE!
+\title{\pgtitle}
+\author{\pgauthor}
+\date{} % Suppress the date.
+
+\begin{document}
+
+\titlepagelogo
+\maketitle
+
+\begin{center}{ \large
+ Dokumentation
+} \end{center}
+
+\vspace{10mm}
+
+\begin{abstract}
+
+Hier ein kleine Zusammenfassung
+
+\end{abstract}
+\thispagestyle{empty} % Get rid of the page number on the title page.
+\clearpage
+
+% @SETTINGS: If you want a table of contents, uncomment the following two lines.
+% Please do not use it for the seminar paper.
+\tableofcontents
+\clearpage
+
+% @SETTINGS: If you want a list of figures, uncomment the following two lines.
+% Please do not use it for the seminar paper.
+%\listoffigures
+%\clearpage
+
+\section{Einleitung} \labelSec{einleitung}
+Einleitungstext 
+
+\section{verwendetet Technologien} \labelSec{abschnitt}
+\label{technologien}
+
+
+Quelle: \cite{eclipse}
+
+\section{Projekt zum Laufen bringen} \labelSec{abschnitt}
+
+  
+\section{Ausblick} \labelSec{ausblick}
+
+\clearpage
+
+\section{Appendix}
+
+% @SETTINGS: Insert the name of your bibliography file WITHOUT extension.
+\bibliography{main}
+
+\bibliographystyle{abbrv}
+
+\end{document}
