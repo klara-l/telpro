@@ -1,7 +1,6 @@
 *.class
 
 # Package Files #
-*.jar
 *.war
 
 # gwt caches and compiled units #
@@ -16,3 +15,5 @@ war/WEB-INF/deploy/
 war/WEB-INF/classes/
 
 .settings
+.classpath
+.project
