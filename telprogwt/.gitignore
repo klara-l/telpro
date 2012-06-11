@@ -19,4 +19,4 @@ war/WEB-INF/classes/
 
 .settings
 .classpath
-.project
+#.project
