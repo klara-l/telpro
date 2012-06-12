@@ -4,7 +4,7 @@
 
 # Package Files #
 *.war
-war/WEB-INF/lib/*.jar
+#war/WEB-INF/lib/*.jar
 
 # gwt caches and compiled units #
 war/gwt_bree/
