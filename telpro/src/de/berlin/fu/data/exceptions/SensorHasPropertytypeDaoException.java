@@ -11,6 +11,11 @@ package de.berlin.fu.data.exceptions;
 public class SensorHasPropertytypeDaoException extends DaoException
 {
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4028287356196201761L;
+
+	/**
 	 * Method 'SensorHasPropertytypeDaoException'
 	 * 
 	 * @param message

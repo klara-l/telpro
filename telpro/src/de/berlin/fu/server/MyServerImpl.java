@@ -5,15 +5,21 @@ import java.util.List;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
+import de.berlin.fu.data.dao.TriggerDao;
 import de.berlin.fu.data.dto.Action;
 import de.berlin.fu.data.dto.Event;
 import de.berlin.fu.data.dto.Property;
 import de.berlin.fu.data.dto.PropertyType;
 import de.berlin.fu.data.dto.Sensor;
 import de.berlin.fu.data.dto.Trigger;
+import de.berlin.fu.data.exceptions.ActionDaoException;
 import de.berlin.fu.data.exceptions.EventDaoException;
+import de.berlin.fu.data.exceptions.SensorDaoException;
+import de.berlin.fu.data.exceptions.TriggerDaoException;
+import de.berlin.fu.data.factory.ActionDaoFactory;
 import de.berlin.fu.data.factory.EventDaoFactory;
-import de.berlin.fu.shared.FieldVerifier;
+import de.berlin.fu.data.factory.SensorDaoFactory;
+import de.berlin.fu.data.factory.TriggerDaoFactory;
 import de.berlin.fu.shared.MyServer;
 
 /**
@@ -21,44 +27,6 @@ import de.berlin.fu.shared.MyServer;
  */
 @SuppressWarnings("serial")
 public class MyServerImpl extends RemoteServiceServlet implements MyServer {
-
-	public String greetServer(String input) throws IllegalArgumentException {
-		// Verify that the input is valid.
-		if (!FieldVerifier.isValidName(input)) {
-			// If the input is not valid, throw an IllegalArgumentException back
-			// to
-			// the client.
-			throw new IllegalArgumentException(
-					"Name must be at least 4 characters long");
-		}
-
-		String serverInfo = getServletContext().getServerInfo();
-		String userAgent = getThreadLocalRequest().getHeader("User-Agent");
-
-		// Escape data from the client to avoid cross-site script
-		// vulnerabilities.
-		input = escapeHtml(input);
-		userAgent = escapeHtml(userAgent);
-
-		return "Hello, " + input + "!<br><br>I am running " + serverInfo
-				+ ".<br><br>It looks like you are using:<br>" + userAgent;
-	}
-
-	/**
-	 * Escape an html string. Escaping data received from the client helps to
-	 * prevent cross-site script vulnerabilities.
-	 * 
-	 * @param html
-	 *            the html string to escape
-	 * @return the escaped string
-	 */
-	private String escapeHtml(String html) {
-		if (html == null) {
-			return null;
-		}
-		return html.replaceAll("&", "&amp;").replaceAll("<", "&lt;")
-				.replaceAll(">", "&gt;");
-	}
 
 	@Override
 	public List<Event> getEventList() {
@@ -72,32 +40,57 @@ public class MyServerImpl extends RemoteServiceServlet implements MyServer {
 
 	@Override
 	public List<Event> getNewEvents(int idEvent) {
-		// TODO Auto-generated method stub
+		Integer[] param = { idEvent };
+		try {
+			return Arrays.asList(EventDaoFactory.create().findByDynamicWhere(
+					"idEvent > ?", param));
+		} catch (EventDaoException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 
 	@Override
 	public List<Sensor> getSensors() {
-		// TODO Auto-generated method stub
+		try {
+			return Arrays.asList(SensorDaoFactory.create().findAll());
+		} catch (SensorDaoException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 
 	@Override
 	public List<Trigger> getTriggers() {
-		// TODO Auto-generated method stub
+		try {
+			return Arrays.asList(TriggerDaoFactory.create().findAll());
+		} catch (TriggerDaoException e) {
+			e.printStackTrace();
+		}
 		return null;
+
 	}
 
 	@Override
 	public List<Action> getActions() {
-		// TODO Auto-generated method stub
+		try {
+			return Arrays.asList(ActionDaoFactory.create().findAll());
+		} catch (ActionDaoException e) {
+			e.printStackTrace();
+		}
 		return null;
+
 	}
 
 	@Override
 	public void addTrigger(Trigger t) {
-		// TODO Auto-generated method stub
-
+		TriggerDao _dao = TriggerDaoFactory.create();
+		try {
+			_dao.insert(t);
+		} catch (TriggerDaoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override

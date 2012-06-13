@@ -8,15 +8,18 @@
 
 package de.berlin.fu.data.exceptions;
 
-public class ActionDaoException extends DaoException
-{
+public class ActionDaoException extends DaoException {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -9003059764693427365L;
+
 	/**
 	 * Method 'ActionDaoException'
 	 * 
 	 * @param message
 	 */
-	public ActionDaoException(String message)
-	{
+	public ActionDaoException(String message) {
 		super(message);
 	}
 
@@ -26,8 +29,7 @@ public class ActionDaoException extends DaoException
 	 * @param message
 	 * @param cause
 	 */
-	public ActionDaoException(String message, Throwable cause)
-	{
+	public ActionDaoException(String message, Throwable cause) {
 		super(message, cause);
 	}
 

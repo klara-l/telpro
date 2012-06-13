@@ -8,25 +8,25 @@
 
 package de.berlin.fu.data.dto;
 
-import de.berlin.fu.data.dao.*;
-import de.berlin.fu.data.factory.*;
-import de.berlin.fu.data.exceptions.*;
 import java.io.Serializable;
-import java.util.*;
 
-public class Action implements Serializable
-{
-	/** 
+public class Action implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3271067922688920296L;
+
+	/**
 	 * This attribute maps to the column idAction in the Action table.
 	 */
 	protected int idAction;
 
-	/** 
+	/**
 	 * This attribute maps to the column Name in the Action table.
 	 */
 	protected String name;
 
-	/** 
+	/**
 	 * This attribute maps to the column Description in the Action table.
 	 */
 	protected String description;
@@ -35,8 +35,7 @@ public class Action implements Serializable
 	 * Method 'Action'
 	 * 
 	 */
-	public Action()
-	{
+	public Action() {
 	}
 
 	/**
@@ -44,8 +43,7 @@ public class Action implements Serializable
 	 * 
 	 * @return int
 	 */
-	public int getIdAction()
-	{
+	public int getIdAction() {
 		return idAction;
 	}
 
@@ -54,8 +52,7 @@ public class Action implements Serializable
 	 * 
 	 * @param idAction
 	 */
-	public void setIdAction(int idAction)
-	{
+	public void setIdAction(int idAction) {
 		this.idAction = idAction;
 	}
 
@@ -64,8 +61,7 @@ public class Action implements Serializable
 	 * 
 	 * @return String
 	 */
-	public String getName()
-	{
+	public String getName() {
 		return name;
 	}
 
@@ -74,8 +70,7 @@ public class Action implements Serializable
 	 * 
 	 * @param name
 	 */
-	public void setName(String name)
-	{
+	public void setName(String name) {
 		this.name = name;
 	}
 
@@ -84,8 +79,7 @@ public class Action implements Serializable
 	 * 
 	 * @return String
 	 */
-	public String getDescription()
-	{
+	public String getDescription() {
 		return description;
 	}
 
@@ -94,8 +88,7 @@ public class Action implements Serializable
 	 * 
 	 * @param description
 	 */
-	public void setDescription(String description)
-	{
+	public void setDescription(String description) {
 		this.description = description;
 	}
 
@@ -105,33 +98,33 @@ public class Action implements Serializable
 	 * @param _other
 	 * @return boolean
 	 */
-	public boolean equals(Object _other)
-	{
+	public boolean equals(Object _other) {
 		if (_other == null) {
 			return false;
 		}
-		
+
 		if (_other == this) {
 			return true;
 		}
-		
+
 		if (!(_other instanceof Action)) {
 			return false;
 		}
-		
+
 		final Action _cast = (Action) _other;
 		if (idAction != _cast.idAction) {
 			return false;
 		}
-		
-		if (name == null ? _cast.name != name : !name.equals( _cast.name )) {
+
+		if (name == null ? _cast.name != name : !name.equals(_cast.name)) {
 			return false;
 		}
-		
-		if (description == null ? _cast.description != description : !description.equals( _cast.description )) {
+
+		if (description == null ? _cast.description != description
+				: !description.equals(_cast.description)) {
 			return false;
 		}
-		
+
 		return true;
 	}
 
@@ -140,18 +133,17 @@ public class Action implements Serializable
 	 * 
 	 * @return int
 	 */
-	public int hashCode()
-	{
+	public int hashCode() {
 		int _hashCode = 0;
 		_hashCode = 29 * _hashCode + idAction;
 		if (name != null) {
 			_hashCode = 29 * _hashCode + name.hashCode();
 		}
-		
+
 		if (description != null) {
 			_hashCode = 29 * _hashCode + description.hashCode();
 		}
-		
+
 		return _hashCode;
 	}
 
@@ -160,8 +152,7 @@ public class Action implements Serializable
 	 * 
 	 * @return ActionPk
 	 */
-	public ActionPk createPk()
-	{
+	public ActionPk createPk() {
 		return new ActionPk(idAction);
 	}
 
@@ -170,13 +161,12 @@ public class Action implements Serializable
 	 * 
 	 * @return String
 	 */
-	public String toString()
-	{
+	public String toString() {
 		StringBuffer ret = new StringBuffer();
-		ret.append( "de.berlin.fu.data.dto.Action: " );
-		ret.append( "idAction=" + idAction );
-		ret.append( ", name=" + name );
-		ret.append( ", description=" + description );
+		ret.append("de.berlin.fu.data.dto.Action: ");
+		ret.append("idAction=" + idAction);
+		ret.append(", name=" + name);
+		ret.append(", description=" + description);
 		return ret.toString();
 	}
 

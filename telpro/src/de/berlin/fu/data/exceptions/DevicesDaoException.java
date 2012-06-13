@@ -11,6 +11,11 @@ package de.berlin.fu.data.exceptions;
 public class DevicesDaoException extends DaoException
 {
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3218371520806616112L;
+
+	/**
 	 * Method 'DevicesDaoException'
 	 * 
 	 * @param message

@@ -287,7 +287,7 @@ public class DevicesDaoImpl extends AbstractDAO implements DevicesDao {
 	 * Fetches multiple rows from the result set
 	 */
 	protected Devices[] fetchMultiResults(ResultSet rs) throws SQLException {
-		Collection resultList = new ArrayList();
+		Collection<Devices> resultList = new ArrayList<Devices>();
 		while (rs.next()) {
 			Devices dto = new Devices();
 			populateDto(dto, rs);

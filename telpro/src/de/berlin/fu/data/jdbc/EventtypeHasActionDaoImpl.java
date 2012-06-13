@@ -8,263 +8,284 @@
 
 package de.berlin.fu.data.jdbc;
 
-import de.berlin.fu.data.dao.*;
-import de.berlin.fu.data.factory.*;
-import de.berlin.fu.data.dto.*;
-import de.berlin.fu.data.exceptions.*;
 import java.sql.Connection;
-import java.util.Collection;
 import java.sql.PreparedStatement;
-import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Time;
-import java.util.List;
-import java.util.Iterator;
 import java.util.ArrayList;
+import java.util.Collection;
 
-public class EventtypeHasActionDaoImpl extends AbstractDAO implements EventtypeHasActionDao
-{
-	/** 
-	 * The factory class for this DAO has two versions of the create() method - one that
-takes no arguments and one that takes a Connection argument. If the Connection version
-is chosen then the connection will be stored in this attribute and will be used by all
-calls to this DAO, otherwise a new Connection will be allocated for each operation.
+import de.berlin.fu.data.dao.EventtypeHasActionDao;
+import de.berlin.fu.data.dto.EventtypeHasAction;
+import de.berlin.fu.data.dto.EventtypeHasActionPk;
+import de.berlin.fu.data.exceptions.EventtypeHasActionDaoException;
+
+public class EventtypeHasActionDaoImpl extends AbstractDAO implements
+		EventtypeHasActionDao {
+	/**
+	 * The factory class for this DAO has two versions of the create() method -
+	 * one that takes no arguments and one that takes a Connection argument. If
+	 * the Connection version is chosen then the connection will be stored in
+	 * this attribute and will be used by all calls to this DAO, otherwise a new
+	 * Connection will be allocated for each operation.
 	 */
 	protected java.sql.Connection userConn;
 
-	/** 
-	 * All finder methods in this class use this SELECT constant to build their queries
+	/**
+	 * All finder methods in this class use this SELECT constant to build their
+	 * queries
 	 */
-	protected final String SQL_SELECT = "SELECT EventType_idEventType, Action_idAction FROM " + getTableName() + "";
+	protected final String SQL_SELECT = "SELECT EventType_idEventType, Action_idAction FROM "
+			+ getTableName() + "";
 
-	/** 
+	/**
 	 * Finder methods will pass this value to the JDBC setMaxRows method
 	 */
 	protected int maxRows;
 
-	/** 
+	/**
 	 * SQL INSERT statement for this table
 	 */
-	protected final String SQL_INSERT = "INSERT INTO " + getTableName() + " ( EventType_idEventType, Action_idAction ) VALUES ( ?, ? )";
+	protected final String SQL_INSERT = "INSERT INTO " + getTableName()
+			+ " ( EventType_idEventType, Action_idAction ) VALUES ( ?, ? )";
 
-	/** 
+	/**
 	 * SQL UPDATE statement for this table
 	 */
-	protected final String SQL_UPDATE = "UPDATE " + getTableName() + " SET EventType_idEventType = ?, Action_idAction = ? WHERE EventType_idEventType = ? AND Action_idAction = ?";
+	protected final String SQL_UPDATE = "UPDATE "
+			+ getTableName()
+			+ " SET EventType_idEventType = ?, Action_idAction = ? WHERE EventType_idEventType = ? AND Action_idAction = ?";
 
-	/** 
+	/**
 	 * SQL DELETE statement for this table
 	 */
-	protected final String SQL_DELETE = "DELETE FROM " + getTableName() + " WHERE EventType_idEventType = ? AND Action_idAction = ?";
+	protected final String SQL_DELETE = "DELETE FROM " + getTableName()
+			+ " WHERE EventType_idEventType = ? AND Action_idAction = ?";
 
-	/** 
+	/**
 	 * Index of column EventType_idEventType
 	 */
 	protected static final int COLUMN_EVENTTYPE_IDEVENTTYPE = 1;
 
-	/** 
+	/**
 	 * Index of column Action_idAction
 	 */
 	protected static final int COLUMN_ACTION_IDACTION = 2;
 
-	/** 
+	/**
 	 * Number of columns
 	 */
 	protected static final int NUMBER_OF_COLUMNS = 2;
 
-	/** 
+	/**
 	 * Index of primary-key column EventType_idEventType
 	 */
 	protected static final int PK_COLUMN_EVENTTYPE_IDEVENTTYPE = 1;
 
-	/** 
+	/**
 	 * Index of primary-key column Action_idAction
 	 */
 	protected static final int PK_COLUMN_ACTION_IDACTION = 2;
 
-	/** 
+	/**
 	 * Inserts a new row in the EventType_has_Action table.
 	 */
-	public EventtypeHasActionPk insert(EventtypeHasAction dto) throws EventtypeHasActionDaoException
-	{
+	public EventtypeHasActionPk insert(EventtypeHasAction dto)
+			throws EventtypeHasActionDaoException {
 		long t1 = System.currentTimeMillis();
 		// declare variables
 		final boolean isConnSupplied = (userConn != null);
 		Connection conn = null;
 		PreparedStatement stmt = null;
-		ResultSet rs = null;
-		
 		try {
-			// get the user-specified connection or get a connection from the ResourceManager
+			// get the user-specified connection or get a connection from the
+			// ResourceManager
 			conn = isConnSupplied ? userConn : ResourceManager.getConnection();
-		
-			stmt = conn.prepareStatement( SQL_INSERT );
+
+			stmt = conn.prepareStatement(SQL_INSERT);
 			int index = 1;
-			stmt.setInt( index++, dto.getEventtypeIdeventtype() );
-			stmt.setInt( index++, dto.getActionIdaction() );
-			System.out.println( "Executing " + SQL_INSERT + " with DTO: " + dto );
+			stmt.setInt(index++, dto.getEventtypeIdeventtype());
+			stmt.setInt(index++, dto.getActionIdaction());
+			System.out.println("Executing " + SQL_INSERT + " with DTO: " + dto);
 			int rows = stmt.executeUpdate();
 			long t2 = System.currentTimeMillis();
-			System.out.println( rows + " rows affected (" + (t2-t1) + " ms)" );
+			System.out.println(rows + " rows affected (" + (t2 - t1) + " ms)");
 			reset(dto);
 			return dto.createPk();
-		}
-		catch (Exception _e) {
+		} catch (Exception _e) {
 			_e.printStackTrace();
-			throw new EventtypeHasActionDaoException( "Exception: " + _e.getMessage(), _e );
-		}
-		finally {
+			throw new EventtypeHasActionDaoException("Exception: "
+					+ _e.getMessage(), _e);
+		} finally {
 			ResourceManager.close(stmt);
 			if (!isConnSupplied) {
 				ResourceManager.close(conn);
 			}
-		
+
 		}
-		
+
 	}
 
-	/** 
+	/**
 	 * Updates a single row in the EventType_has_Action table.
 	 */
-	public void update(EventtypeHasActionPk pk, EventtypeHasAction dto) throws EventtypeHasActionDaoException
-	{
+	public void update(EventtypeHasActionPk pk, EventtypeHasAction dto)
+			throws EventtypeHasActionDaoException {
 		long t1 = System.currentTimeMillis();
 		// declare variables
 		final boolean isConnSupplied = (userConn != null);
 		Connection conn = null;
 		PreparedStatement stmt = null;
-		
+
 		try {
-			// get the user-specified connection or get a connection from the ResourceManager
+			// get the user-specified connection or get a connection from the
+			// ResourceManager
 			conn = isConnSupplied ? userConn : ResourceManager.getConnection();
-		
-			System.out.println( "Executing " + SQL_UPDATE + " with DTO: " + dto );
-			stmt = conn.prepareStatement( SQL_UPDATE );
-			int index=1;
-			stmt.setInt( index++, dto.getEventtypeIdeventtype() );
-			stmt.setInt( index++, dto.getActionIdaction() );
-			stmt.setInt( 3, pk.getEventtypeIdeventtype() );
-			stmt.setInt( 4, pk.getActionIdaction() );
+
+			System.out.println("Executing " + SQL_UPDATE + " with DTO: " + dto);
+			stmt = conn.prepareStatement(SQL_UPDATE);
+			int index = 1;
+			stmt.setInt(index++, dto.getEventtypeIdeventtype());
+			stmt.setInt(index++, dto.getActionIdaction());
+			stmt.setInt(3, pk.getEventtypeIdeventtype());
+			stmt.setInt(4, pk.getActionIdaction());
 			int rows = stmt.executeUpdate();
 			reset(dto);
 			long t2 = System.currentTimeMillis();
-			System.out.println( rows + " rows affected (" + (t2-t1) + " ms)" );
-		}
-		catch (Exception _e) {
+			System.out.println(rows + " rows affected (" + (t2 - t1) + " ms)");
+		} catch (Exception _e) {
 			_e.printStackTrace();
-			throw new EventtypeHasActionDaoException( "Exception: " + _e.getMessage(), _e );
-		}
-		finally {
+			throw new EventtypeHasActionDaoException("Exception: "
+					+ _e.getMessage(), _e);
+		} finally {
 			ResourceManager.close(stmt);
 			if (!isConnSupplied) {
 				ResourceManager.close(conn);
 			}
-		
+
 		}
-		
+
 	}
 
-	/** 
+	/**
 	 * Deletes a single row in the EventType_has_Action table.
 	 */
-	public void delete(EventtypeHasActionPk pk) throws EventtypeHasActionDaoException
-	{
+	public void delete(EventtypeHasActionPk pk)
+			throws EventtypeHasActionDaoException {
 		long t1 = System.currentTimeMillis();
 		// declare variables
 		final boolean isConnSupplied = (userConn != null);
 		Connection conn = null;
 		PreparedStatement stmt = null;
-		
+
 		try {
-			// get the user-specified connection or get a connection from the ResourceManager
+			// get the user-specified connection or get a connection from the
+			// ResourceManager
 			conn = isConnSupplied ? userConn : ResourceManager.getConnection();
-		
-			System.out.println( "Executing " + SQL_DELETE + " with PK: " + pk );
-			stmt = conn.prepareStatement( SQL_DELETE );
-			stmt.setInt( 1, pk.getEventtypeIdeventtype() );
-			stmt.setInt( 2, pk.getActionIdaction() );
+
+			System.out.println("Executing " + SQL_DELETE + " with PK: " + pk);
+			stmt = conn.prepareStatement(SQL_DELETE);
+			stmt.setInt(1, pk.getEventtypeIdeventtype());
+			stmt.setInt(2, pk.getActionIdaction());
 			int rows = stmt.executeUpdate();
 			long t2 = System.currentTimeMillis();
-			System.out.println( rows + " rows affected (" + (t2-t1) + " ms)" );
-		}
-		catch (Exception _e) {
+			System.out.println(rows + " rows affected (" + (t2 - t1) + " ms)");
+		} catch (Exception _e) {
 			_e.printStackTrace();
-			throw new EventtypeHasActionDaoException( "Exception: " + _e.getMessage(), _e );
-		}
-		finally {
+			throw new EventtypeHasActionDaoException("Exception: "
+					+ _e.getMessage(), _e);
+		} finally {
 			ResourceManager.close(stmt);
 			if (!isConnSupplied) {
 				ResourceManager.close(conn);
 			}
-		
+
 		}
-		
+
 	}
 
-	/** 
-	 * Returns the rows from the EventType_has_Action table that matches the specified primary-key value.
+	/**
+	 * Returns the rows from the EventType_has_Action table that matches the
+	 * specified primary-key value.
 	 */
-	public EventtypeHasAction findByPrimaryKey(EventtypeHasActionPk pk) throws EventtypeHasActionDaoException
-	{
-		return findByPrimaryKey( pk.getEventtypeIdeventtype(), pk.getActionIdaction() );
+	public EventtypeHasAction findByPrimaryKey(EventtypeHasActionPk pk)
+			throws EventtypeHasActionDaoException {
+		return findByPrimaryKey(pk.getEventtypeIdeventtype(),
+				pk.getActionIdaction());
 	}
 
-	/** 
-	 * Returns all rows from the EventType_has_Action table that match the criteria 'EventType_idEventType = :eventtypeIdeventtype AND Action_idAction = :actionIdaction'.
+	/**
+	 * Returns all rows from the EventType_has_Action table that match the
+	 * criteria 'EventType_idEventType = :eventtypeIdeventtype AND
+	 * Action_idAction = :actionIdaction'.
 	 */
-	public EventtypeHasAction findByPrimaryKey(int eventtypeIdeventtype, int actionIdaction) throws EventtypeHasActionDaoException
-	{
-		EventtypeHasAction ret[] = findByDynamicSelect( SQL_SELECT + " WHERE EventType_idEventType = ? AND Action_idAction = ?", new Object[] {  new Integer(eventtypeIdeventtype),  new Integer(actionIdaction) } );
-		return ret.length==0 ? null : ret[0];
+	public EventtypeHasAction findByPrimaryKey(int eventtypeIdeventtype,
+			int actionIdaction) throws EventtypeHasActionDaoException {
+		EventtypeHasAction ret[] = findByDynamicSelect(SQL_SELECT
+				+ " WHERE EventType_idEventType = ? AND Action_idAction = ?",
+				new Object[] { new Integer(eventtypeIdeventtype),
+						new Integer(actionIdaction) });
+		return ret.length == 0 ? null : ret[0];
 	}
 
-	/** 
-	 * Returns all rows from the EventType_has_Action table that match the criteria ''.
+	/**
+	 * Returns all rows from the EventType_has_Action table that match the
+	 * criteria ''.
 	 */
-	public EventtypeHasAction[] findAll() throws EventtypeHasActionDaoException
-	{
-		return findByDynamicSelect( SQL_SELECT + " ORDER BY EventType_idEventType, Action_idAction", null );
+	public EventtypeHasAction[] findAll() throws EventtypeHasActionDaoException {
+		return findByDynamicSelect(SQL_SELECT
+				+ " ORDER BY EventType_idEventType, Action_idAction", null);
 	}
 
-	/** 
-	 * Returns all rows from the EventType_has_Action table that match the criteria 'Action_idAction = :actionIdaction'.
+	/**
+	 * Returns all rows from the EventType_has_Action table that match the
+	 * criteria 'Action_idAction = :actionIdaction'.
 	 */
-	public EventtypeHasAction[] findByAction(int actionIdaction) throws EventtypeHasActionDaoException
-	{
-		return findByDynamicSelect( SQL_SELECT + " WHERE Action_idAction = ?", new Object[] {  new Integer(actionIdaction) } );
+	public EventtypeHasAction[] findByAction(int actionIdaction)
+			throws EventtypeHasActionDaoException {
+		return findByDynamicSelect(SQL_SELECT + " WHERE Action_idAction = ?",
+				new Object[] { new Integer(actionIdaction) });
 	}
 
-	/** 
-	 * Returns all rows from the EventType_has_Action table that match the criteria 'EventType_idEventType = :eventtypeIdeventtype'.
+	/**
+	 * Returns all rows from the EventType_has_Action table that match the
+	 * criteria 'EventType_idEventType = :eventtypeIdeventtype'.
 	 */
-	public EventtypeHasAction[] findByEventType(int eventtypeIdeventtype) throws EventtypeHasActionDaoException
-	{
-		return findByDynamicSelect( SQL_SELECT + " WHERE EventType_idEventType = ?", new Object[] {  new Integer(eventtypeIdeventtype) } );
+	public EventtypeHasAction[] findByEventType(int eventtypeIdeventtype)
+			throws EventtypeHasActionDaoException {
+		return findByDynamicSelect(SQL_SELECT
+				+ " WHERE EventType_idEventType = ?",
+				new Object[] { new Integer(eventtypeIdeventtype) });
 	}
 
-	/** 
-	 * Returns all rows from the EventType_has_Action table that match the criteria 'EventType_idEventType = :eventtypeIdeventtype'.
+	/**
+	 * Returns all rows from the EventType_has_Action table that match the
+	 * criteria 'EventType_idEventType = :eventtypeIdeventtype'.
 	 */
-	public EventtypeHasAction[] findWhereEventtypeIdeventtypeEquals(int eventtypeIdeventtype) throws EventtypeHasActionDaoException
-	{
-		return findByDynamicSelect( SQL_SELECT + " WHERE EventType_idEventType = ? ORDER BY EventType_idEventType", new Object[] {  new Integer(eventtypeIdeventtype) } );
+	public EventtypeHasAction[] findWhereEventtypeIdeventtypeEquals(
+			int eventtypeIdeventtype) throws EventtypeHasActionDaoException {
+		return findByDynamicSelect(
+				SQL_SELECT
+						+ " WHERE EventType_idEventType = ? ORDER BY EventType_idEventType",
+				new Object[] { new Integer(eventtypeIdeventtype) });
 	}
 
-	/** 
-	 * Returns all rows from the EventType_has_Action table that match the criteria 'Action_idAction = :actionIdaction'.
+	/**
+	 * Returns all rows from the EventType_has_Action table that match the
+	 * criteria 'Action_idAction = :actionIdaction'.
 	 */
-	public EventtypeHasAction[] findWhereActionIdactionEquals(int actionIdaction) throws EventtypeHasActionDaoException
-	{
-		return findByDynamicSelect( SQL_SELECT + " WHERE Action_idAction = ? ORDER BY Action_idAction", new Object[] {  new Integer(actionIdaction) } );
+	public EventtypeHasAction[] findWhereActionIdactionEquals(int actionIdaction)
+			throws EventtypeHasActionDaoException {
+		return findByDynamicSelect(SQL_SELECT
+				+ " WHERE Action_idAction = ? ORDER BY Action_idAction",
+				new Object[] { new Integer(actionIdaction) });
 	}
 
 	/**
 	 * Method 'EventtypeHasActionDaoImpl'
 	 * 
 	 */
-	public EventtypeHasActionDaoImpl()
-	{
+	public EventtypeHasActionDaoImpl() {
 	}
 
 	/**
@@ -272,24 +293,21 @@ calls to this DAO, otherwise a new Connection will be allocated for each operati
 	 * 
 	 * @param userConn
 	 */
-	public EventtypeHasActionDaoImpl(final java.sql.Connection userConn)
-	{
+	public EventtypeHasActionDaoImpl(final java.sql.Connection userConn) {
 		this.userConn = userConn;
 	}
 
-	/** 
+	/**
 	 * Sets the value of maxRows
 	 */
-	public void setMaxRows(int maxRows)
-	{
+	public void setMaxRows(int maxRows) {
 		this.maxRows = maxRows;
 	}
 
-	/** 
+	/**
 	 * Gets the value of maxRows
 	 */
-	public int getMaxRows()
-	{
+	public int getMaxRows() {
 		return maxRows;
 	}
 
@@ -298,157 +316,153 @@ calls to this DAO, otherwise a new Connection will be allocated for each operati
 	 * 
 	 * @return String
 	 */
-	public String getTableName()
-	{
+	public String getTableName() {
 		return "telpro.EventType_has_Action";
 	}
 
-	/** 
+	/**
 	 * Fetches a single row from the result set
 	 */
-	protected EventtypeHasAction fetchSingleResult(ResultSet rs) throws SQLException
-	{
+	protected EventtypeHasAction fetchSingleResult(ResultSet rs)
+			throws SQLException {
 		if (rs.next()) {
 			EventtypeHasAction dto = new EventtypeHasAction();
-			populateDto( dto, rs);
+			populateDto(dto, rs);
 			return dto;
 		} else {
 			return null;
 		}
-		
+
 	}
 
-	/** 
+	/**
 	 * Fetches multiple rows from the result set
 	 */
-	protected EventtypeHasAction[] fetchMultiResults(ResultSet rs) throws SQLException
-	{
-		Collection resultList = new ArrayList();
+	protected EventtypeHasAction[] fetchMultiResults(ResultSet rs)
+			throws SQLException {
+		Collection<EventtypeHasAction> resultList = new ArrayList<EventtypeHasAction>();
 		while (rs.next()) {
 			EventtypeHasAction dto = new EventtypeHasAction();
-			populateDto( dto, rs);
-			resultList.add( dto );
+			populateDto(dto, rs);
+			resultList.add(dto);
 		}
-		
-		EventtypeHasAction ret[] = new EventtypeHasAction[ resultList.size() ];
-		resultList.toArray( ret );
+
+		EventtypeHasAction ret[] = new EventtypeHasAction[resultList.size()];
+		resultList.toArray(ret);
 		return ret;
 	}
 
-	/** 
+	/**
 	 * Populates a DTO with data from a ResultSet
 	 */
-	protected void populateDto(EventtypeHasAction dto, ResultSet rs) throws SQLException
-	{
-		dto.setEventtypeIdeventtype( rs.getInt( COLUMN_EVENTTYPE_IDEVENTTYPE ) );
-		dto.setActionIdaction( rs.getInt( COLUMN_ACTION_IDACTION ) );
+	protected void populateDto(EventtypeHasAction dto, ResultSet rs)
+			throws SQLException {
+		dto.setEventtypeIdeventtype(rs.getInt(COLUMN_EVENTTYPE_IDEVENTTYPE));
+		dto.setActionIdaction(rs.getInt(COLUMN_ACTION_IDACTION));
 	}
 
-	/** 
+	/**
 	 * Resets the modified attributes in the DTO
 	 */
-	protected void reset(EventtypeHasAction dto)
-	{
+	protected void reset(EventtypeHasAction dto) {
 	}
 
-	/** 
-	 * Returns all rows from the EventType_has_Action table that match the specified arbitrary SQL statement
+	/**
+	 * Returns all rows from the EventType_has_Action table that match the
+	 * specified arbitrary SQL statement
 	 */
-	public EventtypeHasAction[] findByDynamicSelect(String sql, Object[] sqlParams) throws EventtypeHasActionDaoException
-	{
+	public EventtypeHasAction[] findByDynamicSelect(String sql,
+			Object[] sqlParams) throws EventtypeHasActionDaoException {
 		// declare variables
 		final boolean isConnSupplied = (userConn != null);
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		
+
 		try {
-			// get the user-specified connection or get a connection from the ResourceManager
+			// get the user-specified connection or get a connection from the
+			// ResourceManager
 			conn = isConnSupplied ? userConn : ResourceManager.getConnection();
-		
+
 			// construct the SQL statement
 			final String SQL = sql;
-		
-		
-			System.out.println( "Executing " + SQL );
+
+			System.out.println("Executing " + SQL);
 			// prepare statement
-			stmt = conn.prepareStatement( SQL );
-			stmt.setMaxRows( maxRows );
-		
+			stmt = conn.prepareStatement(SQL);
+			stmt.setMaxRows(maxRows);
+
 			// bind parameters
-			for (int i=0; sqlParams!=null && i<sqlParams.length; i++ ) {
-				stmt.setObject( i+1, sqlParams[i] );
+			for (int i = 0; sqlParams != null && i < sqlParams.length; i++) {
+				stmt.setObject(i + 1, sqlParams[i]);
 			}
-		
-		
+
 			rs = stmt.executeQuery();
-		
+
 			// fetch the results
 			return fetchMultiResults(rs);
-		}
-		catch (Exception _e) {
+		} catch (Exception _e) {
 			_e.printStackTrace();
-			throw new EventtypeHasActionDaoException( "Exception: " + _e.getMessage(), _e );
-		}
-		finally {
+			throw new EventtypeHasActionDaoException("Exception: "
+					+ _e.getMessage(), _e);
+		} finally {
 			ResourceManager.close(rs);
 			ResourceManager.close(stmt);
 			if (!isConnSupplied) {
 				ResourceManager.close(conn);
 			}
-		
+
 		}
-		
+
 	}
 
-	/** 
-	 * Returns all rows from the EventType_has_Action table that match the specified arbitrary SQL statement
+	/**
+	 * Returns all rows from the EventType_has_Action table that match the
+	 * specified arbitrary SQL statement
 	 */
-	public EventtypeHasAction[] findByDynamicWhere(String sql, Object[] sqlParams) throws EventtypeHasActionDaoException
-	{
+	public EventtypeHasAction[] findByDynamicWhere(String sql,
+			Object[] sqlParams) throws EventtypeHasActionDaoException {
 		// declare variables
 		final boolean isConnSupplied = (userConn != null);
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		
+
 		try {
-			// get the user-specified connection or get a connection from the ResourceManager
+			// get the user-specified connection or get a connection from the
+			// ResourceManager
 			conn = isConnSupplied ? userConn : ResourceManager.getConnection();
-		
+
 			// construct the SQL statement
 			final String SQL = SQL_SELECT + " WHERE " + sql;
-		
-		
-			System.out.println( "Executing " + SQL );
+
+			System.out.println("Executing " + SQL);
 			// prepare statement
-			stmt = conn.prepareStatement( SQL );
-			stmt.setMaxRows( maxRows );
-		
+			stmt = conn.prepareStatement(SQL);
+			stmt.setMaxRows(maxRows);
+
 			// bind parameters
-			for (int i=0; sqlParams!=null && i<sqlParams.length; i++ ) {
-				stmt.setObject( i+1, sqlParams[i] );
+			for (int i = 0; sqlParams != null && i < sqlParams.length; i++) {
+				stmt.setObject(i + 1, sqlParams[i]);
 			}
-		
-		
+
 			rs = stmt.executeQuery();
-		
+
 			// fetch the results
 			return fetchMultiResults(rs);
-		}
-		catch (Exception _e) {
+		} catch (Exception _e) {
 			_e.printStackTrace();
-			throw new EventtypeHasActionDaoException( "Exception: " + _e.getMessage(), _e );
-		}
-		finally {
+			throw new EventtypeHasActionDaoException("Exception: "
+					+ _e.getMessage(), _e);
+		} finally {
 			ResourceManager.close(rs);
 			ResourceManager.close(stmt);
 			if (!isConnSupplied) {
 				ResourceManager.close(conn);
 			}
-		
+
 		}
-		
+
 	}
 
 }
