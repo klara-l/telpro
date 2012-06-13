@@ -9,14 +9,16 @@
 package de.berlin.fu.data.dto;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Date;
 
 /** 
  * This class represents the primary key of the Sensor table.
  */
 public class SensorPk implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2933715824194576120L;
 	protected String idSensor;
 
 	/** 
@@ -59,6 +61,7 @@ public class SensorPk implements Serializable
 	 * @param _other
 	 * @return boolean
 	 */
+	@Override
 	public boolean equals(Object _other)
 	{
 		if (_other == null) {
@@ -86,6 +89,7 @@ public class SensorPk implements Serializable
 	 * 
 	 * @return int
 	 */
+	@Override
 	public int hashCode()
 	{
 		int _hashCode = 0;
@@ -101,6 +105,7 @@ public class SensorPk implements Serializable
 	 * 
 	 * @return String
 	 */
+	@Override
 	public String toString()
 	{
 		StringBuffer ret = new StringBuffer();

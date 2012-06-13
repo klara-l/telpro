@@ -8,333 +8,367 @@
 
 package de.berlin.fu.data.jdbc;
 
-import de.berlin.fu.data.dao.*;
-import de.berlin.fu.data.factory.*;
-import java.util.Date;
-import de.berlin.fu.data.dto.*;
-import de.berlin.fu.data.exceptions.*;
 import java.sql.Connection;
-import java.util.Collection;
 import java.sql.PreparedStatement;
-import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Time;
-import java.util.List;
-import java.util.Iterator;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 
-public class PropertyDaoImpl extends AbstractDAO implements PropertyDao
-{
-	/** 
-	 * The factory class for this DAO has two versions of the create() method - one that
-takes no arguments and one that takes a Connection argument. If the Connection version
-is chosen then the connection will be stored in this attribute and will be used by all
-calls to this DAO, otherwise a new Connection will be allocated for each operation.
+import de.berlin.fu.data.dao.PropertyDao;
+import de.berlin.fu.data.dto.Property;
+import de.berlin.fu.data.dto.PropertyPk;
+import de.berlin.fu.data.exceptions.PropertyDaoException;
+
+public class PropertyDaoImpl extends AbstractDAO implements PropertyDao {
+	/**
+	 * The factory class for this DAO has two versions of the create() method -
+	 * one that takes no arguments and one that takes a Connection argument. If
+	 * the Connection version is chosen then the connection will be stored in
+	 * this attribute and will be used by all calls to this DAO, otherwise a new
+	 * Connection will be allocated for each operation.
 	 */
 	protected java.sql.Connection userConn;
 
-	/** 
-	 * All finder methods in this class use this SELECT constant to build their queries
+	/**
+	 * All finder methods in this class use this SELECT constant to build their
+	 * queries
 	 */
-	protected final String SQL_SELECT = "SELECT idProperty, PropertyType_idPropertyType, Sensor_idSensor, Value, Timestamp FROM " + getTableName() + "";
+	protected final String SQL_SELECT = "SELECT idProperty, PropertyType_idPropertyType, Sensor_idSensor, Value, Timestamp FROM "
+			+ getTableName() + "";
 
-	/** 
+	/**
 	 * Finder methods will pass this value to the JDBC setMaxRows method
 	 */
 	protected int maxRows;
 
-	/** 
+	/**
 	 * SQL INSERT statement for this table
 	 */
-	protected final String SQL_INSERT = "INSERT INTO " + getTableName() + " ( idProperty, PropertyType_idPropertyType, Sensor_idSensor, Value, Timestamp ) VALUES ( ?, ?, ?, ?, ? )";
+	protected final String SQL_INSERT = "INSERT INTO "
+			+ getTableName()
+			+ " ( idProperty, PropertyType_idPropertyType, Sensor_idSensor, Value, Timestamp ) VALUES ( ?, ?, ?, ?, ? )";
 
-	/** 
+	/**
 	 * SQL UPDATE statement for this table
 	 */
-	protected final String SQL_UPDATE = "UPDATE " + getTableName() + " SET idProperty = ?, PropertyType_idPropertyType = ?, Sensor_idSensor = ?, Value = ?, Timestamp = ? WHERE idProperty = ? AND PropertyType_idPropertyType = ? AND Sensor_idSensor = ?";
+	protected final String SQL_UPDATE = "UPDATE "
+			+ getTableName()
+			+ " SET idProperty = ?, PropertyType_idPropertyType = ?, Sensor_idSensor = ?, Value = ?, Timestamp = ? WHERE idProperty = ? AND PropertyType_idPropertyType = ? AND Sensor_idSensor = ?";
 
-	/** 
+	/**
 	 * SQL DELETE statement for this table
 	 */
-	protected final String SQL_DELETE = "DELETE FROM " + getTableName() + " WHERE idProperty = ? AND PropertyType_idPropertyType = ? AND Sensor_idSensor = ?";
+	protected final String SQL_DELETE = "DELETE FROM "
+			+ getTableName()
+			+ " WHERE idProperty = ? AND PropertyType_idPropertyType = ? AND Sensor_idSensor = ?";
 
-	/** 
+	/**
 	 * Index of column idProperty
 	 */
 	protected static final int COLUMN_ID_PROPERTY = 1;
 
-	/** 
+	/**
 	 * Index of column PropertyType_idPropertyType
 	 */
 	protected static final int COLUMN_PROPERTYTYPE_IDPROPERTYTYPE = 2;
 
-	/** 
+	/**
 	 * Index of column Sensor_idSensor
 	 */
 	protected static final int COLUMN_SENSOR_IDSENSOR = 3;
 
-	/** 
+	/**
 	 * Index of column Value
 	 */
 	protected static final int COLUMN_VALUE = 4;
 
-	/** 
+	/**
 	 * Index of column Timestamp
 	 */
 	protected static final int COLUMN_TIMESTAMP = 5;
 
-	/** 
+	/**
 	 * Number of columns
 	 */
 	protected static final int NUMBER_OF_COLUMNS = 5;
 
-	/** 
+	/**
 	 * Index of primary-key column idProperty
 	 */
 	protected static final int PK_COLUMN_ID_PROPERTY = 1;
 
-	/** 
+	/**
 	 * Index of primary-key column PropertyType_idPropertyType
 	 */
 	protected static final int PK_COLUMN_PROPERTYTYPE_IDPROPERTYTYPE = 2;
 
-	/** 
+	/**
 	 * Index of primary-key column Sensor_idSensor
 	 */
 	protected static final int PK_COLUMN_SENSOR_IDSENSOR = 3;
 
-	/** 
+	/**
 	 * Inserts a new row in the Property table.
 	 */
-	public PropertyPk insert(Property dto) throws PropertyDaoException
-	{
+	public PropertyPk insert(Property dto) throws PropertyDaoException {
 		long t1 = System.currentTimeMillis();
 		// declare variables
 		final boolean isConnSupplied = (userConn != null);
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		
+
 		try {
-			// get the user-specified connection or get a connection from the ResourceManager
+			// get the user-specified connection or get a connection from the
+			// ResourceManager
 			conn = isConnSupplied ? userConn : ResourceManager.getConnection();
-		
-			stmt = conn.prepareStatement( SQL_INSERT, Statement.RETURN_GENERATED_KEYS );
+
+			stmt = conn.prepareStatement(SQL_INSERT,
+					Statement.RETURN_GENERATED_KEYS);
 			int index = 1;
-			stmt.setInt( index++, dto.getIdProperty() );
-			stmt.setInt( index++, dto.getPropertytypeIdpropertytype() );
-			stmt.setString( index++, dto.getSensorIdsensor() );
+			stmt.setInt(index++, dto.getIdProperty());
+			stmt.setInt(index++, dto.getPropertytypeIdpropertytype());
+			stmt.setString(index++, dto.getSensorIdsensor());
 			if (dto.isValueNull()) {
-				stmt.setNull( index++, java.sql.Types.DOUBLE );
+				stmt.setNull(index++, java.sql.Types.DOUBLE);
 			} else {
-				stmt.setDouble( index++, dto.getValue() );
+				stmt.setDouble(index++, dto.getValue());
 			}
-		
-			stmt.setTimestamp(index++, dto.getTimestamp()==null ? null : new java.sql.Timestamp( dto.getTimestamp().getTime() ) );
-			System.out.println( "Executing " + SQL_INSERT + " with DTO: " + dto );
+
+			stmt.setTimestamp(index++, dto.getTimestamp() == null ? null
+					: new java.sql.Timestamp(dto.getTimestamp().getTime()));
+			System.out.println("Executing " + SQL_INSERT + " with DTO: " + dto);
 			int rows = stmt.executeUpdate();
 			long t2 = System.currentTimeMillis();
-			System.out.println( rows + " rows affected (" + (t2-t1) + " ms)" );
-		
+			System.out.println(rows + " rows affected (" + (t2 - t1) + " ms)");
+
 			// retrieve values from auto-increment columns
 			rs = stmt.getGeneratedKeys();
 			if (rs != null && rs.next()) {
-				dto.setIdProperty( rs.getInt( 1 ) );
+				dto.setIdProperty(rs.getInt(1));
 			}
-		
+
 			reset(dto);
 			return dto.createPk();
-		}
-		catch (Exception _e) {
+		} catch (Exception _e) {
 			_e.printStackTrace();
-			throw new PropertyDaoException( "Exception: " + _e.getMessage(), _e );
-		}
-		finally {
+			throw new PropertyDaoException("Exception: " + _e.getMessage(), _e);
+		} finally {
 			ResourceManager.close(stmt);
 			if (!isConnSupplied) {
 				ResourceManager.close(conn);
 			}
-		
+
 		}
-		
+
 	}
 
-	/** 
+	/**
 	 * Updates a single row in the Property table.
 	 */
-	public void update(PropertyPk pk, Property dto) throws PropertyDaoException
-	{
+	public void update(PropertyPk pk, Property dto) throws PropertyDaoException {
 		long t1 = System.currentTimeMillis();
 		// declare variables
 		final boolean isConnSupplied = (userConn != null);
 		Connection conn = null;
 		PreparedStatement stmt = null;
-		
+
 		try {
-			// get the user-specified connection or get a connection from the ResourceManager
+			// get the user-specified connection or get a connection from the
+			// ResourceManager
 			conn = isConnSupplied ? userConn : ResourceManager.getConnection();
-		
-			System.out.println( "Executing " + SQL_UPDATE + " with DTO: " + dto );
-			stmt = conn.prepareStatement( SQL_UPDATE );
-			int index=1;
-			stmt.setInt( index++, dto.getIdProperty() );
-			stmt.setInt( index++, dto.getPropertytypeIdpropertytype() );
-			stmt.setString( index++, dto.getSensorIdsensor() );
+
+			System.out.println("Executing " + SQL_UPDATE + " with DTO: " + dto);
+			stmt = conn.prepareStatement(SQL_UPDATE);
+			int index = 1;
+			stmt.setInt(index++, dto.getIdProperty());
+			stmt.setInt(index++, dto.getPropertytypeIdpropertytype());
+			stmt.setString(index++, dto.getSensorIdsensor());
 			if (dto.isValueNull()) {
-				stmt.setNull( index++, java.sql.Types.DOUBLE );
+				stmt.setNull(index++, java.sql.Types.DOUBLE);
 			} else {
-				stmt.setDouble( index++, dto.getValue() );
+				stmt.setDouble(index++, dto.getValue());
 			}
-		
-			stmt.setTimestamp(index++, dto.getTimestamp()==null ? null : new java.sql.Timestamp( dto.getTimestamp().getTime() ) );
-			stmt.setInt( 6, pk.getIdProperty() );
-			stmt.setInt( 7, pk.getPropertytypeIdpropertytype() );
-			stmt.setString( 8, pk.getSensorIdsensor() );
+
+			stmt.setTimestamp(index++, dto.getTimestamp() == null ? null
+					: new java.sql.Timestamp(dto.getTimestamp().getTime()));
+			stmt.setInt(6, pk.getIdProperty());
+			stmt.setInt(7, pk.getPropertytypeIdpropertytype());
+			stmt.setString(8, pk.getSensorIdsensor());
 			int rows = stmt.executeUpdate();
 			reset(dto);
 			long t2 = System.currentTimeMillis();
-			System.out.println( rows + " rows affected (" + (t2-t1) + " ms)" );
-		}
-		catch (Exception _e) {
+			System.out.println(rows + " rows affected (" + (t2 - t1) + " ms)");
+		} catch (Exception _e) {
 			_e.printStackTrace();
-			throw new PropertyDaoException( "Exception: " + _e.getMessage(), _e );
-		}
-		finally {
+			throw new PropertyDaoException("Exception: " + _e.getMessage(), _e);
+		} finally {
 			ResourceManager.close(stmt);
 			if (!isConnSupplied) {
 				ResourceManager.close(conn);
 			}
-		
+
 		}
-		
+
 	}
 
-	/** 
+	/**
 	 * Deletes a single row in the Property table.
 	 */
-	public void delete(PropertyPk pk) throws PropertyDaoException
-	{
+	public void delete(PropertyPk pk) throws PropertyDaoException {
 		long t1 = System.currentTimeMillis();
 		// declare variables
 		final boolean isConnSupplied = (userConn != null);
 		Connection conn = null;
 		PreparedStatement stmt = null;
-		
+
 		try {
-			// get the user-specified connection or get a connection from the ResourceManager
+			// get the user-specified connection or get a connection from the
+			// ResourceManager
 			conn = isConnSupplied ? userConn : ResourceManager.getConnection();
-		
-			System.out.println( "Executing " + SQL_DELETE + " with PK: " + pk );
-			stmt = conn.prepareStatement( SQL_DELETE );
-			stmt.setInt( 1, pk.getIdProperty() );
-			stmt.setInt( 2, pk.getPropertytypeIdpropertytype() );
-			stmt.setString( 3, pk.getSensorIdsensor() );
+
+			System.out.println("Executing " + SQL_DELETE + " with PK: " + pk);
+			stmt = conn.prepareStatement(SQL_DELETE);
+			stmt.setInt(1, pk.getIdProperty());
+			stmt.setInt(2, pk.getPropertytypeIdpropertytype());
+			stmt.setString(3, pk.getSensorIdsensor());
 			int rows = stmt.executeUpdate();
 			long t2 = System.currentTimeMillis();
-			System.out.println( rows + " rows affected (" + (t2-t1) + " ms)" );
-		}
-		catch (Exception _e) {
+			System.out.println(rows + " rows affected (" + (t2 - t1) + " ms)");
+		} catch (Exception _e) {
 			_e.printStackTrace();
-			throw new PropertyDaoException( "Exception: " + _e.getMessage(), _e );
-		}
-		finally {
+			throw new PropertyDaoException("Exception: " + _e.getMessage(), _e);
+		} finally {
 			ResourceManager.close(stmt);
 			if (!isConnSupplied) {
 				ResourceManager.close(conn);
 			}
-		
+
 		}
-		
+
 	}
 
-	/** 
-	 * Returns the rows from the Property table that matches the specified primary-key value.
+	/**
+	 * Returns the rows from the Property table that matches the specified
+	 * primary-key value.
 	 */
-	public Property findByPrimaryKey(PropertyPk pk) throws PropertyDaoException
-	{
-		return findByPrimaryKey( pk.getIdProperty(), pk.getPropertytypeIdpropertytype(), pk.getSensorIdsensor() );
+	public Property findByPrimaryKey(PropertyPk pk) throws PropertyDaoException {
+		return findByPrimaryKey(pk.getIdProperty(),
+				pk.getPropertytypeIdpropertytype(), pk.getSensorIdsensor());
 	}
 
-	/** 
-	 * Returns all rows from the Property table that match the criteria 'idProperty = :idProperty AND PropertyType_idPropertyType = :propertytypeIdpropertytype AND Sensor_idSensor = :sensorIdsensor'.
+	/**
+	 * Returns all rows from the Property table that match the criteria
+	 * 'idProperty = :idProperty AND PropertyType_idPropertyType =
+	 * :propertytypeIdpropertytype AND Sensor_idSensor = :sensorIdsensor'.
 	 */
-	public Property findByPrimaryKey(int idProperty, int propertytypeIdpropertytype, String sensorIdsensor) throws PropertyDaoException
-	{
-		Property ret[] = findByDynamicSelect( SQL_SELECT + " WHERE idProperty = ? AND PropertyType_idPropertyType = ? AND Sensor_idSensor = ?", new Object[] {  new Integer(idProperty),  new Integer(propertytypeIdpropertytype), sensorIdsensor } );
-		return ret.length==0 ? null : ret[0];
+	public Property findByPrimaryKey(int idProperty,
+			int propertytypeIdpropertytype, String sensorIdsensor)
+			throws PropertyDaoException {
+		Property ret[] = findByDynamicSelect(
+				SQL_SELECT
+						+ " WHERE idProperty = ? AND PropertyType_idPropertyType = ? AND Sensor_idSensor = ?",
+				new Object[] { new Integer(idProperty),
+						new Integer(propertytypeIdpropertytype), sensorIdsensor });
+		return ret.length == 0 ? null : ret[0];
 	}
 
-	/** 
+	/**
 	 * Returns all rows from the Property table that match the criteria ''.
 	 */
-	public Property[] findAll() throws PropertyDaoException
-	{
-		return findByDynamicSelect( SQL_SELECT + " ORDER BY idProperty, PropertyType_idPropertyType, Sensor_idSensor", null );
+	public Property[] findAll() throws PropertyDaoException {
+		return findByDynamicSelect(
+				SQL_SELECT
+						+ " ORDER BY idProperty, PropertyType_idPropertyType, Sensor_idSensor",
+				null);
 	}
 
-	/** 
-	 * Returns all rows from the Property table that match the criteria 'PropertyType_idPropertyType = :propertytypeIdpropertytype'.
+	/**
+	 * Returns all rows from the Property table that match the criteria
+	 * 'PropertyType_idPropertyType = :propertytypeIdpropertytype'.
 	 */
-	public Property[] findByPropertyType(int propertytypeIdpropertytype) throws PropertyDaoException
-	{
-		return findByDynamicSelect( SQL_SELECT + " WHERE PropertyType_idPropertyType = ?", new Object[] {  new Integer(propertytypeIdpropertytype) } );
+	public Property[] findByPropertyType(int propertytypeIdpropertytype)
+			throws PropertyDaoException {
+		return findByDynamicSelect(SQL_SELECT
+				+ " WHERE PropertyType_idPropertyType = ?",
+				new Object[] { new Integer(propertytypeIdpropertytype) });
 	}
 
-	/** 
-	 * Returns all rows from the Property table that match the criteria 'Sensor_idSensor = :sensorIdsensor'.
+	/**
+	 * Returns all rows from the Property table that match the criteria
+	 * 'Sensor_idSensor = :sensorIdsensor'.
 	 */
-	public Property[] findBySensor(String sensorIdsensor) throws PropertyDaoException
-	{
-		return findByDynamicSelect( SQL_SELECT + " WHERE Sensor_idSensor = ?", new Object[] { sensorIdsensor } );
+	public Property[] findBySensor(String sensorIdsensor)
+			throws PropertyDaoException {
+		return findByDynamicSelect(SQL_SELECT + " WHERE Sensor_idSensor = ?",
+				new Object[] { sensorIdsensor });
 	}
 
-	/** 
-	 * Returns all rows from the Property table that match the criteria 'idProperty = :idProperty'.
+	/**
+	 * Returns all rows from the Property table that match the criteria
+	 * 'idProperty = :idProperty'.
 	 */
-	public Property[] findWhereIdPropertyEquals(int idProperty) throws PropertyDaoException
-	{
-		return findByDynamicSelect( SQL_SELECT + " WHERE idProperty = ? ORDER BY idProperty", new Object[] {  new Integer(idProperty) } );
+	public Property[] findWhereIdPropertyEquals(int idProperty)
+			throws PropertyDaoException {
+		return findByDynamicSelect(SQL_SELECT
+				+ " WHERE idProperty = ? ORDER BY idProperty",
+				new Object[] { new Integer(idProperty) });
 	}
 
-	/** 
-	 * Returns all rows from the Property table that match the criteria 'PropertyType_idPropertyType = :propertytypeIdpropertytype'.
+	/**
+	 * Returns all rows from the Property table that match the criteria
+	 * 'PropertyType_idPropertyType = :propertytypeIdpropertytype'.
 	 */
-	public Property[] findWherePropertytypeIdpropertytypeEquals(int propertytypeIdpropertytype) throws PropertyDaoException
-	{
-		return findByDynamicSelect( SQL_SELECT + " WHERE PropertyType_idPropertyType = ? ORDER BY PropertyType_idPropertyType", new Object[] {  new Integer(propertytypeIdpropertytype) } );
+	public Property[] findWherePropertytypeIdpropertytypeEquals(
+			int propertytypeIdpropertytype) throws PropertyDaoException {
+		return findByDynamicSelect(
+				SQL_SELECT
+						+ " WHERE PropertyType_idPropertyType = ? ORDER BY PropertyType_idPropertyType",
+				new Object[] { new Integer(propertytypeIdpropertytype) });
 	}
 
-	/** 
-	 * Returns all rows from the Property table that match the criteria 'Sensor_idSensor = :sensorIdsensor'.
+	/**
+	 * Returns all rows from the Property table that match the criteria
+	 * 'Sensor_idSensor = :sensorIdsensor'.
 	 */
-	public Property[] findWhereSensorIdsensorEquals(String sensorIdsensor) throws PropertyDaoException
-	{
-		return findByDynamicSelect( SQL_SELECT + " WHERE Sensor_idSensor = ? ORDER BY Sensor_idSensor", new Object[] { sensorIdsensor } );
+	public Property[] findWhereSensorIdsensorEquals(String sensorIdsensor)
+			throws PropertyDaoException {
+		return findByDynamicSelect(SQL_SELECT
+				+ " WHERE Sensor_idSensor = ? ORDER BY Sensor_idSensor",
+				new Object[] { sensorIdsensor });
 	}
 
-	/** 
-	 * Returns all rows from the Property table that match the criteria 'Value = :value'.
+	/**
+	 * Returns all rows from the Property table that match the criteria 'Value =
+	 * :value'.
 	 */
-	public Property[] findWhereValueEquals(double value) throws PropertyDaoException
-	{
-		return findByDynamicSelect( SQL_SELECT + " WHERE Value = ? ORDER BY Value", new Object[] {  new Double(value) } );
+	public Property[] findWhereValueEquals(double value)
+			throws PropertyDaoException {
+		return findByDynamicSelect(SQL_SELECT
+				+ " WHERE Value = ? ORDER BY Value", new Object[] { new Double(
+				value) });
 	}
 
-	/** 
-	 * Returns all rows from the Property table that match the criteria 'Timestamp = :timestamp'.
+	/**
+	 * Returns all rows from the Property table that match the criteria
+	 * 'Timestamp = :timestamp'.
 	 */
-	public Property[] findWhereTimestampEquals(Date timestamp) throws PropertyDaoException
-	{
-		return findByDynamicSelect( SQL_SELECT + " WHERE Timestamp = ? ORDER BY Timestamp", new Object[] { timestamp==null ? null : new java.sql.Timestamp( timestamp.getTime() ) } );
+	public Property[] findWhereTimestampEquals(Date timestamp)
+			throws PropertyDaoException {
+		return findByDynamicSelect(SQL_SELECT
+				+ " WHERE Timestamp = ? ORDER BY Timestamp",
+				new Object[] { timestamp == null ? null
+						: new java.sql.Timestamp(timestamp.getTime()) });
 	}
 
 	/**
 	 * Method 'PropertyDaoImpl'
 	 * 
 	 */
-	public PropertyDaoImpl()
-	{
+	public PropertyDaoImpl() {
 	}
 
 	/**
@@ -342,24 +376,21 @@ calls to this DAO, otherwise a new Connection will be allocated for each operati
 	 * 
 	 * @param userConn
 	 */
-	public PropertyDaoImpl(final java.sql.Connection userConn)
-	{
+	public PropertyDaoImpl(final java.sql.Connection userConn) {
 		this.userConn = userConn;
 	}
 
-	/** 
+	/**
 	 * Sets the value of maxRows
 	 */
-	public void setMaxRows(int maxRows)
-	{
+	public void setMaxRows(int maxRows) {
 		this.maxRows = maxRows;
 	}
 
-	/** 
+	/**
 	 * Gets the value of maxRows
 	 */
-	public int getMaxRows()
-	{
+	public int getMaxRows() {
 		return maxRows;
 	}
 
@@ -368,164 +399,156 @@ calls to this DAO, otherwise a new Connection will be allocated for each operati
 	 * 
 	 * @return String
 	 */
-	public String getTableName()
-	{
+	public String getTableName() {
 		return "telpro.Property";
 	}
 
-	/** 
+	/**
 	 * Fetches a single row from the result set
 	 */
-	protected Property fetchSingleResult(ResultSet rs) throws SQLException
-	{
+	protected Property fetchSingleResult(ResultSet rs) throws SQLException {
 		if (rs.next()) {
 			Property dto = new Property();
-			populateDto( dto, rs);
+			populateDto(dto, rs);
 			return dto;
 		} else {
 			return null;
 		}
-		
+
 	}
 
-	/** 
+	/**
 	 * Fetches multiple rows from the result set
 	 */
-	protected Property[] fetchMultiResults(ResultSet rs) throws SQLException
-	{
-		Collection resultList = new ArrayList();
+	protected Property[] fetchMultiResults(ResultSet rs) throws SQLException {
+		Collection<Property> resultList = new ArrayList<Property>();
 		while (rs.next()) {
 			Property dto = new Property();
-			populateDto( dto, rs);
-			resultList.add( dto );
+			populateDto(dto, rs);
+			resultList.add(dto);
 		}
-		
-		Property ret[] = new Property[ resultList.size() ];
-		resultList.toArray( ret );
+
+		Property ret[] = new Property[resultList.size()];
+		resultList.toArray(ret);
 		return ret;
 	}
 
-	/** 
+	/**
 	 * Populates a DTO with data from a ResultSet
 	 */
-	protected void populateDto(Property dto, ResultSet rs) throws SQLException
-	{
-		dto.setIdProperty( rs.getInt( COLUMN_ID_PROPERTY ) );
-		dto.setPropertytypeIdpropertytype( rs.getInt( COLUMN_PROPERTYTYPE_IDPROPERTYTYPE ) );
-		dto.setSensorIdsensor( rs.getString( COLUMN_SENSOR_IDSENSOR ) );
-		dto.setValue( rs.getDouble( COLUMN_VALUE ) );
+	protected void populateDto(Property dto, ResultSet rs) throws SQLException {
+		dto.setIdProperty(rs.getInt(COLUMN_ID_PROPERTY));
+		dto.setPropertytypeIdpropertytype(rs
+				.getInt(COLUMN_PROPERTYTYPE_IDPROPERTYTYPE));
+		dto.setSensorIdsensor(rs.getString(COLUMN_SENSOR_IDSENSOR));
+		dto.setValue(rs.getDouble(COLUMN_VALUE));
 		if (rs.wasNull()) {
-			dto.setValueNull( true );
+			dto.setValueNull(true);
 		}
-		
-		dto.setTimestamp( rs.getTimestamp(COLUMN_TIMESTAMP ) );
+
+		dto.setTimestamp(rs.getTimestamp(COLUMN_TIMESTAMP));
 	}
 
-	/** 
+	/**
 	 * Resets the modified attributes in the DTO
 	 */
-	protected void reset(Property dto)
-	{
+	protected void reset(Property dto) {
 	}
 
-	/** 
-	 * Returns all rows from the Property table that match the specified arbitrary SQL statement
+	/**
+	 * Returns all rows from the Property table that match the specified
+	 * arbitrary SQL statement
 	 */
-	public Property[] findByDynamicSelect(String sql, Object[] sqlParams) throws PropertyDaoException
-	{
+	public Property[] findByDynamicSelect(String sql, Object[] sqlParams)
+			throws PropertyDaoException {
 		// declare variables
 		final boolean isConnSupplied = (userConn != null);
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		
+
 		try {
-			// get the user-specified connection or get a connection from the ResourceManager
+			// get the user-specified connection or get a connection from the
+			// ResourceManager
 			conn = isConnSupplied ? userConn : ResourceManager.getConnection();
-		
+
 			// construct the SQL statement
 			final String SQL = sql;
-		
-		
-			System.out.println( "Executing " + SQL );
+
+			System.out.println("Executing " + SQL);
 			// prepare statement
-			stmt = conn.prepareStatement( SQL );
-			stmt.setMaxRows( maxRows );
-		
+			stmt = conn.prepareStatement(SQL);
+			stmt.setMaxRows(maxRows);
+
 			// bind parameters
-			for (int i=0; sqlParams!=null && i<sqlParams.length; i++ ) {
-				stmt.setObject( i+1, sqlParams[i] );
+			for (int i = 0; sqlParams != null && i < sqlParams.length; i++) {
+				stmt.setObject(i + 1, sqlParams[i]);
 			}
-		
-		
+
 			rs = stmt.executeQuery();
-		
+
 			// fetch the results
 			return fetchMultiResults(rs);
-		}
-		catch (Exception _e) {
+		} catch (Exception _e) {
 			_e.printStackTrace();
-			throw new PropertyDaoException( "Exception: " + _e.getMessage(), _e );
-		}
-		finally {
+			throw new PropertyDaoException("Exception: " + _e.getMessage(), _e);
+		} finally {
 			ResourceManager.close(rs);
 			ResourceManager.close(stmt);
 			if (!isConnSupplied) {
 				ResourceManager.close(conn);
 			}
-		
+
 		}
-		
+
 	}
 
-	/** 
-	 * Returns all rows from the Property table that match the specified arbitrary SQL statement
+	/**
+	 * Returns all rows from the Property table that match the specified
+	 * arbitrary SQL statement
 	 */
-	public Property[] findByDynamicWhere(String sql, Object[] sqlParams) throws PropertyDaoException
-	{
+	public Property[] findByDynamicWhere(String sql, Object[] sqlParams)
+			throws PropertyDaoException {
 		// declare variables
 		final boolean isConnSupplied = (userConn != null);
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		
+
 		try {
-			// get the user-specified connection or get a connection from the ResourceManager
+			// get the user-specified connection or get a connection from the
+			// ResourceManager
 			conn = isConnSupplied ? userConn : ResourceManager.getConnection();
-		
+
 			// construct the SQL statement
 			final String SQL = SQL_SELECT + " WHERE " + sql;
-		
-		
-			System.out.println( "Executing " + SQL );
+
+			System.out.println("Executing " + SQL);
 			// prepare statement
-			stmt = conn.prepareStatement( SQL );
-			stmt.setMaxRows( maxRows );
-		
+			stmt = conn.prepareStatement(SQL);
+			stmt.setMaxRows(maxRows);
+
 			// bind parameters
-			for (int i=0; sqlParams!=null && i<sqlParams.length; i++ ) {
-				stmt.setObject( i+1, sqlParams[i] );
+			for (int i = 0; sqlParams != null && i < sqlParams.length; i++) {
+				stmt.setObject(i + 1, sqlParams[i]);
 			}
-		
-		
+
 			rs = stmt.executeQuery();
-		
+
 			// fetch the results
 			return fetchMultiResults(rs);
-		}
-		catch (Exception _e) {
+		} catch (Exception _e) {
 			_e.printStackTrace();
-			throw new PropertyDaoException( "Exception: " + _e.getMessage(), _e );
-		}
-		finally {
+			throw new PropertyDaoException("Exception: " + _e.getMessage(), _e);
+		} finally {
 			ResourceManager.close(rs);
 			ResourceManager.close(stmt);
 			if (!isConnSupplied) {
 				ResourceManager.close(conn);
 			}
-		
+
 		}
-		
+
 	}
 
 }

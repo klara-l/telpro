@@ -94,7 +94,6 @@ public class SensorDaoImpl extends AbstractDAO implements SensorDao {
 		final boolean isConnSupplied = (userConn != null);
 		Connection conn = null;
 		PreparedStatement stmt = null;
-		ResultSet rs = null;
 
 		try {
 			// get the user-specified connection or get a connection from the

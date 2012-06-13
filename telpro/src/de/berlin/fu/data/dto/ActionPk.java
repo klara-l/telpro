@@ -9,34 +9,35 @@
 package de.berlin.fu.data.dto;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Date;
 
-/** 
+/**
  * This class represents the primary key of the Action table.
  */
-public class ActionPk implements Serializable
-{
+public class ActionPk implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -9148396789784741123L;
+
 	protected int idAction;
 
-	/** 
-	 * This attribute represents whether the primitive attribute idAction is null.
+	/**
+	 * This attribute represents whether the primitive attribute idAction is
+	 * null.
 	 */
 	protected boolean idActionNull;
 
-	/** 
+	/**
 	 * Sets the value of idAction
 	 */
-	public void setIdAction(int idAction)
-	{
+	public void setIdAction(int idAction) {
 		this.idAction = idAction;
 	}
 
-	/** 
+	/**
 	 * Gets the value of idAction
 	 */
-	public int getIdAction()
-	{
+	public int getIdAction() {
 		return idAction;
 	}
 
@@ -44,8 +45,7 @@ public class ActionPk implements Serializable
 	 * Method 'ActionPk'
 	 * 
 	 */
-	public ActionPk()
-	{
+	public ActionPk() {
 	}
 
 	/**
@@ -53,24 +53,21 @@ public class ActionPk implements Serializable
 	 * 
 	 * @param idAction
 	 */
-	public ActionPk(final int idAction)
-	{
+	public ActionPk(final int idAction) {
 		this.idAction = idAction;
 	}
 
-	/** 
+	/**
 	 * Sets the value of idActionNull
 	 */
-	public void setIdActionNull(boolean idActionNull)
-	{
+	public void setIdActionNull(boolean idActionNull) {
 		this.idActionNull = idActionNull;
 	}
 
-	/** 
+	/**
 	 * Gets the value of idActionNull
 	 */
-	public boolean isIdActionNull()
-	{
+	public boolean isIdActionNull() {
 		return idActionNull;
 	}
 
@@ -80,29 +77,29 @@ public class ActionPk implements Serializable
 	 * @param _other
 	 * @return boolean
 	 */
-	public boolean equals(Object _other)
-	{
+	@Override
+	public boolean equals(Object _other) {
 		if (_other == null) {
 			return false;
 		}
-		
+
 		if (_other == this) {
 			return true;
 		}
-		
+
 		if (!(_other instanceof ActionPk)) {
 			return false;
 		}
-		
+
 		final ActionPk _cast = (ActionPk) _other;
 		if (idAction != _cast.idAction) {
 			return false;
 		}
-		
+
 		if (idActionNull != _cast.idActionNull) {
 			return false;
 		}
-		
+
 		return true;
 	}
 
@@ -111,8 +108,8 @@ public class ActionPk implements Serializable
 	 * 
 	 * @return int
 	 */
-	public int hashCode()
-	{
+	@Override
+	public int hashCode() {
 		int _hashCode = 0;
 		_hashCode = 29 * _hashCode + idAction;
 		_hashCode = 29 * _hashCode + (idActionNull ? 1 : 0);
@@ -124,11 +121,11 @@ public class ActionPk implements Serializable
 	 * 
 	 * @return String
 	 */
-	public String toString()
-	{
+	@Override
+	public String toString() {
 		StringBuffer ret = new StringBuffer();
-		ret.append( "de.berlin.fu.data.dto.ActionPk: " );
-		ret.append( "idAction=" + idAction );
+		ret.append("de.berlin.fu.data.dto.ActionPk: ");
+		ret.append("idAction=" + idAction);
 		return ret.toString();
 	}
 

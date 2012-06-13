@@ -8,14 +8,15 @@
 
 package de.berlin.fu.data.dto;
 
-import de.berlin.fu.data.dao.*;
-import de.berlin.fu.data.factory.*;
-import de.berlin.fu.data.exceptions.*;
 import java.io.Serializable;
-import java.util.*;
 
 public class EventtypeHasAction implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7367364992551864633L;
+
 	/** 
 	 * This attribute maps to the column EventType_idEventType in the EventType_has_Action table.
 	 */
@@ -80,6 +81,7 @@ public class EventtypeHasAction implements Serializable
 	 * @param _other
 	 * @return boolean
 	 */
+	@Override
 	public boolean equals(Object _other)
 	{
 		if (_other == null) {
@@ -111,6 +113,7 @@ public class EventtypeHasAction implements Serializable
 	 * 
 	 * @return int
 	 */
+	@Override
 	public int hashCode()
 	{
 		int _hashCode = 0;
@@ -134,6 +137,7 @@ public class EventtypeHasAction implements Serializable
 	 * 
 	 * @return String
 	 */
+	@Override
 	public String toString()
 	{
 		StringBuffer ret = new StringBuffer();

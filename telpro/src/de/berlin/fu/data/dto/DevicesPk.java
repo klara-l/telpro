@@ -9,34 +9,35 @@
 package de.berlin.fu.data.dto;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Date;
 
-/** 
+/**
  * This class represents the primary key of the Devices table.
  */
-public class DevicesPk implements Serializable
-{
+public class DevicesPk implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2189697635976424314L;
+
 	protected int idDevices;
 
-	/** 
-	 * This attribute represents whether the primitive attribute idDevices is null.
+	/**
+	 * This attribute represents whether the primitive attribute idDevices is
+	 * null.
 	 */
 	protected boolean idDevicesNull;
 
-	/** 
+	/**
 	 * Sets the value of idDevices
 	 */
-	public void setIdDevices(int idDevices)
-	{
+	public void setIdDevices(int idDevices) {
 		this.idDevices = idDevices;
 	}
 
-	/** 
+	/**
 	 * Gets the value of idDevices
 	 */
-	public int getIdDevices()
-	{
+	public int getIdDevices() {
 		return idDevices;
 	}
 
@@ -44,8 +45,7 @@ public class DevicesPk implements Serializable
 	 * Method 'DevicesPk'
 	 * 
 	 */
-	public DevicesPk()
-	{
+	public DevicesPk() {
 	}
 
 	/**
@@ -53,24 +53,21 @@ public class DevicesPk implements Serializable
 	 * 
 	 * @param idDevices
 	 */
-	public DevicesPk(final int idDevices)
-	{
+	public DevicesPk(final int idDevices) {
 		this.idDevices = idDevices;
 	}
 
-	/** 
+	/**
 	 * Sets the value of idDevicesNull
 	 */
-	public void setIdDevicesNull(boolean idDevicesNull)
-	{
+	public void setIdDevicesNull(boolean idDevicesNull) {
 		this.idDevicesNull = idDevicesNull;
 	}
 
-	/** 
+	/**
 	 * Gets the value of idDevicesNull
 	 */
-	public boolean isIdDevicesNull()
-	{
+	public boolean isIdDevicesNull() {
 		return idDevicesNull;
 	}
 
@@ -80,29 +77,28 @@ public class DevicesPk implements Serializable
 	 * @param _other
 	 * @return boolean
 	 */
-	public boolean equals(Object _other)
-	{
+	public boolean equals(Object _other) {
 		if (_other == null) {
 			return false;
 		}
-		
+
 		if (_other == this) {
 			return true;
 		}
-		
+
 		if (!(_other instanceof DevicesPk)) {
 			return false;
 		}
-		
+
 		final DevicesPk _cast = (DevicesPk) _other;
 		if (idDevices != _cast.idDevices) {
 			return false;
 		}
-		
+
 		if (idDevicesNull != _cast.idDevicesNull) {
 			return false;
 		}
-		
+
 		return true;
 	}
 
@@ -111,8 +107,7 @@ public class DevicesPk implements Serializable
 	 * 
 	 * @return int
 	 */
-	public int hashCode()
-	{
+	public int hashCode() {
 		int _hashCode = 0;
 		_hashCode = 29 * _hashCode + idDevices;
 		_hashCode = 29 * _hashCode + (idDevicesNull ? 1 : 0);
@@ -124,11 +119,10 @@ public class DevicesPk implements Serializable
 	 * 
 	 * @return String
 	 */
-	public String toString()
-	{
+	public String toString() {
 		StringBuffer ret = new StringBuffer();
-		ret.append( "de.berlin.fu.data.dto.DevicesPk: " );
-		ret.append( "idDevices=" + idDevices );
+		ret.append("de.berlin.fu.data.dto.DevicesPk: ");
+		ret.append("idDevices=" + idDevices);
 		return ret.toString();
 	}
 

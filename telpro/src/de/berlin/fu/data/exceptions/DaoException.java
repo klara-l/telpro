@@ -10,6 +10,10 @@ package de.berlin.fu.data.exceptions;
 
 public class DaoException extends Exception
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 221009247577231709L;
 	protected Throwable throwable;
 
 	/**
@@ -39,6 +43,7 @@ public class DaoException extends Exception
 	 * 
 	 * @return Throwable
 	 */
+	@Override
 	public Throwable getCause()
 	{
 		return throwable;

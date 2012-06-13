@@ -8,14 +8,15 @@
 
 package de.berlin.fu.data.dto;
 
-import de.berlin.fu.data.dao.*;
-import de.berlin.fu.data.factory.*;
-import de.berlin.fu.data.exceptions.*;
 import java.io.Serializable;
-import java.util.*;
 
 public class Trigger implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2435671469727456562L;
+
 	/** 
 	 * This attribute maps to the column idTrigger in the Trigger table.
 	 */
@@ -105,6 +106,7 @@ public class Trigger implements Serializable
 	 * @param _other
 	 * @return boolean
 	 */
+	@Override
 	public boolean equals(Object _other)
 	{
 		if (_other == null) {
@@ -140,6 +142,7 @@ public class Trigger implements Serializable
 	 * 
 	 * @return int
 	 */
+	@Override
 	public int hashCode()
 	{
 		int _hashCode = 0;
@@ -164,6 +167,7 @@ public class Trigger implements Serializable
 	 * 
 	 * @return String
 	 */
+	@Override
 	public String toString()
 	{
 		StringBuffer ret = new StringBuffer();
