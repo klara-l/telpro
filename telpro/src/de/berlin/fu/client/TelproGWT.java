@@ -1,20 +1,17 @@
 package de.berlin.fu.client;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.JsArray;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.visualization.client.AbstractDataTable;
 import com.google.gwt.visualization.client.AbstractDataTable.ColumnType;
 import com.google.gwt.visualization.client.DataTable;
-import com.google.gwt.visualization.client.Selection;
-import com.google.gwt.visualization.client.events.SelectHandler;
+import com.google.gwt.visualization.client.VisualizationUtils;
 import com.google.gwt.visualization.client.visualizations.LineChart;
 import com.google.gwt.visualization.client.visualizations.LineChart.Options;
 
@@ -49,89 +46,42 @@ public class TelproGWT implements EntryPoint {
 			public void run() {
 				Panel panel = RootPanel.get();
 				// create a line chart
+				LinkedHashMap<String, Integer> temp = new LinkedHashMap<String, Integer>();
+				
+				temp.put("11:45", 20);
+				temp.put("11:46", 26);
+				temp.put("11:47", 21);
+				temp.put("11:48", 19);
+				temp.put("11:49", 15);
+				temp.put("11:50", 21);
+				temp.put("11:51", 20);
 
-				// LineChart line = new LineChart(
-				// createTempTable(conn.getTemperatur()), createOptions());
+				 LineChart line = new LineChart(createTempTable(temp), createOptions());
 
 				// Create a pie chart visualization.
-				// PieChart pie = new PieChart(createTable(), createOptions());
+				//PieChart pie = new PieChart(createTable(), createOptions());
 
-				// pie.addSelectHandler(createSelectHandler(pie));
-				// panel.add(pie);
-				// panel.add(line);
+				//pie.addSelectHandler(createSelectHandler(pie));
+				//panel.add(pie);
+				panel.add(line);
 			}
 		};
 
 		// Load the visualization api, passing the onLoadCallback to be called
 		// when loading is done.
-		// VisualizationUtils.loadVisualizationApi(onLoadCallback,
-		// LineChart.PACKAGE);
+		 VisualizationUtils.loadVisualizationApi(onLoadCallback, LineChart.PACKAGE);
 	}
 
 	private Options createOptions() {
 		Options options = Options.create();
 		options.setWidth(400);
 		options.setHeight(240);
-		options.setTitle("Temperatur in a day");
+		options.setTitle("Temperature in a day");
 		return options;
 	}
 
-	private SelectHandler createSelectHandler(final LineChart chart) {
-		return new SelectHandler() {
-			@Override
-			public void onSelect(SelectEvent event) {
-				String message = "";
 
-				// May be multiple selections.
-				JsArray<Selection> selections = chart.getSelections();
-
-				for (int i = 0; i < selections.length(); i++) {
-					// add a new line for each selection
-					message += i == 0 ? "" : "\n";
-
-					Selection selection = selections.get(i);
-
-					if (selection.isCell()) {
-						// isCell() returns true if a cell has been selected.
-
-						// getRow() returns the row number of the selected cell.
-						int row = selection.getRow();
-						// getColumn() returns the column number of the selected
-						// cell.
-						int column = selection.getColumn();
-						message += "cell " + row + ":" + column + " selected";
-					} else if (selection.isRow()) {
-						// isRow() returns true if an entire row has been
-						// selected.
-
-						// getRow() returns the row number of the selected row.
-						int row = selection.getRow();
-						message += "row " + row + " selected";
-					} else {
-						// unreachable
-						message += "Pie chart selections should be either row selections or cell selections.";
-						message += "  Other visualizations support column selections as well.";
-					}
-				}
-
-				Window.alert(message);
-			}
-		};
-	}
-
-	private AbstractDataTable createTable() {
-		DataTable data = DataTable.create();
-		data.addColumn(ColumnType.STRING, "Task");
-		data.addColumn(ColumnType.NUMBER, "Hours per Day");
-		data.addRows(2);
-		data.setValue(0, 0, "Work");
-		data.setValue(0, 1, 14);
-		data.setValue(1, 0, "Sleep");
-		data.setValue(1, 1, 10);
-		return data;
-	}
-
-	private AbstractDataTable createTempTable(HashMap<String, Integer> list) {
+	private AbstractDataTable createTempTable(LinkedHashMap<String, Integer> list) {
 		DataTable data = DataTable.create();
 		data.addColumn(ColumnType.STRING, "Time");
 		data.addColumn(ColumnType.NUMBER, "Temperatur");
