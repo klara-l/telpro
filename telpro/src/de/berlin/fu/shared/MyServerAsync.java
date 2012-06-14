@@ -38,4 +38,6 @@ public interface MyServerAsync {
 
 	void updateTrigger(Trigger t, AsyncCallback<Boolean> callback);
 
+	void getPropertyTypes(AsyncCallback<List<PropertyType>> callback);
+
 }
