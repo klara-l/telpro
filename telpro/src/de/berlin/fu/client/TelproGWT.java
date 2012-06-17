@@ -29,6 +29,7 @@ import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.grid.ListGridRecord;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
+import com.smartgwt.client.util.SC;
 
 import de.berlin.fu.data.dto.Property;
 import de.berlin.fu.data.dto.PropertyType;
@@ -66,72 +67,52 @@ public class TelproGWT implements EntryPoint {
 
 		createSensorTable();
 		updateSensorSelection();
+		
+		
+		
+		 
+		 //showGreetingWindow();
+		 //startTimer();
+		
 	}
+	
 
-	private void showGreetingWindow() {
 
-		Window startWindow = new Window();
-		startWindow.setTitle("Select sensor node");
-		startWindow.setWidth(400);
-		startWindow.setHeight(400);
-		startWindow.setCanDragResize(true);
-		Label text = new Label();
-		text.setContents("<h4 align=\"center\">Please select a sensor node!</h4>");
-
-		IButton select = new IButton("Ok");
-		// select.setIconOrientation("middle");
-
-		startWindow.addItem(text);
-		// startWindow.addItem(sensorTable);
-		startWindow.addItem(select);
-
-		startWindow.setShowCloseButton(false);
-		startWindow.setIsModal(true);
-		startWindow.setShowModalMask(true);
-		startWindow.centerInPage();
-		startWindow.show();
-	}
-
-	private void drawCharts() {
-		// add Charts
-		Runnable onLoadCallback = new Runnable() {
-			public void run() {
-				HLayout tempAndHum = new HLayout();
-				tempAndHum.setHeight(400);
-				tempAndHum.setWidth(600);
-				tempAndHum.setMembersMargin(20);
-				tempAndHum.setLayoutMargin(10);
-
-				temperature = new LineChart(createTable(null, "Temperature"),
-						createChartOptions("Temperature"));
-				humidity = new LineChart(createTable(null, "Humidity"),
-						createChartOptions("Humidity"));
-				tempAndHum.addMember(temperature);
-				tempAndHum.addMember(humidity);
-
-				HLayout tiltAndRoll = new HLayout();
-				tiltAndRoll.setHeight(400);
-				tiltAndRoll.setWidth(600);
-				tiltAndRoll.setMembersMargin(20);
-				tiltAndRoll.setLayoutMargin(10);
-
-				tilt = new LineChart(createTable(null, "Tilt"),
-						createChartOptions("Tilt"));
-				roll = new LineChart(createTable(null, "Roll"),
-						createChartOptions("Roll"));
-
-				tiltAndRoll.addMember(tilt);
-				tiltAndRoll.addMember(roll);
-
-				panel.add(tempAndHum);
-				panel.add(tiltAndRoll);
-			}
-		};
-
-		// Load the visualization api, passing the onLoadCallback to be called
-		// when loading is done.
-		VisualizationUtils.loadVisualizationApi(onLoadCallback,
-				LineChart.PACKAGE);
+	private void drawCharts(){
+		//add Charts
+				Runnable onLoadCallback = new Runnable() {
+					public void run() {
+						HLayout tempAndHum = new HLayout();
+						tempAndHum.setHeight(400); 
+						tempAndHum.setWidth(600);
+						tempAndHum.setMembersMargin(20);  
+						tempAndHum.setLayoutMargin(10);
+						
+						temperature = new LineChart(createTable(null, "Temperature"), createChartOptions("Temperature"));
+						humidity = new LineChart(createTable(null, "Humidity"), createChartOptions("Humidity"));
+						tempAndHum.addMember(temperature);
+						tempAndHum.addMember(humidity);
+						
+						HLayout tiltAndRoll = new HLayout();
+						tiltAndRoll.setHeight(400); 
+						tiltAndRoll.setWidth(600);
+						tiltAndRoll.setMembersMargin(20);  
+						tiltAndRoll.setLayoutMargin(10);
+						
+						tilt = new LineChart(createTable(null, "Tilt"), createChartOptions("Tilt"));
+						roll = new LineChart(createTable(null, "Roll"), createChartOptions("Roll"));
+						
+						tiltAndRoll.addMember(tilt);
+						tiltAndRoll.addMember(roll);
+						
+						panel.add(tempAndHum);
+						panel.add(tiltAndRoll);
+					}
+				};
+				
+				// Load the visualization api, passing the onLoadCallback to be called
+				// when loading is done.
+		 VisualizationUtils.loadVisualizationApi(onLoadCallback, LineChart.PACKAGE);
 	}
 
 	private void createSensorTable() {
@@ -158,6 +139,7 @@ public class TelproGWT implements EntryPoint {
 
 		textSelectednode = new Label();
 		textSelectednode.setContents("<h4>Please select a sensor node! </h4>");
+		
 
 		Button showDia = new Button("Show Diagrams");
 		addClickhandlerToShowDia(showDia);
@@ -320,6 +302,7 @@ public class TelproGWT implements EntryPoint {
 				i++;
 			}
 		}
+		
 
 		return data;
 	}
