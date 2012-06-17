@@ -9,18 +9,21 @@ import de.berlin.fu.data.dao.ActionDao;
 import de.berlin.fu.data.dao.TriggerDao;
 import de.berlin.fu.data.dto.Action;
 import de.berlin.fu.data.dto.Event;
+import de.berlin.fu.data.dto.EventType;
 import de.berlin.fu.data.dto.Property;
 import de.berlin.fu.data.dto.PropertyType;
 import de.berlin.fu.data.dto.Sensor;
 import de.berlin.fu.data.dto.Trigger;
 import de.berlin.fu.data.exceptions.ActionDaoException;
 import de.berlin.fu.data.exceptions.EventDaoException;
+import de.berlin.fu.data.exceptions.EventTypeDaoException;
 import de.berlin.fu.data.exceptions.PropertyDaoException;
 import de.berlin.fu.data.exceptions.PropertyTypeDaoException;
 import de.berlin.fu.data.exceptions.SensorDaoException;
 import de.berlin.fu.data.exceptions.TriggerDaoException;
 import de.berlin.fu.data.factory.ActionDaoFactory;
 import de.berlin.fu.data.factory.EventDaoFactory;
+import de.berlin.fu.data.factory.EventTypeDaoFactory;
 import de.berlin.fu.data.factory.PropertyDaoFactory;
 import de.berlin.fu.data.factory.PropertyTypeDaoFactory;
 import de.berlin.fu.data.factory.SensorDaoFactory;
@@ -173,5 +176,16 @@ public class MyServerImpl extends RemoteServiceServlet implements MyServer {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	public List<EventType> getEventTypes() {
+		try {
+			return Arrays.asList(EventTypeDaoFactory.create().findAll());
+		} catch (EventTypeDaoException e) {
+			e.printStackTrace();
+		}
+		return null;
+
 	}
 }

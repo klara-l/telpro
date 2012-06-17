@@ -7,6 +7,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 import de.berlin.fu.data.dto.Action;
 import de.berlin.fu.data.dto.Event;
+import de.berlin.fu.data.dto.EventType;
 import de.berlin.fu.data.dto.Property;
 import de.berlin.fu.data.dto.PropertyType;
 import de.berlin.fu.data.dto.Sensor;
@@ -40,5 +41,7 @@ public interface MyServer extends RemoteService {
 	public List<Property> getProperty(Sensor s, PropertyType pt);
 
 	public List<PropertyType> getPropertyTypes();
+
+	public List<EventType> getEventTypes();
 
 }

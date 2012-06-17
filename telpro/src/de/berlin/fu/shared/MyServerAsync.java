@@ -6,6 +6,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import de.berlin.fu.data.dto.Action;
 import de.berlin.fu.data.dto.Event;
+import de.berlin.fu.data.dto.EventType;
 import de.berlin.fu.data.dto.Property;
 import de.berlin.fu.data.dto.PropertyType;
 import de.berlin.fu.data.dto.Sensor;
@@ -39,5 +40,7 @@ public interface MyServerAsync {
 	void updateTrigger(Trigger t, AsyncCallback<Void> callback);
 
 	void getPropertyTypes(AsyncCallback<List<PropertyType>> callback);
+
+	void getEventTypes(AsyncCallback<List<EventType>> callback);
 
 }
