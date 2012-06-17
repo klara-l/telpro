@@ -17,12 +17,9 @@ import com.google.gwt.visualization.client.visualizations.LineChart;
 import com.google.gwt.visualization.client.visualizations.LineChart.Options;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.SelectionStyle;
-import com.smartgwt.client.types.VerticalAlignment;
 
 import com.smartgwt.client.widgets.Button;
-import com.smartgwt.client.widgets.IButton;
 import com.smartgwt.client.widgets.Label;
-import com.smartgwt.client.widgets.Window;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.grid.ListGrid;
@@ -77,30 +74,7 @@ public class TelproGWT implements EntryPoint {
 		
 	}
 	
-	private void showGreetingWindow(){
-		
-		
-		Window startWindow = new Window();
-		startWindow.setTitle("Select sensor node");  
-		startWindow.setWidth(400);  
-		startWindow.setHeight(400);  
-		startWindow.setCanDragResize(true);  
-		Label text = new Label();  
-        text.setContents("<h4 align=\"center\">Please select a sensor node!</h4>"); 
-        
-        IButton select = new IButton("Ok");
-        //select.setIconOrientation("middle");
-        
-        startWindow.addItem(text);
-        //startWindow.addItem(sensorTable);
-        startWindow.addItem(select);
-        
-        startWindow.setShowCloseButton(false);
-        startWindow.setIsModal(true);  
-        startWindow.setShowModalMask(true);  
-        startWindow.centerInPage();
-        startWindow.show();
-	}
+
 
 	private void drawCharts(){
 		//add Charts
