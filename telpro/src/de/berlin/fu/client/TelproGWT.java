@@ -49,6 +49,8 @@ public class TelproGWT implements EntryPoint {
 	
 	private LineChart temperature;
 	private LineChart humidity;
+	private LineChart tilt;
+	private LineChart roll;
 	
 	private Panel panel;
 	
@@ -104,10 +106,31 @@ public class TelproGWT implements EntryPoint {
 		//add Charts
 				Runnable onLoadCallback = new Runnable() {
 					public void run() {
+						HLayout tempAndHum = new HLayout();
+						tempAndHum.setHeight(400); 
+						tempAndHum.setWidth(600);
+						tempAndHum.setMembersMargin(20);  
+						tempAndHum.setLayoutMargin(10);
+						
 						temperature = new LineChart(createTable(null, "Temperature"), createChartOptions("Temperature"));
 						humidity = new LineChart(createTable(null, "Humidity"), createChartOptions("Humidity"));
-						panel.add(temperature);
-						panel.add(humidity);
+						tempAndHum.addMember(temperature);
+						tempAndHum.addMember(humidity);
+						
+						HLayout tiltAndRoll = new HLayout();
+						tiltAndRoll.setHeight(400); 
+						tiltAndRoll.setWidth(600);
+						tiltAndRoll.setMembersMargin(20);  
+						tiltAndRoll.setLayoutMargin(10);
+						
+						tilt = new LineChart(createTable(null, "Tilt"), createChartOptions("Tilt"));
+						roll = new LineChart(createTable(null, "Roll"), createChartOptions("Roll"));
+						
+						tiltAndRoll.addMember(tilt);
+						tiltAndRoll.addMember(roll);
+						
+						panel.add(tempAndHum);
+						panel.add(tiltAndRoll);
 					}
 				};
 				
@@ -118,10 +141,11 @@ public class TelproGWT implements EntryPoint {
 
 	private void createSensorTable(){
 		HLayout sensorTableLayout = new HLayout();  
-        sensorTableLayout.setHeight(150); 
-        sensorTableLayout.setWidth(600);
-        sensorTableLayout.setMembersMargin(20);  
-        sensorTableLayout.setLayoutMargin(10);
+		sensorTableLayout.setHeight(200); 
+		sensorTableLayout.setWidth(600);
+		sensorTableLayout.setMembersMargin(20);  
+		sensorTableLayout.setLayoutMargin(10);
+
         
         VLayout tableWithButton = new VLayout();  
         tableWithButton.setShowEdges(true);  
@@ -233,13 +257,17 @@ public class TelproGWT implements EntryPoint {
 					temperature.draw(table);
 				}else if(type.equals("humidity")){
 					humidity.draw(table);
-				}//add here else if
+				}else if(type.equals("tilt")){
+					tilt.draw(table);
+				}else{
+					roll.draw(table);
+				}
 				
 			}
 			
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
+				SC.say("Error", "Ups.. you have no access to database. Please reload the page!");
 				
 			}
 		});
@@ -299,6 +327,8 @@ public class TelproGWT implements EntryPoint {
 		    	
 		    	  getProperties(sensorID, "temperature");
 		    	  getProperties(sensorID, "humidity");
+		    	  getProperties(sensorID, "tilt");
+		    	  getProperties(sensorID, "roll");
 		      }
 		    };
 
