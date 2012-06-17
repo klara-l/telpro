@@ -20,5 +20,7 @@ war/WEB-INF/classes/
 .settings
 .classpath
 .project
+.gwt
+
 
 src/de/berlin/fu/data/jdbc/ResourceManager.java
