@@ -22,6 +22,7 @@ war/WEB-INF/classes/
 .project
 .gwt
 
+*.rpc
 
 src/de/berlin/fu/data/jdbc/ResourceManager.java
 src/de/berlin/fu/client/SmartGWTTest.java
