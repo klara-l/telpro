@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Erstellungszeit: 01. Jan 2000 um 03:10
+-- Erstellungszeit: 01. Jan 2000 um 03:45
 -- Server Version: 5.5.16
 -- PHP-Version: 5.3.8
 
@@ -26,7 +26,6 @@ SET time_zone = "+00:00";
 -- Tabellenstruktur für Tabelle `Action`
 --
 
-DROP TABLE IF EXISTS `Action`;
 CREATE TABLE IF NOT EXISTS `Action` (
   `idAction` int(11) NOT NULL AUTO_INCREMENT,
   `Name` varchar(45) DEFAULT NULL,
@@ -40,7 +39,6 @@ CREATE TABLE IF NOT EXISTS `Action` (
 -- Tabellenstruktur für Tabelle `Devices`
 --
 
-DROP TABLE IF EXISTS `Devices`;
 CREATE TABLE IF NOT EXISTS `Devices` (
   `idDevices` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`idDevices`)
@@ -52,7 +50,6 @@ CREATE TABLE IF NOT EXISTS `Devices` (
 -- Tabellenstruktur für Tabelle `Event`
 --
 
-DROP TABLE IF EXISTS `Event`;
 CREATE TABLE IF NOT EXISTS `Event` (
   `idEvent` int(11) NOT NULL AUTO_INCREMENT,
   `EventType_idEventType` int(11) NOT NULL,
@@ -78,7 +75,6 @@ INSERT INTO `Event` (`idEvent`, `EventType_idEventType`, `Timestamp`, `Sensor_id
 -- Tabellenstruktur für Tabelle `EventType`
 --
 
-DROP TABLE IF EXISTS `EventType`;
 CREATE TABLE IF NOT EXISTS `EventType` (
   `idEventType` int(11) NOT NULL AUTO_INCREMENT,
   `Name` varchar(45) DEFAULT NULL,
@@ -99,7 +95,6 @@ INSERT INTO `EventType` (`idEventType`, `Name`, `Description`) VALUES
 -- Tabellenstruktur für Tabelle `EventType_has_Action`
 --
 
-DROP TABLE IF EXISTS `EventType_has_Action`;
 CREATE TABLE IF NOT EXISTS `EventType_has_Action` (
   `EventType_idEventType` int(11) NOT NULL,
   `Action_idAction` int(11) NOT NULL,
@@ -114,7 +109,6 @@ CREATE TABLE IF NOT EXISTS `EventType_has_Action` (
 -- Tabellenstruktur für Tabelle `Property`
 --
 
-DROP TABLE IF EXISTS `Property`;
 CREATE TABLE IF NOT EXISTS `Property` (
   `idProperty` int(11) NOT NULL AUTO_INCREMENT,
   `PropertyType_idPropertyType` int(11) NOT NULL,
@@ -124,7 +118,7 @@ CREATE TABLE IF NOT EXISTS `Property` (
   PRIMARY KEY (`idProperty`,`PropertyType_idPropertyType`,`Sensor_idSensor`),
   KEY `fk_Property_PropertyType1` (`PropertyType_idPropertyType`),
   KEY `fk_Property_Sensor1` (`Sensor_idSensor`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=56 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=57 ;
 
 --
 -- Daten für Tabelle `Property`
@@ -184,7 +178,11 @@ INSERT INTO `Property` (`idProperty`, `PropertyType_idPropertyType`, `Sensor_idS
 (52, 1, 'testnode', 21.5, '2012-06-05 20:37:38'),
 (53, 1, 'testnode', 21.5, '2012-06-05 20:37:53'),
 (54, 1, 'testnode', 21.5, '2012-06-05 20:38:08'),
-(55, 1, 'testnode', 21.5, '2012-06-05 20:38:23');
+(55, 1, 'testnode', 21.5, '2012-06-05 20:38:23'),
+(56, 1, 'testnode', 0, '2012-06-17 21:56:56'),
+(56, 2, 'testnode', 0, '2012-06-17 21:56:56'),
+(56, 3, 'testnode', 0, '2012-06-17 21:56:56'),
+(56, 4, 'testnode', 0, '2012-06-17 21:56:56');
 
 -- --------------------------------------------------------
 
@@ -192,12 +190,11 @@ INSERT INTO `Property` (`idProperty`, `PropertyType_idPropertyType`, `Sensor_idS
 -- Tabellenstruktur für Tabelle `PropertyType`
 --
 
-DROP TABLE IF EXISTS `PropertyType`;
 CREATE TABLE IF NOT EXISTS `PropertyType` (
   `idPropertyType` int(11) NOT NULL AUTO_INCREMENT,
   `Name` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`idPropertyType`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
 -- Daten für Tabelle `PropertyType`
@@ -205,7 +202,9 @@ CREATE TABLE IF NOT EXISTS `PropertyType` (
 
 INSERT INTO `PropertyType` (`idPropertyType`, `Name`) VALUES
 (1, 'temperature'),
-(2, 'humidity');
+(2, 'humidity'),
+(3, 'tilt'),
+(4, 'roll');
 
 -- --------------------------------------------------------
 
@@ -213,7 +212,6 @@ INSERT INTO `PropertyType` (`idPropertyType`, `Name`) VALUES
 -- Tabellenstruktur für Tabelle `Sensor`
 --
 
-DROP TABLE IF EXISTS `Sensor`;
 CREATE TABLE IF NOT EXISTS `Sensor` (
   `idSensor` varchar(16) NOT NULL,
   `IP` int(11) DEFAULT NULL,
@@ -226,7 +224,7 @@ CREATE TABLE IF NOT EXISTS `Sensor` (
 --
 
 INSERT INTO `Sensor` (`idSensor`, `IP`, `Location`) VALUES
-('testnode', 9, 'home');
+('testnode', 2130706433, 'home');
 
 -- --------------------------------------------------------
 
@@ -234,7 +232,6 @@ INSERT INTO `Sensor` (`idSensor`, `IP`, `Location`) VALUES
 -- Tabellenstruktur für Tabelle `Sensor_has_PropertyType`
 --
 
-DROP TABLE IF EXISTS `Sensor_has_PropertyType`;
 CREATE TABLE IF NOT EXISTS `Sensor_has_PropertyType` (
   `Sensor_idSensor` varchar(16) NOT NULL,
   `PropertyType_idPropertyType` int(11) NOT NULL,
@@ -249,7 +246,6 @@ CREATE TABLE IF NOT EXISTS `Sensor_has_PropertyType` (
 -- Tabellenstruktur für Tabelle `Sensor_has_Trigger`
 --
 
-DROP TABLE IF EXISTS `Sensor_has_Trigger`;
 CREATE TABLE IF NOT EXISTS `Sensor_has_Trigger` (
   `Sensor_idSensor` varchar(16) NOT NULL,
   `Trigger_idTrigger` int(11) NOT NULL,
@@ -264,7 +260,6 @@ CREATE TABLE IF NOT EXISTS `Sensor_has_Trigger` (
 -- Tabellenstruktur für Tabelle `Trigger`
 --
 
-DROP TABLE IF EXISTS `Trigger`;
 CREATE TABLE IF NOT EXISTS `Trigger` (
   `idTrigger` int(11) NOT NULL AUTO_INCREMENT,
   `PropertyType_idPropertyType` int(11) NOT NULL,
@@ -272,7 +267,7 @@ CREATE TABLE IF NOT EXISTS `Trigger` (
   PRIMARY KEY (`idTrigger`),
   KEY `fk_Trigger_PropertyType1` (`PropertyType_idPropertyType`),
   KEY `fk_Trigger_EventType1` (`EventType_idEventType`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Constraints der exportierten Tabellen
