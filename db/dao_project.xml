@@ -1,0 +1,1868 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<firestorm-project version="4.0.1">
+  <name>MyProject</name>
+  <description />
+  <dbimport-config>
+    <jdbc-datasource>MySQL Datasource</jdbc-datasource>
+    <jdbc-catalog>telpro</jdbc-catalog>
+    <jdbc-schema />
+    <sql-import-file>/home/kaidowei/telpro/db/create_db.sql</sql-import-file>
+    <sql-vendor>MySQL</sql-vendor>
+    <import-tables>true</import-tables>
+    <import-views>true</import-views>
+    <import-procedures>true</import-procedures>
+    <prefer-objects>false</prefer-objects>
+    <sync-new>true</sync-new>
+    <sync-existing>true</sync-existing>
+    <sync-deleted>true</sync-deleted>
+    <map-large-integer-to-bigdecimal>false</map-large-integer-to-bigdecimal>
+    <verbose-logging>false</verbose-logging>
+    <filter-list>
+      <filter>Action</filter>
+      <filter>Devices</filter>
+      <filter>Event</filter>
+      <filter>EventType</filter>
+      <filter>EventType_has_Action</filter>
+      <filter>Property</filter>
+      <filter>PropertyType</filter>
+      <filter>Sensor</filter>
+      <filter>Sensor_has_PropertyType</filter>
+      <filter>Sensor_has_Trigger</filter>
+      <filter>Trigger</filter>
+    </filter-list>
+  </dbimport-config>
+  <database>
+    <platform>MySQL</platform>
+    <catalog-name>telpro</catalog-name>
+    <schema-name />
+    <table-list>
+      <table>
+        <sql-name>Action</sql-name>
+        <java-name>Action</java-name>
+        <primary-key>
+          <column-list>
+            <column>idAction</column>
+          </column-list>
+        </primary-key>
+        <column-list>
+          <column>
+            <java-name>idAction</java-name>
+            <java-type>int</java-type>
+            <java-default-value />
+            <sql-name>idAction</sql-name>
+            <sql-type>INT</sql-type>
+            <jdbc-type>INTEGER</jdbc-type>
+            <jdbc-precision>10</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>false</nullable>
+            <unique>false</unique>
+            <auto-increment>true</auto-increment>
+            <sequence-name />
+          </column>
+          <column>
+            <java-name>name</java-name>
+            <java-type>java.lang.String</java-type>
+            <java-default-value />
+            <sql-name>Name</sql-name>
+            <sql-type>VARCHAR</sql-type>
+            <jdbc-type>VARCHAR</jdbc-type>
+            <jdbc-precision>45</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>true</nullable>
+            <unique>false</unique>
+            <auto-increment>false</auto-increment>
+            <sequence-name />
+          </column>
+          <column>
+            <java-name>description</java-name>
+            <java-type>java.lang.String</java-type>
+            <java-default-value />
+            <sql-name>Description</sql-name>
+            <sql-type>TEXT</sql-type>
+            <jdbc-type>LONGVARCHAR</jdbc-type>
+            <jdbc-precision>65535</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>true</nullable>
+            <unique>false</unique>
+            <auto-increment>false</auto-increment>
+            <sequence-name />
+          </column>
+        </column-list>
+        <finder-list>
+          <finder>
+            <name>findByPrimaryKey</name>
+            <multi-finder>false</multi-finder>
+            <where>idAction = :idAction</where>
+            <order-by />
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>idAction</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findAll</name>
+            <multi-finder>true</multi-finder>
+            <where />
+            <order-by>idAction</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list />
+          </finder>
+          <finder>
+            <name>findWhereIdActionEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>idAction = :idAction</where>
+            <order-by>idAction</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>idAction</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findWhereNameEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>Name = :name</where>
+            <order-by>Name</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>name</java-name>
+                <java-type>java.lang.String</java-type>
+                <jdbc-type>VARCHAR</jdbc-type>
+                <jdbc-precision>45</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findWhereDescriptionEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>Description = :description</where>
+            <order-by>Description</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>description</java-name>
+                <java-type>java.lang.String</java-type>
+                <jdbc-type>LONGVARCHAR</jdbc-type>
+                <jdbc-precision>65535</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+        </finder-list>
+      </table>
+      <table>
+        <sql-name>Devices</sql-name>
+        <java-name>Devices</java-name>
+        <primary-key>
+          <column-list>
+            <column>idDevices</column>
+          </column-list>
+        </primary-key>
+        <column-list>
+          <column>
+            <java-name>idDevices</java-name>
+            <java-type>int</java-type>
+            <java-default-value />
+            <sql-name>idDevices</sql-name>
+            <sql-type>INT</sql-type>
+            <jdbc-type>INTEGER</jdbc-type>
+            <jdbc-precision>10</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>false</nullable>
+            <unique>false</unique>
+            <auto-increment>true</auto-increment>
+            <sequence-name />
+          </column>
+        </column-list>
+        <finder-list>
+          <finder>
+            <name>findByPrimaryKey</name>
+            <multi-finder>false</multi-finder>
+            <where>idDevices = :idDevices</where>
+            <order-by />
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>idDevices</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findAll</name>
+            <multi-finder>true</multi-finder>
+            <where />
+            <order-by>idDevices</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list />
+          </finder>
+          <finder>
+            <name>findWhereIdDevicesEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>idDevices = :idDevices</where>
+            <order-by>idDevices</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>idDevices</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+        </finder-list>
+      </table>
+      <table>
+        <sql-name>Event</sql-name>
+        <java-name>Event</java-name>
+        <primary-key>
+          <column-list>
+            <column>idEvent</column>
+            <column>EventType_idEventType</column>
+          </column-list>
+        </primary-key>
+        <foreign-key-list>
+          <foreign-key>
+            <name>fk_Event_EventType1</name>
+            <parent-table>EventType</parent-table>
+            <cardinality>1-many</cardinality>
+            <nav-to-parent-term>EventType</nav-to-parent-term>
+            <nav-to-child-term>Event</nav-to-child-term>
+            <nav-to-parent>true</nav-to-parent>
+            <nav-to-child>false</nav-to-child>
+            <column-list>
+              <column>
+                <column-name>EventType_idEventType</column-name>
+                <ref-column-name>idEventType</ref-column-name>
+              </column>
+            </column-list>
+          </foreign-key>
+          <foreign-key>
+            <name>fk_Event_Sensor1</name>
+            <parent-table>Sensor</parent-table>
+            <cardinality>1-many</cardinality>
+            <nav-to-parent-term>Sensor</nav-to-parent-term>
+            <nav-to-child-term>Event1</nav-to-child-term>
+            <nav-to-parent>true</nav-to-parent>
+            <nav-to-child>false</nav-to-child>
+            <column-list>
+              <column>
+                <column-name>Sensor_idSensor</column-name>
+                <ref-column-name>idSensor</ref-column-name>
+              </column>
+            </column-list>
+          </foreign-key>
+          <foreign-key>
+            <name>fk_Event_Trigger1</name>
+            <parent-table>Trigger</parent-table>
+            <cardinality>1-many</cardinality>
+            <nav-to-parent-term>Trigger</nav-to-parent-term>
+            <nav-to-child-term>Event2</nav-to-child-term>
+            <nav-to-parent>true</nav-to-parent>
+            <nav-to-child>false</nav-to-child>
+            <column-list>
+              <column>
+                <column-name>Trigger_idTrigger</column-name>
+                <ref-column-name>idTrigger</ref-column-name>
+              </column>
+            </column-list>
+          </foreign-key>
+        </foreign-key-list>
+        <column-list>
+          <column>
+            <java-name>idEvent</java-name>
+            <java-type>int</java-type>
+            <java-default-value />
+            <sql-name>idEvent</sql-name>
+            <sql-type>INT</sql-type>
+            <jdbc-type>INTEGER</jdbc-type>
+            <jdbc-precision>10</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>false</nullable>
+            <unique>false</unique>
+            <auto-increment>true</auto-increment>
+            <sequence-name />
+          </column>
+          <column>
+            <java-name>eventtypeIdeventtype</java-name>
+            <java-type>int</java-type>
+            <java-default-value />
+            <sql-name>EventType_idEventType</sql-name>
+            <sql-type>INT</sql-type>
+            <jdbc-type>INTEGER</jdbc-type>
+            <jdbc-precision>10</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>false</nullable>
+            <unique>false</unique>
+            <auto-increment>false</auto-increment>
+            <sequence-name />
+          </column>
+          <column>
+            <java-name>timestamp</java-name>
+            <java-type>java.util.Date</java-type>
+            <java-default-value />
+            <sql-name>Timestamp</sql-name>
+            <sql-type>TIMESTAMP</sql-type>
+            <jdbc-type>TIMESTAMP</jdbc-type>
+            <jdbc-precision>19</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>true</nullable>
+            <unique>false</unique>
+            <auto-increment>false</auto-increment>
+            <sequence-name />
+          </column>
+          <column>
+            <java-name>sensorIdsensor</java-name>
+            <java-type>java.lang.String</java-type>
+            <java-default-value />
+            <sql-name>Sensor_idSensor</sql-name>
+            <sql-type>VARCHAR</sql-type>
+            <jdbc-type>VARCHAR</jdbc-type>
+            <jdbc-precision>16</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>true</nullable>
+            <unique>false</unique>
+            <auto-increment>false</auto-increment>
+            <sequence-name />
+          </column>
+          <column>
+            <java-name>triggerIdtrigger</java-name>
+            <java-type>int</java-type>
+            <java-default-value />
+            <sql-name>Trigger_idTrigger</sql-name>
+            <sql-type>INT</sql-type>
+            <jdbc-type>INTEGER</jdbc-type>
+            <jdbc-precision>10</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>true</nullable>
+            <unique>false</unique>
+            <auto-increment>false</auto-increment>
+            <sequence-name />
+          </column>
+        </column-list>
+        <finder-list>
+          <finder>
+            <name>findByPrimaryKey</name>
+            <multi-finder>false</multi-finder>
+            <where>idEvent = :idEvent AND EventType_idEventType = :eventtypeIdeventtype</where>
+            <order-by />
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>idEvent</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+              <parameter>
+                <java-name>eventtypeIdeventtype</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findAll</name>
+            <multi-finder>true</multi-finder>
+            <where />
+            <order-by>idEvent, EventType_idEventType</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list />
+          </finder>
+          <finder>
+            <name>findByEventType</name>
+            <multi-finder>true</multi-finder>
+            <where>EventType_idEventType = :eventtypeIdeventtype</where>
+            <order-by />
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>eventtypeIdeventtype</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findBySensor</name>
+            <multi-finder>true</multi-finder>
+            <where>Sensor_idSensor = :sensorIdsensor</where>
+            <order-by />
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>sensorIdsensor</java-name>
+                <java-type>java.lang.String</java-type>
+                <jdbc-type>VARCHAR</jdbc-type>
+                <jdbc-precision>16</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findByTrigger</name>
+            <multi-finder>true</multi-finder>
+            <where>Trigger_idTrigger = :triggerIdtrigger</where>
+            <order-by />
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>triggerIdtrigger</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findWhereIdEventEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>idEvent = :idEvent</where>
+            <order-by>idEvent</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>idEvent</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findWhereEventtypeIdeventtypeEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>EventType_idEventType = :eventtypeIdeventtype</where>
+            <order-by>EventType_idEventType</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>eventtypeIdeventtype</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findWhereTimestampEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>Timestamp = :timestamp</where>
+            <order-by>Timestamp</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>timestamp</java-name>
+                <java-type>java.util.Date</java-type>
+                <jdbc-type>TIMESTAMP</jdbc-type>
+                <jdbc-precision>19</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findWhereSensorIdsensorEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>Sensor_idSensor = :sensorIdsensor</where>
+            <order-by>Sensor_idSensor</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>sensorIdsensor</java-name>
+                <java-type>java.lang.String</java-type>
+                <jdbc-type>VARCHAR</jdbc-type>
+                <jdbc-precision>16</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findWhereTriggerIdtriggerEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>Trigger_idTrigger = :triggerIdtrigger</where>
+            <order-by>Trigger_idTrigger</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>triggerIdtrigger</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+        </finder-list>
+      </table>
+      <table>
+        <sql-name>EventType</sql-name>
+        <java-name>EventType</java-name>
+        <primary-key>
+          <column-list>
+            <column>idEventType</column>
+          </column-list>
+        </primary-key>
+        <column-list>
+          <column>
+            <java-name>idEventType</java-name>
+            <java-type>int</java-type>
+            <java-default-value />
+            <sql-name>idEventType</sql-name>
+            <sql-type>INT</sql-type>
+            <jdbc-type>INTEGER</jdbc-type>
+            <jdbc-precision>10</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>false</nullable>
+            <unique>false</unique>
+            <auto-increment>true</auto-increment>
+            <sequence-name />
+          </column>
+          <column>
+            <java-name>name</java-name>
+            <java-type>java.lang.String</java-type>
+            <java-default-value />
+            <sql-name>Name</sql-name>
+            <sql-type>VARCHAR</sql-type>
+            <jdbc-type>VARCHAR</jdbc-type>
+            <jdbc-precision>45</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>true</nullable>
+            <unique>false</unique>
+            <auto-increment>false</auto-increment>
+            <sequence-name />
+          </column>
+          <column>
+            <java-name>description</java-name>
+            <java-type>java.lang.String</java-type>
+            <java-default-value />
+            <sql-name>Description</sql-name>
+            <sql-type>TEXT</sql-type>
+            <jdbc-type>LONGVARCHAR</jdbc-type>
+            <jdbc-precision>65535</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>true</nullable>
+            <unique>false</unique>
+            <auto-increment>false</auto-increment>
+            <sequence-name />
+          </column>
+        </column-list>
+        <finder-list>
+          <finder>
+            <name>findByPrimaryKey</name>
+            <multi-finder>false</multi-finder>
+            <where>idEventType = :idEventType</where>
+            <order-by />
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>idEventType</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findAll</name>
+            <multi-finder>true</multi-finder>
+            <where />
+            <order-by>idEventType</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list />
+          </finder>
+          <finder>
+            <name>findWhereIdEventTypeEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>idEventType = :idEventType</where>
+            <order-by>idEventType</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>idEventType</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findWhereNameEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>Name = :name</where>
+            <order-by>Name</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>name</java-name>
+                <java-type>java.lang.String</java-type>
+                <jdbc-type>VARCHAR</jdbc-type>
+                <jdbc-precision>45</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findWhereDescriptionEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>Description = :description</where>
+            <order-by>Description</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>description</java-name>
+                <java-type>java.lang.String</java-type>
+                <jdbc-type>LONGVARCHAR</jdbc-type>
+                <jdbc-precision>65535</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+        </finder-list>
+      </table>
+      <table>
+        <sql-name>EventType_has_Action</sql-name>
+        <java-name>EventtypeHasAction</java-name>
+        <primary-key>
+          <column-list>
+            <column>EventType_idEventType</column>
+            <column>Action_idAction</column>
+          </column-list>
+        </primary-key>
+        <foreign-key-list>
+          <foreign-key>
+            <name>fk_EventType_has_Action_Action1</name>
+            <parent-table>Action</parent-table>
+            <cardinality>1-many</cardinality>
+            <nav-to-parent-term>Action</nav-to-parent-term>
+            <nav-to-child-term>EventtypeHasAction</nav-to-child-term>
+            <nav-to-parent>true</nav-to-parent>
+            <nav-to-child>false</nav-to-child>
+            <column-list>
+              <column>
+                <column-name>Action_idAction</column-name>
+                <ref-column-name>idAction</ref-column-name>
+              </column>
+            </column-list>
+          </foreign-key>
+          <foreign-key>
+            <name>fk_EventType_has_Action_EventType1</name>
+            <parent-table>EventType</parent-table>
+            <cardinality>1-many</cardinality>
+            <nav-to-parent-term>EventType</nav-to-parent-term>
+            <nav-to-child-term>EventtypeHasAction1</nav-to-child-term>
+            <nav-to-parent>true</nav-to-parent>
+            <nav-to-child>false</nav-to-child>
+            <column-list>
+              <column>
+                <column-name>EventType_idEventType</column-name>
+                <ref-column-name>idEventType</ref-column-name>
+              </column>
+            </column-list>
+          </foreign-key>
+        </foreign-key-list>
+        <column-list>
+          <column>
+            <java-name>eventtypeIdeventtype</java-name>
+            <java-type>int</java-type>
+            <java-default-value />
+            <sql-name>EventType_idEventType</sql-name>
+            <sql-type>INT</sql-type>
+            <jdbc-type>INTEGER</jdbc-type>
+            <jdbc-precision>10</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>false</nullable>
+            <unique>false</unique>
+            <auto-increment>false</auto-increment>
+            <sequence-name />
+          </column>
+          <column>
+            <java-name>actionIdaction</java-name>
+            <java-type>int</java-type>
+            <java-default-value />
+            <sql-name>Action_idAction</sql-name>
+            <sql-type>INT</sql-type>
+            <jdbc-type>INTEGER</jdbc-type>
+            <jdbc-precision>10</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>false</nullable>
+            <unique>false</unique>
+            <auto-increment>false</auto-increment>
+            <sequence-name />
+          </column>
+        </column-list>
+        <finder-list>
+          <finder>
+            <name>findByPrimaryKey</name>
+            <multi-finder>false</multi-finder>
+            <where>EventType_idEventType = :eventtypeIdeventtype AND Action_idAction = :actionIdaction</where>
+            <order-by />
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>eventtypeIdeventtype</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+              <parameter>
+                <java-name>actionIdaction</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findAll</name>
+            <multi-finder>true</multi-finder>
+            <where />
+            <order-by>EventType_idEventType, Action_idAction</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list />
+          </finder>
+          <finder>
+            <name>findByAction</name>
+            <multi-finder>true</multi-finder>
+            <where>Action_idAction = :actionIdaction</where>
+            <order-by />
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>actionIdaction</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findByEventType</name>
+            <multi-finder>true</multi-finder>
+            <where>EventType_idEventType = :eventtypeIdeventtype</where>
+            <order-by />
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>eventtypeIdeventtype</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findWhereEventtypeIdeventtypeEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>EventType_idEventType = :eventtypeIdeventtype</where>
+            <order-by>EventType_idEventType</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>eventtypeIdeventtype</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findWhereActionIdactionEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>Action_idAction = :actionIdaction</where>
+            <order-by>Action_idAction</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>actionIdaction</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+        </finder-list>
+      </table>
+      <table>
+        <sql-name>Property</sql-name>
+        <java-name>Property</java-name>
+        <primary-key>
+          <column-list>
+            <column>idProperty</column>
+            <column>PropertyType_idPropertyType</column>
+            <column>Sensor_idSensor</column>
+          </column-list>
+        </primary-key>
+        <foreign-key-list>
+          <foreign-key>
+            <name>fk_Property_PropertyType1</name>
+            <parent-table>PropertyType</parent-table>
+            <cardinality>1-many</cardinality>
+            <nav-to-parent-term>PropertyType</nav-to-parent-term>
+            <nav-to-child-term>Property</nav-to-child-term>
+            <nav-to-parent>true</nav-to-parent>
+            <nav-to-child>false</nav-to-child>
+            <column-list>
+              <column>
+                <column-name>PropertyType_idPropertyType</column-name>
+                <ref-column-name>idPropertyType</ref-column-name>
+              </column>
+            </column-list>
+          </foreign-key>
+          <foreign-key>
+            <name>fk_Property_Sensor1</name>
+            <parent-table>Sensor</parent-table>
+            <cardinality>1-many</cardinality>
+            <nav-to-parent-term>Sensor</nav-to-parent-term>
+            <nav-to-child-term>Property1</nav-to-child-term>
+            <nav-to-parent>true</nav-to-parent>
+            <nav-to-child>false</nav-to-child>
+            <column-list>
+              <column>
+                <column-name>Sensor_idSensor</column-name>
+                <ref-column-name>idSensor</ref-column-name>
+              </column>
+            </column-list>
+          </foreign-key>
+        </foreign-key-list>
+        <column-list>
+          <column>
+            <java-name>idProperty</java-name>
+            <java-type>int</java-type>
+            <java-default-value />
+            <sql-name>idProperty</sql-name>
+            <sql-type>INT</sql-type>
+            <jdbc-type>INTEGER</jdbc-type>
+            <jdbc-precision>10</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>false</nullable>
+            <unique>false</unique>
+            <auto-increment>true</auto-increment>
+            <sequence-name />
+          </column>
+          <column>
+            <java-name>propertytypeIdpropertytype</java-name>
+            <java-type>int</java-type>
+            <java-default-value />
+            <sql-name>PropertyType_idPropertyType</sql-name>
+            <sql-type>INT</sql-type>
+            <jdbc-type>INTEGER</jdbc-type>
+            <jdbc-precision>10</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>false</nullable>
+            <unique>false</unique>
+            <auto-increment>false</auto-increment>
+            <sequence-name />
+          </column>
+          <column>
+            <java-name>sensorIdsensor</java-name>
+            <java-type>java.lang.String</java-type>
+            <java-default-value />
+            <sql-name>Sensor_idSensor</sql-name>
+            <sql-type>VARCHAR</sql-type>
+            <jdbc-type>VARCHAR</jdbc-type>
+            <jdbc-precision>16</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>false</nullable>
+            <unique>false</unique>
+            <auto-increment>false</auto-increment>
+            <sequence-name />
+          </column>
+          <column>
+            <java-name>value</java-name>
+            <java-type>double</java-type>
+            <java-default-value />
+            <sql-name>Value</sql-name>
+            <sql-type>DOUBLE</sql-type>
+            <jdbc-type>DOUBLE</jdbc-type>
+            <jdbc-precision>22</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>true</nullable>
+            <unique>false</unique>
+            <auto-increment>false</auto-increment>
+            <sequence-name />
+          </column>
+          <column>
+            <java-name>timestamp</java-name>
+            <java-type>java.util.Date</java-type>
+            <java-default-value />
+            <sql-name>Timestamp</sql-name>
+            <sql-type>TIMESTAMP</sql-type>
+            <jdbc-type>TIMESTAMP</jdbc-type>
+            <jdbc-precision>19</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>true</nullable>
+            <unique>false</unique>
+            <auto-increment>false</auto-increment>
+            <sequence-name />
+          </column>
+        </column-list>
+        <finder-list>
+          <finder>
+            <name>findByPrimaryKey</name>
+            <multi-finder>false</multi-finder>
+            <where>idProperty = :idProperty AND PropertyType_idPropertyType = :propertytypeIdpropertytype AND Sensor_idSensor = :sensorIdsensor</where>
+            <order-by />
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>idProperty</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+              <parameter>
+                <java-name>propertytypeIdpropertytype</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+              <parameter>
+                <java-name>sensorIdsensor</java-name>
+                <java-type>java.lang.String</java-type>
+                <jdbc-type>VARCHAR</jdbc-type>
+                <jdbc-precision>16</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findAll</name>
+            <multi-finder>true</multi-finder>
+            <where />
+            <order-by>idProperty, PropertyType_idPropertyType, Sensor_idSensor</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list />
+          </finder>
+          <finder>
+            <name>findByPropertyType</name>
+            <multi-finder>true</multi-finder>
+            <where>PropertyType_idPropertyType = :propertytypeIdpropertytype</where>
+            <order-by />
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>propertytypeIdpropertytype</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findBySensor</name>
+            <multi-finder>true</multi-finder>
+            <where>Sensor_idSensor = :sensorIdsensor</where>
+            <order-by />
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>sensorIdsensor</java-name>
+                <java-type>java.lang.String</java-type>
+                <jdbc-type>VARCHAR</jdbc-type>
+                <jdbc-precision>16</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findWhereIdPropertyEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>idProperty = :idProperty</where>
+            <order-by>idProperty</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>idProperty</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findWherePropertytypeIdpropertytypeEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>PropertyType_idPropertyType = :propertytypeIdpropertytype</where>
+            <order-by>PropertyType_idPropertyType</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>propertytypeIdpropertytype</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findWhereSensorIdsensorEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>Sensor_idSensor = :sensorIdsensor</where>
+            <order-by>Sensor_idSensor</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>sensorIdsensor</java-name>
+                <java-type>java.lang.String</java-type>
+                <jdbc-type>VARCHAR</jdbc-type>
+                <jdbc-precision>16</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findWhereValueEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>Value = :value</where>
+            <order-by>Value</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>value</java-name>
+                <java-type>double</java-type>
+                <jdbc-type>DOUBLE</jdbc-type>
+                <jdbc-precision>22</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findWhereTimestampEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>Timestamp = :timestamp</where>
+            <order-by>Timestamp</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>timestamp</java-name>
+                <java-type>java.util.Date</java-type>
+                <jdbc-type>TIMESTAMP</jdbc-type>
+                <jdbc-precision>19</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+        </finder-list>
+      </table>
+      <table>
+        <sql-name>PropertyType</sql-name>
+        <java-name>PropertyType</java-name>
+        <primary-key>
+          <column-list>
+            <column>idPropertyType</column>
+          </column-list>
+        </primary-key>
+        <column-list>
+          <column>
+            <java-name>idPropertyType</java-name>
+            <java-type>int</java-type>
+            <java-default-value />
+            <sql-name>idPropertyType</sql-name>
+            <sql-type>INT</sql-type>
+            <jdbc-type>INTEGER</jdbc-type>
+            <jdbc-precision>10</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>false</nullable>
+            <unique>false</unique>
+            <auto-increment>true</auto-increment>
+            <sequence-name />
+          </column>
+          <column>
+            <java-name>name</java-name>
+            <java-type>java.lang.String</java-type>
+            <java-default-value />
+            <sql-name>Name</sql-name>
+            <sql-type>VARCHAR</sql-type>
+            <jdbc-type>VARCHAR</jdbc-type>
+            <jdbc-precision>45</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>true</nullable>
+            <unique>false</unique>
+            <auto-increment>false</auto-increment>
+            <sequence-name />
+          </column>
+        </column-list>
+        <finder-list>
+          <finder>
+            <name>findByPrimaryKey</name>
+            <multi-finder>false</multi-finder>
+            <where>idPropertyType = :idPropertyType</where>
+            <order-by />
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>idPropertyType</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findAll</name>
+            <multi-finder>true</multi-finder>
+            <where />
+            <order-by>idPropertyType</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list />
+          </finder>
+          <finder>
+            <name>findWhereIdPropertyTypeEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>idPropertyType = :idPropertyType</where>
+            <order-by>idPropertyType</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>idPropertyType</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findWhereNameEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>Name = :name</where>
+            <order-by>Name</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>name</java-name>
+                <java-type>java.lang.String</java-type>
+                <jdbc-type>VARCHAR</jdbc-type>
+                <jdbc-precision>45</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+        </finder-list>
+      </table>
+      <table>
+        <sql-name>Sensor</sql-name>
+        <java-name>Sensor</java-name>
+        <primary-key>
+          <column-list>
+            <column>idSensor</column>
+          </column-list>
+        </primary-key>
+        <column-list>
+          <column>
+            <java-name>idSensor</java-name>
+            <java-type>java.lang.String</java-type>
+            <java-default-value />
+            <sql-name>idSensor</sql-name>
+            <sql-type>VARCHAR</sql-type>
+            <jdbc-type>VARCHAR</jdbc-type>
+            <jdbc-precision>16</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>false</nullable>
+            <unique>false</unique>
+            <auto-increment>false</auto-increment>
+            <sequence-name />
+          </column>
+          <column>
+            <java-name>ip</java-name>
+            <java-type>int</java-type>
+            <java-default-value />
+            <sql-name>IP</sql-name>
+            <sql-type>INT</sql-type>
+            <jdbc-type>INTEGER</jdbc-type>
+            <jdbc-precision>10</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>true</nullable>
+            <unique>false</unique>
+            <auto-increment>false</auto-increment>
+            <sequence-name />
+          </column>
+          <column>
+            <java-name>location</java-name>
+            <java-type>java.lang.String</java-type>
+            <java-default-value />
+            <sql-name>Location</sql-name>
+            <sql-type>VARCHAR</sql-type>
+            <jdbc-type>VARCHAR</jdbc-type>
+            <jdbc-precision>45</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>true</nullable>
+            <unique>false</unique>
+            <auto-increment>false</auto-increment>
+            <sequence-name />
+          </column>
+        </column-list>
+        <finder-list>
+          <finder>
+            <name>findByPrimaryKey</name>
+            <multi-finder>false</multi-finder>
+            <where>idSensor = :idSensor</where>
+            <order-by />
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>idSensor</java-name>
+                <java-type>java.lang.String</java-type>
+                <jdbc-type>VARCHAR</jdbc-type>
+                <jdbc-precision>16</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findAll</name>
+            <multi-finder>true</multi-finder>
+            <where />
+            <order-by>idSensor</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list />
+          </finder>
+          <finder>
+            <name>findWhereIdSensorEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>idSensor = :idSensor</where>
+            <order-by>idSensor</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>idSensor</java-name>
+                <java-type>java.lang.String</java-type>
+                <jdbc-type>VARCHAR</jdbc-type>
+                <jdbc-precision>16</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findWhereIpEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>IP = :ip</where>
+            <order-by>IP</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>ip</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findWhereLocationEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>Location = :location</where>
+            <order-by>Location</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>location</java-name>
+                <java-type>java.lang.String</java-type>
+                <jdbc-type>VARCHAR</jdbc-type>
+                <jdbc-precision>45</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+        </finder-list>
+      </table>
+      <table>
+        <sql-name>Sensor_has_PropertyType</sql-name>
+        <java-name>SensorHasPropertytype</java-name>
+        <primary-key>
+          <column-list>
+            <column>Sensor_idSensor</column>
+            <column>PropertyType_idPropertyType</column>
+          </column-list>
+        </primary-key>
+        <foreign-key-list>
+          <foreign-key>
+            <name>fk_Sensor_has_PropertyType_PropertyType1</name>
+            <parent-table>PropertyType</parent-table>
+            <cardinality>1-many</cardinality>
+            <nav-to-parent-term>PropertyType</nav-to-parent-term>
+            <nav-to-child-term>SensorHasPropertytype</nav-to-child-term>
+            <nav-to-parent>true</nav-to-parent>
+            <nav-to-child>false</nav-to-child>
+            <column-list>
+              <column>
+                <column-name>PropertyType_idPropertyType</column-name>
+                <ref-column-name>idPropertyType</ref-column-name>
+              </column>
+            </column-list>
+          </foreign-key>
+          <foreign-key>
+            <name>fk_Sensor_has_PropertyType_Sensor1</name>
+            <parent-table>Sensor</parent-table>
+            <cardinality>1-many</cardinality>
+            <nav-to-parent-term>Sensor</nav-to-parent-term>
+            <nav-to-child-term>SensorHasPropertytype1</nav-to-child-term>
+            <nav-to-parent>true</nav-to-parent>
+            <nav-to-child>false</nav-to-child>
+            <column-list>
+              <column>
+                <column-name>Sensor_idSensor</column-name>
+                <ref-column-name>idSensor</ref-column-name>
+              </column>
+            </column-list>
+          </foreign-key>
+        </foreign-key-list>
+        <column-list>
+          <column>
+            <java-name>sensorIdsensor</java-name>
+            <java-type>java.lang.String</java-type>
+            <java-default-value />
+            <sql-name>Sensor_idSensor</sql-name>
+            <sql-type>VARCHAR</sql-type>
+            <jdbc-type>VARCHAR</jdbc-type>
+            <jdbc-precision>16</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>false</nullable>
+            <unique>false</unique>
+            <auto-increment>false</auto-increment>
+            <sequence-name />
+          </column>
+          <column>
+            <java-name>propertytypeIdpropertytype</java-name>
+            <java-type>int</java-type>
+            <java-default-value />
+            <sql-name>PropertyType_idPropertyType</sql-name>
+            <sql-type>INT</sql-type>
+            <jdbc-type>INTEGER</jdbc-type>
+            <jdbc-precision>10</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>false</nullable>
+            <unique>false</unique>
+            <auto-increment>false</auto-increment>
+            <sequence-name />
+          </column>
+        </column-list>
+        <finder-list>
+          <finder>
+            <name>findByPrimaryKey</name>
+            <multi-finder>false</multi-finder>
+            <where>Sensor_idSensor = :sensorIdsensor AND PropertyType_idPropertyType = :propertytypeIdpropertytype</where>
+            <order-by />
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>sensorIdsensor</java-name>
+                <java-type>java.lang.String</java-type>
+                <jdbc-type>VARCHAR</jdbc-type>
+                <jdbc-precision>16</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+              <parameter>
+                <java-name>propertytypeIdpropertytype</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findAll</name>
+            <multi-finder>true</multi-finder>
+            <where />
+            <order-by>Sensor_idSensor, PropertyType_idPropertyType</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list />
+          </finder>
+          <finder>
+            <name>findByPropertyType</name>
+            <multi-finder>true</multi-finder>
+            <where>PropertyType_idPropertyType = :propertytypeIdpropertytype</where>
+            <order-by />
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>propertytypeIdpropertytype</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findBySensor</name>
+            <multi-finder>true</multi-finder>
+            <where>Sensor_idSensor = :sensorIdsensor</where>
+            <order-by />
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>sensorIdsensor</java-name>
+                <java-type>java.lang.String</java-type>
+                <jdbc-type>VARCHAR</jdbc-type>
+                <jdbc-precision>16</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findWhereSensorIdsensorEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>Sensor_idSensor = :sensorIdsensor</where>
+            <order-by>Sensor_idSensor</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>sensorIdsensor</java-name>
+                <java-type>java.lang.String</java-type>
+                <jdbc-type>VARCHAR</jdbc-type>
+                <jdbc-precision>16</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findWherePropertytypeIdpropertytypeEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>PropertyType_idPropertyType = :propertytypeIdpropertytype</where>
+            <order-by>PropertyType_idPropertyType</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>propertytypeIdpropertytype</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+        </finder-list>
+      </table>
+      <table>
+        <sql-name>Sensor_has_Trigger</sql-name>
+        <java-name>SensorHasTrigger</java-name>
+        <primary-key>
+          <column-list>
+            <column>Sensor_idSensor</column>
+            <column>Trigger_idTrigger</column>
+          </column-list>
+        </primary-key>
+        <foreign-key-list>
+          <foreign-key>
+            <name>fk_Sensor_has_Trigger_Sensor1</name>
+            <parent-table>Sensor</parent-table>
+            <cardinality>1-many</cardinality>
+            <nav-to-parent-term>Sensor</nav-to-parent-term>
+            <nav-to-child-term>SensorHasTrigger</nav-to-child-term>
+            <nav-to-parent>true</nav-to-parent>
+            <nav-to-child>false</nav-to-child>
+            <column-list>
+              <column>
+                <column-name>Sensor_idSensor</column-name>
+                <ref-column-name>idSensor</ref-column-name>
+              </column>
+            </column-list>
+          </foreign-key>
+          <foreign-key>
+            <name>fk_Sensor_has_Trigger_Trigger1</name>
+            <parent-table>Trigger</parent-table>
+            <cardinality>1-many</cardinality>
+            <nav-to-parent-term>Trigger</nav-to-parent-term>
+            <nav-to-child-term>SensorHasTrigger1</nav-to-child-term>
+            <nav-to-parent>true</nav-to-parent>
+            <nav-to-child>false</nav-to-child>
+            <column-list>
+              <column>
+                <column-name>Trigger_idTrigger</column-name>
+                <ref-column-name>idTrigger</ref-column-name>
+              </column>
+            </column-list>
+          </foreign-key>
+        </foreign-key-list>
+        <column-list>
+          <column>
+            <java-name>sensorIdsensor</java-name>
+            <java-type>java.lang.String</java-type>
+            <java-default-value />
+            <sql-name>Sensor_idSensor</sql-name>
+            <sql-type>VARCHAR</sql-type>
+            <jdbc-type>VARCHAR</jdbc-type>
+            <jdbc-precision>16</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>false</nullable>
+            <unique>false</unique>
+            <auto-increment>false</auto-increment>
+            <sequence-name />
+          </column>
+          <column>
+            <java-name>triggerIdtrigger</java-name>
+            <java-type>int</java-type>
+            <java-default-value />
+            <sql-name>Trigger_idTrigger</sql-name>
+            <sql-type>INT</sql-type>
+            <jdbc-type>INTEGER</jdbc-type>
+            <jdbc-precision>10</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>false</nullable>
+            <unique>false</unique>
+            <auto-increment>false</auto-increment>
+            <sequence-name />
+          </column>
+        </column-list>
+        <finder-list>
+          <finder>
+            <name>findByPrimaryKey</name>
+            <multi-finder>false</multi-finder>
+            <where>Sensor_idSensor = :sensorIdsensor AND Trigger_idTrigger = :triggerIdtrigger</where>
+            <order-by />
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>sensorIdsensor</java-name>
+                <java-type>java.lang.String</java-type>
+                <jdbc-type>VARCHAR</jdbc-type>
+                <jdbc-precision>16</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+              <parameter>
+                <java-name>triggerIdtrigger</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findAll</name>
+            <multi-finder>true</multi-finder>
+            <where />
+            <order-by>Sensor_idSensor, Trigger_idTrigger</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list />
+          </finder>
+          <finder>
+            <name>findBySensor</name>
+            <multi-finder>true</multi-finder>
+            <where>Sensor_idSensor = :sensorIdsensor</where>
+            <order-by />
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>sensorIdsensor</java-name>
+                <java-type>java.lang.String</java-type>
+                <jdbc-type>VARCHAR</jdbc-type>
+                <jdbc-precision>16</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findByTrigger</name>
+            <multi-finder>true</multi-finder>
+            <where>Trigger_idTrigger = :triggerIdtrigger</where>
+            <order-by />
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>triggerIdtrigger</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findWhereSensorIdsensorEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>Sensor_idSensor = :sensorIdsensor</where>
+            <order-by>Sensor_idSensor</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>sensorIdsensor</java-name>
+                <java-type>java.lang.String</java-type>
+                <jdbc-type>VARCHAR</jdbc-type>
+                <jdbc-precision>16</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findWhereTriggerIdtriggerEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>Trigger_idTrigger = :triggerIdtrigger</where>
+            <order-by>Trigger_idTrigger</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>triggerIdtrigger</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+        </finder-list>
+      </table>
+      <table>
+        <sql-name>Trigger</sql-name>
+        <java-name>Trigger</java-name>
+        <primary-key>
+          <column-list>
+            <column>idTrigger</column>
+          </column-list>
+        </primary-key>
+        <foreign-key-list>
+          <foreign-key>
+            <name>fk_Trigger_EventType1</name>
+            <parent-table>EventType</parent-table>
+            <cardinality>1-many</cardinality>
+            <nav-to-parent-term>EventType</nav-to-parent-term>
+            <nav-to-child-term>Trigger</nav-to-child-term>
+            <nav-to-parent>true</nav-to-parent>
+            <nav-to-child>false</nav-to-child>
+            <column-list>
+              <column>
+                <column-name>EventType_idEventType</column-name>
+                <ref-column-name>idEventType</ref-column-name>
+              </column>
+            </column-list>
+          </foreign-key>
+          <foreign-key>
+            <name>fk_Trigger_PropertyType1</name>
+            <parent-table>PropertyType</parent-table>
+            <cardinality>1-many</cardinality>
+            <nav-to-parent-term>PropertyType</nav-to-parent-term>
+            <nav-to-child-term>Trigger1</nav-to-child-term>
+            <nav-to-parent>true</nav-to-parent>
+            <nav-to-child>false</nav-to-child>
+            <column-list>
+              <column>
+                <column-name>PropertyType_idPropertyType</column-name>
+                <ref-column-name>idPropertyType</ref-column-name>
+              </column>
+            </column-list>
+          </foreign-key>
+        </foreign-key-list>
+        <column-list>
+          <column>
+            <java-name>idTrigger</java-name>
+            <java-type>int</java-type>
+            <java-default-value />
+            <sql-name>idTrigger</sql-name>
+            <sql-type>INT</sql-type>
+            <jdbc-type>INTEGER</jdbc-type>
+            <jdbc-precision>10</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>false</nullable>
+            <unique>false</unique>
+            <auto-increment>false</auto-increment>
+            <sequence-name />
+          </column>
+          <column>
+            <java-name>propertytypeIdpropertytype</java-name>
+            <java-type>int</java-type>
+            <java-default-value />
+            <sql-name>PropertyType_idPropertyType</sql-name>
+            <sql-type>INT</sql-type>
+            <jdbc-type>INTEGER</jdbc-type>
+            <jdbc-precision>10</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>false</nullable>
+            <unique>false</unique>
+            <auto-increment>false</auto-increment>
+            <sequence-name />
+          </column>
+          <column>
+            <java-name>eventtypeIdeventtype</java-name>
+            <java-type>int</java-type>
+            <java-default-value />
+            <sql-name>EventType_idEventType</sql-name>
+            <sql-type>INT</sql-type>
+            <jdbc-type>INTEGER</jdbc-type>
+            <jdbc-precision>10</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>false</nullable>
+            <unique>false</unique>
+            <auto-increment>false</auto-increment>
+            <sequence-name />
+          </column>
+        </column-list>
+        <finder-list>
+          <finder>
+            <name>findByPrimaryKey</name>
+            <multi-finder>false</multi-finder>
+            <where>idTrigger = :idTrigger</where>
+            <order-by />
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>idTrigger</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findAll</name>
+            <multi-finder>true</multi-finder>
+            <where />
+            <order-by>idTrigger</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list />
+          </finder>
+          <finder>
+            <name>findByEventType</name>
+            <multi-finder>true</multi-finder>
+            <where>EventType_idEventType = :eventtypeIdeventtype</where>
+            <order-by />
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>eventtypeIdeventtype</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findByPropertyType</name>
+            <multi-finder>true</multi-finder>
+            <where>PropertyType_idPropertyType = :propertytypeIdpropertytype</where>
+            <order-by />
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>propertytypeIdpropertytype</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findWhereIdTriggerEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>idTrigger = :idTrigger</where>
+            <order-by>idTrigger</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>idTrigger</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findWherePropertytypeIdpropertytypeEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>PropertyType_idPropertyType = :propertytypeIdpropertytype</where>
+            <order-by>PropertyType_idPropertyType</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>propertytypeIdpropertytype</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findWhereEventtypeIdeventtypeEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>EventType_idEventType = :eventtypeIdeventtype</where>
+            <order-by>EventType_idEventType</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>eventtypeIdeventtype</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+        </finder-list>
+      </table>
+    </table-list>
+    <view-list />
+    <procedure-list />
+    <custom-sql-list />
+  </database>
+  <provider-options>
+    <default-codegen-provider>j2se</default-codegen-provider>
+    <provider name="j2se">
+      <property key="app-name" value="telpro" />
+      <property key="dao-strategy" value="jdbc" />
+      <property key="delete-files" value="false" />
+      <property key="dto-fields-public" value="false" />
+      <property key="generate-dynamic-inserts" value="false" />
+      <property key="generate-dynamic-updates" value="false" />
+      <property key="jdbc-driver" value="com.mysql.jdbc.Driver" />
+      <property key="jdbc-pwd" value="telematik" />
+      <property key="jdbc-table-aliases" value="false" />
+      <property key="jdbc-url" value="jdbc:mysql://192.168.1.105/telpro" />
+      <property key="jdbc-user" value="root" />
+      <property key="jdbc30-capable" value="true" />
+      <property key="logging" value="stdout" />
+      <property key="output-dir" value="/home/kaidowei/dao/gen-j2se" />
+      <property key="overwrite-resource-manager" value="true" />
+      <property key="package-name" value="de.berlin.fu.data" />
+      <property key="prefix-schema-name" value="true" />
+    </provider>
+    <provider name="provider" />
+  </provider-options>
+</firestorm-project>
+

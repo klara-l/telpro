@@ -17,8 +17,7 @@ import com.google.gwt.visualization.client.visualizations.LineChart;
 import com.google.gwt.visualization.client.visualizations.LineChart.Options;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.SelectionStyle;
-import com.smartgwt.client.types.VerticalAlignment;
-
+import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.Button;
 import com.smartgwt.client.widgets.IButton;
 import com.smartgwt.client.widgets.Label;
@@ -30,7 +29,6 @@ import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.grid.ListGridRecord;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
-import com.smartgwt.client.util.SC;
 
 import de.berlin.fu.data.dto.Property;
 import de.berlin.fu.data.dto.PropertyType;
@@ -42,259 +40,265 @@ public class TelproGWT implements EntryPoint {
 
 	private final MyServerAsync server = GWT.create(MyServer.class);
 	private ListGrid sensorTable;
-	
+
 	private HashMap<String, Sensor> sensors;
-	
+
 	private HashMap<String, PropertyType> propTypes;
-	
+
 	private LineChart temperature;
 	private LineChart humidity;
 	private LineChart tilt;
 	private LineChart roll;
-	
+
 	private Panel panel;
-	
-	private boolean firstClick=true;
-	
+
+	private boolean firstClick = true;
+
 	private Label textSelectednode;
-	
+
 	public void onModuleLoad() {
 		sensors = new HashMap<String, Sensor>();
 		propTypes = new HashMap<String, PropertyType>();
-		
+
 		panel = RootPanel.get();
-		
+
 		getAllPropertyTypes();
-		
+
 		createSensorTable();
 		updateSensorSelection();
-		
-		
-		
-		 
-		 //showGreetingWindow();
-		 //startTimer();
-		
 	}
-	
-	private void showGreetingWindow(){
-		
-		
+
+	private void showGreetingWindow() {
+
 		Window startWindow = new Window();
-		startWindow.setTitle("Select sensor node");  
-		startWindow.setWidth(400);  
-		startWindow.setHeight(400);  
-		startWindow.setCanDragResize(true);  
-		Label text = new Label();  
-        text.setContents("<h4 align=\"center\">Please select a sensor node!</h4>"); 
-        
-        IButton select = new IButton("Ok");
-        //select.setIconOrientation("middle");
-        
-        startWindow.addItem(text);
-        //startWindow.addItem(sensorTable);
-        startWindow.addItem(select);
-        
-        startWindow.setShowCloseButton(false);
-        startWindow.setIsModal(true);  
-        startWindow.setShowModalMask(true);  
-        startWindow.centerInPage();
-        startWindow.show();
+		startWindow.setTitle("Select sensor node");
+		startWindow.setWidth(400);
+		startWindow.setHeight(400);
+		startWindow.setCanDragResize(true);
+		Label text = new Label();
+		text.setContents("<h4 align=\"center\">Please select a sensor node!</h4>");
+
+		IButton select = new IButton("Ok");
+		// select.setIconOrientation("middle");
+
+		startWindow.addItem(text);
+		// startWindow.addItem(sensorTable);
+		startWindow.addItem(select);
+
+		startWindow.setShowCloseButton(false);
+		startWindow.setIsModal(true);
+		startWindow.setShowModalMask(true);
+		startWindow.centerInPage();
+		startWindow.show();
 	}
 
-	private void drawCharts(){
-		//add Charts
-				Runnable onLoadCallback = new Runnable() {
-					public void run() {
-						HLayout tempAndHum = new HLayout();
-						tempAndHum.setHeight(400); 
-						tempAndHum.setWidth(600);
-						tempAndHum.setMembersMargin(20);  
-						tempAndHum.setLayoutMargin(10);
-						
-						temperature = new LineChart(createTable(null, "Temperature"), createChartOptions("Temperature"));
-						humidity = new LineChart(createTable(null, "Humidity"), createChartOptions("Humidity"));
-						tempAndHum.addMember(temperature);
-						tempAndHum.addMember(humidity);
-						
-						HLayout tiltAndRoll = new HLayout();
-						tiltAndRoll.setHeight(400); 
-						tiltAndRoll.setWidth(600);
-						tiltAndRoll.setMembersMargin(20);  
-						tiltAndRoll.setLayoutMargin(10);
-						
-						tilt = new LineChart(createTable(null, "Tilt"), createChartOptions("Tilt"));
-						roll = new LineChart(createTable(null, "Roll"), createChartOptions("Roll"));
-						
-						tiltAndRoll.addMember(tilt);
-						tiltAndRoll.addMember(roll);
-						
-						panel.add(tempAndHum);
-						panel.add(tiltAndRoll);
-					}
-				};
-				
-				// Load the visualization api, passing the onLoadCallback to be called
-				// when loading is done.
-		 VisualizationUtils.loadVisualizationApi(onLoadCallback, LineChart.PACKAGE);
+	private void drawCharts() {
+		// add Charts
+		Runnable onLoadCallback = new Runnable() {
+			public void run() {
+				HLayout tempAndHum = new HLayout();
+				tempAndHum.setHeight(400);
+				tempAndHum.setWidth(600);
+				tempAndHum.setMembersMargin(20);
+				tempAndHum.setLayoutMargin(10);
+
+				temperature = new LineChart(createTable(null, "Temperature"),
+						createChartOptions("Temperature"));
+				humidity = new LineChart(createTable(null, "Humidity"),
+						createChartOptions("Humidity"));
+				tempAndHum.addMember(temperature);
+				tempAndHum.addMember(humidity);
+
+				HLayout tiltAndRoll = new HLayout();
+				tiltAndRoll.setHeight(400);
+				tiltAndRoll.setWidth(600);
+				tiltAndRoll.setMembersMargin(20);
+				tiltAndRoll.setLayoutMargin(10);
+
+				tilt = new LineChart(createTable(null, "Tilt"),
+						createChartOptions("Tilt"));
+				roll = new LineChart(createTable(null, "Roll"),
+						createChartOptions("Roll"));
+
+				tiltAndRoll.addMember(tilt);
+				tiltAndRoll.addMember(roll);
+
+				panel.add(tempAndHum);
+				panel.add(tiltAndRoll);
+			}
+		};
+
+		// Load the visualization api, passing the onLoadCallback to be called
+		// when loading is done.
+		VisualizationUtils.loadVisualizationApi(onLoadCallback,
+				LineChart.PACKAGE);
 	}
 
-	private void createSensorTable(){
-		HLayout sensorTableLayout = new HLayout();  
-		sensorTableLayout.setHeight(200); 
+	private void createSensorTable() {
+		HLayout sensorTableLayout = new HLayout();
+		sensorTableLayout.setHeight(200);
 		sensorTableLayout.setWidth(600);
-		sensorTableLayout.setMembersMargin(20);  
+		sensorTableLayout.setMembersMargin(20);
 		sensorTableLayout.setLayoutMargin(10);
 
-        
-        VLayout tableWithButton = new VLayout();  
-        tableWithButton.setShowEdges(true);  
-        tableWithButton.setEdgeSize(3);
-        tableWithButton.setWidth(600);  
-        tableWithButton.setMembersMargin(20);  
-        tableWithButton.setLayoutMargin(10);
-        
+		VLayout tableWithButton = new VLayout();
+		tableWithButton.setShowEdges(true);
+		tableWithButton.setEdgeSize(3);
+		tableWithButton.setWidth(600);
+		tableWithButton.setMembersMargin(20);
+		tableWithButton.setLayoutMargin(10);
+
 		sensorTable = new ListGrid();
 		ListGridField idSensor = new ListGridField("idSensor", "Sensor ID");
 		ListGridField location = new ListGridField("location", "Location");
 		ListGridField sensorIp = new ListGridField("sensorIp", "Sensor IP");
 		sensorTable.setFields(idSensor, location, sensorIp);
-		//User can only select one sensor node
+		// User can only select one sensor node
 		sensorTable.setSelectionType(SelectionStyle.SINGLE);
-		
+
 		textSelectednode = new Label();
 		textSelectednode.setContents("<h4>Please select a sensor node! </h4>");
-		
 
 		Button showDia = new Button("Show Diagrams");
 		addClickhandlerToShowDia(showDia);
-		
+
 		sensorTableLayout.addMember(sensorTable);
 		sensorTableLayout.addMember(textSelectednode);
-		
+
 		tableWithButton.addMember(sensorTableLayout);
 		tableWithButton.addMember(showDia);
-		
+
 		tableWithButton.setDefaultLayoutAlign(Alignment.CENTER);
-		
+
 		panel.add(tableWithButton);
-		
+
 	}
 
 	/**
 	 * Get the Sensor-ID from Database and add the ID's to the ListBox
 	 */
-	private void updateSensorSelection(){
-		
+	private void updateSensorSelection() {
+
 		server.getSensors(new AsyncCallback<List<Sensor>>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				SC.say("Error", "Ups.. you have no access to database. Please reload the page!");
-				
+				SC.say("Error",
+						"Ups.. you have no access to database. Please reload the page!");
+
 			}
 
 			@Override
 			public void onSuccess(List<Sensor> result) {
-				for(Sensor s: result){
-					//save the Sensors, because we need the nodes later
+				for (Sensor s : result) {
+					// save the Sensors, because we need the nodes later
 					sensors.put(s.getIdSensor(), s);
-					
+
 					ListGridRecord sensorInfo = new ListGridRecord();
 					sensorInfo.setAttribute("idSensor", s.getIdSensor());
 					sensorInfo.setAttribute("location", s.getLocation());
 					sensorInfo.setAttribute("sensorIp", s.getIp());
 					sensorTable.addData(sensorInfo);
 				}
-				
+
 			}
-			
+
 		});
-		
+
 	}
-	
+
 	/**
-	 * If the user click the Button, he get the selected node and load the diagrams of this node
-	 * @param showDia Button 
+	 * If the user click the Button, he get the selected node and load the
+	 * diagrams of this node
+	 * 
+	 * @param showDia
+	 *            Button
 	 */
 	private void addClickhandlerToShowDia(Button showDia) {
 		showDia.addClickHandler(new ClickHandler() {
-			
+
 			@Override
 			public void onClick(ClickEvent event) {
-				String sensorID ="";
-				try{
-					sensorID = sensorTable.getSelectedRecord().getAttribute("idSensor");
-					
-					if(firstClick){
+				String sensorID = "";
+				try {
+					sensorID = sensorTable.getSelectedRecord().getAttribute(
+							"idSensor");
+
+					if (firstClick) {
 						drawCharts();
-						firstClick=false;
+						firstClick = false;
 					}
-					textSelectednode.setContents("<h4>Diagrams from node: </h4>" + sensorID);
-					//failure here... think, the diagrams are not ready
-					//getProperties(sensorID, "temperature");
-					//getProperties(sensorID, "humidity");
-					//startTimer(sensorID);
-				} catch(NullPointerException ex){
+					textSelectednode
+							.setContents("<h4>Diagrams from node: </h4>"
+									+ sensorID);
+					// failure here... think, the diagrams are not ready
+					getProperties(sensorID, "temperature");
+					getProperties(sensorID, "humidity");
+					startTimer(sensorID);
+				} catch (NullPointerException ex) {
 					SC.say("Error", "Please select a sensor node!");
 				}
 			}
 		});
-		
+
 	}
-	
-	private void getProperties(String sensorID, final String type){
+
+	private void getProperties(String sensorID, final String type) {
 		Sensor sensor = sensors.get(sensorID);
-		
+
 		PropertyType proType = propTypes.get(type);
-		
-		server.getProperty(sensor, proType, new AsyncCallback<List<Property>>() {
-			
-			@Override
-			public void onSuccess(List<Property> result) {
-				AbstractDataTable table = createTable(result, type);
-				if(type.equals("temperature")){
-					temperature.draw(table);
-				}else if(type.equals("humidity")){
-					humidity.draw(table);
-				}else if(type.equals("tilt")){
-					tilt.draw(table);
-				}else{
-					roll.draw(table);
-				}
-				
-			}
-			
-			@Override
-			public void onFailure(Throwable caught) {
-				SC.say("Error", "Ups.. you have no access to database. Please reload the page!");
-				
-			}
-		});
-		
+
+		server.getProperty(sensor, proType,
+				new AsyncCallback<List<Property>>() {
+
+					@Override
+					public void onSuccess(List<Property> result) {
+						AbstractDataTable table = createTable(result, type);
+						if (type.equals("temperature")) {
+							temperature.draw(table);
+						} else if (type.equals("humidity")) {
+							humidity.draw(table);
+						} else if (type.equals("tilt")) {
+							tilt.draw(table);
+						} else {
+							roll.draw(table);
+						}
+
+					}
+
+					@Override
+					public void onFailure(Throwable caught) {
+						SC.say("Error",
+								"Ups.. you have no access to database. Please reload the page!");
+					}
+				});
+
 	}
-	
+
 	/**
-	 * Save all PropertyTypes in a HashMap, because we need the types several times
+	 * Save all PropertyTypes in a HashMap, because we need the types several
+	 * times
 	 */
-	private void getAllPropertyTypes(){
+	private void getAllPropertyTypes() {
 		server.getPropertyTypes(new AsyncCallback<List<PropertyType>>() {
-			
+
 			@Override
 			public void onSuccess(List<PropertyType> result) {
-				for(PropertyType type: result){
+				for (PropertyType type : result) {
 					propTypes.put(type.getName(), type);
 				}
-				
+
 			}
-			
+
 			@Override
 			public void onFailure(Throwable caught) {
-				SC.say("Error", "Ups.. you have no access to database. Please reload the page!");
-				
+				SC.say("Error",
+						"Ups.. you have no access to database. Please reload the page!");
+
 			}
 		});
 	}
+
 	private Options createChartOptions(String title) {
 		Options options = Options.create();
 		options.setWidth(400);
@@ -302,38 +306,37 @@ public class TelproGWT implements EntryPoint {
 		options.setTitle(title);
 		return options;
 	}
-	
+
 	private AbstractDataTable createTable(List<Property> list, String title) {
 		DataTable data = DataTable.create();
 		data.addColumn(ColumnType.STRING, "Time");
 		data.addColumn(ColumnType.NUMBER, title);
 		int i = 0;
-		if(list!=null){
+		if (list != null) {
 			data.addRows(list.size());
-			for(Property p: list){
+			for (Property p : list) {
 				data.setValue(i, 0, p.getTimestamp());
 				data.setValue(i, 1, p.getValue());
 				i++;
 			}
 		}
-		
 
 		return data;
 	}
-	
+
 	private void startTimer(final String sensorID) {
 		Timer t = new Timer() {
-		      public void run() {
-		    	
-		    	  getProperties(sensorID, "temperature");
-		    	  getProperties(sensorID, "humidity");
-		    	  getProperties(sensorID, "tilt");
-		    	  getProperties(sensorID, "roll");
-		      }
-		    };
+			public void run() {
 
-		    // get all 5 sec new properties
+				getProperties(sensorID, "temperature");
+				getProperties(sensorID, "humidity");
+				getProperties(sensorID, "tilt");
+				getProperties(sensorID, "roll");
+			}
+		};
+
+		// get all 5 sec new properties
 		t.scheduleRepeating(5000);
-		
+
 	}
 }
