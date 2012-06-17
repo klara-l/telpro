@@ -19,9 +19,7 @@ import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.SelectionStyle;
 import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.Button;
-import com.smartgwt.client.widgets.IButton;
 import com.smartgwt.client.widgets.Label;
-import com.smartgwt.client.widgets.Window;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.grid.ListGrid;
@@ -29,8 +27,9 @@ import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.grid.ListGridRecord;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
-import com.smartgwt.client.util.SC;
 
+import de.berlin.fu.data.dto.Event;
+import de.berlin.fu.data.dto.EventType;
 import de.berlin.fu.data.dto.Property;
 import de.berlin.fu.data.dto.PropertyType;
 import de.berlin.fu.data.dto.Sensor;
@@ -45,6 +44,7 @@ public class TelproGWT implements EntryPoint {
 	private HashMap<String, Sensor> sensors;
 
 	private HashMap<String, PropertyType> propTypes;
+	private HashMap<Integer, EventType> eventTypes;
 
 	private LineChart temperature;
 	private LineChart humidity;
@@ -60,22 +60,40 @@ public class TelproGWT implements EntryPoint {
 	public void onModuleLoad() {
 		sensors = new HashMap<String, Sensor>();
 		propTypes = new HashMap<String, PropertyType>();
-
+		eventTypes = new HashMap<Integer, EventType>();
+		
 		panel = RootPanel.get();
 
 		getAllPropertyTypes();
+		getAllEventTypes();
 
 		createSensorTable();
-		updateSensorSelection();
-		
-		
-		
-		 
-		 //showGreetingWindow();
-		 //startTimer();
+		updateSensorSelection();	
 		
 	}
 	
+
+
+	private void getAllEventTypes() {
+		server.getEventTypes(new AsyncCallback<List<EventType>>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onSuccess(List<EventType> result) {
+				for(EventType etype: result){
+					eventTypes.put(etype.getIdEventType(), etype);
+				}
+				
+			}
+		});
+		
+	}
+
 
 
 	private void drawCharts(){
@@ -214,9 +232,13 @@ public class TelproGWT implements EntryPoint {
 							.setContents("<h4>Diagrams from node: </h4>"
 									+ sensorID);
 					// failure here... think, the diagrams are not ready
-					getProperties(sensorID, "temperature");
-					getProperties(sensorID, "humidity");
+//					getProperties(sensorID, "temperature");
+//					getProperties(sensorID, "humidity");
 					startTimer(sensorID);
+					
+					showEvents(sensorID);
+					
+					//showEvents();
 				} catch (NullPointerException ex) {
 					SC.say("Error", "Please select a sensor node!");
 				}
@@ -224,6 +246,7 @@ public class TelproGWT implements EntryPoint {
 		});
 
 	}
+	
 
 	private void getProperties(String sensorID, final String type) {
 		Sensor sensor = sensors.get(sensorID);
@@ -291,7 +314,7 @@ public class TelproGWT implements EntryPoint {
 
 	private AbstractDataTable createTable(List<Property> list, String title) {
 		DataTable data = DataTable.create();
-		data.addColumn(ColumnType.STRING, "Time");
+		data.addColumn(ColumnType.DATE, "Time");
 		data.addColumn(ColumnType.NUMBER, title);
 		int i = 0;
 		if (list != null) {
@@ -313,13 +336,60 @@ public class TelproGWT implements EntryPoint {
 
 				getProperties(sensorID, "temperature");
 				getProperties(sensorID, "humidity");
-				getProperties(sensorID, "tilt");
-				getProperties(sensorID, "roll");
+				//getProperties(sensorID, "tilt");
+				//getProperties(sensorID, "roll");
 			}
 		};
 
 		// get all 5 sec new properties
 		t.scheduleRepeating(5000);
 
+	}
+	
+	private void showEvents(String sensorID){
+		VLayout eventTableLayout = new VLayout();
+		eventTableLayout.setShowEdges(true);
+		eventTableLayout.setHeight(300);
+		eventTableLayout.setMembersMargin(10);
+		eventTableLayout.setLayoutMargin(10);
+		
+		
+		Label eventLabelHeader = new Label();
+		eventLabelHeader.setContents("<h3>Events from sensor node"+sensorID +"</h3>");
+		eventTableLayout.addMember(eventLabelHeader);
+		
+		final ListGrid eventTable = new ListGrid();
+		ListGridField timestamp = new ListGridField("timestamp", "Timestamp");
+		ListGridField eventtype = new ListGridField("eventtype", "Event type");
+		ListGridField eventdecription = new ListGridField("eventdecription", "Description type");
+		ListGridField sensorId = new ListGridField("sensorId", "Sensor ID");
+		eventTable.setFields(timestamp, eventtype, eventdecription, sensorId);
+		
+		
+		server.getEventList(new AsyncCallback<List<Event>>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onSuccess(List<Event> result) {
+				for(Event e: result){
+					ListGridRecord eventInfo = new ListGridRecord();
+					eventInfo.setAttribute("timestamp", e.getTimestamp().toString());
+					EventType eventType = eventTypes.get(e.getEventtypeIdeventtype());
+					eventInfo.setAttribute("eventtype", eventType.getName());
+					eventInfo.setAttribute("eventdecription", eventType.getDescription());
+					eventInfo.setAttribute("sensorId", e.getSensorIdsensor());
+					eventTable.addData(eventInfo);
+				}
+				
+			}
+		});
+		
+		eventTableLayout.addMember(eventTable);
+		panel.add(eventTableLayout);
 	}
 }
