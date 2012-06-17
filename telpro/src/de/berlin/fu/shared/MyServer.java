@@ -27,18 +27,18 @@ public interface MyServer extends RemoteService {
 
 	public void addTrigger(Trigger t);
 
-	public boolean removeTrigger(Trigger t);
+	public void removeTrigger(Trigger t);
 
-	public boolean updateTrigger(Trigger t);
+	public void updateTrigger(Trigger t);
 
 	public void addAction(Action a);
 
-	public boolean removeAction(Action a);
+	public void removeAction(Action a);
 
-	public boolean updateAction(Action a);
+	public void updateAction(Action a);
 
 	public List<Property> getProperty(Sensor s, PropertyType pt);
-	
+
 	public List<PropertyType> getPropertyTypes();
 
 }

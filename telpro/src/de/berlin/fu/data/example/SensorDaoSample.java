@@ -8,12 +8,8 @@
 
 package de.berlin.fu.data.example;
 
-import java.math.*;
-import java.util.Date;
-import java.util.Collection;
 import de.berlin.fu.data.dao.SensorDao;
 import de.berlin.fu.data.dto.Sensor;
-import de.berlin.fu.data.exceptions.SensorDaoException;
 import de.berlin.fu.data.factory.SensorDaoFactory;
 
 public class SensorDaoSample

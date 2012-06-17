@@ -30,13 +30,13 @@ public interface MyServerAsync {
 
 	void getTriggers(AsyncCallback<List<Trigger>> callback);
 
-	void removeAction(Action a, AsyncCallback<Boolean> callback);
+	void removeAction(Action a, AsyncCallback<Void> callback);
 
-	void removeTrigger(Trigger t, AsyncCallback<Boolean> callback);
+	void removeTrigger(Trigger t, AsyncCallback<Void> callback);
 
-	void updateAction(Action a, AsyncCallback<Boolean> callback);
+	void updateAction(Action a, AsyncCallback<Void> callback);
 
-	void updateTrigger(Trigger t, AsyncCallback<Boolean> callback);
+	void updateTrigger(Trigger t, AsyncCallback<Void> callback);
 
 	void getPropertyTypes(AsyncCallback<List<PropertyType>> callback);
 

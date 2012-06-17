@@ -8,12 +8,8 @@
 
 package de.berlin.fu.data.example;
 
-import java.math.*;
-import java.util.Date;
-import java.util.Collection;
 import de.berlin.fu.data.dao.SensorHasPropertytypeDao;
 import de.berlin.fu.data.dto.SensorHasPropertytype;
-import de.berlin.fu.data.exceptions.SensorHasPropertytypeDaoException;
 import de.berlin.fu.data.factory.SensorHasPropertytypeDaoFactory;
 
 public class SensorHasPropertytypeDaoSample

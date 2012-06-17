@@ -8,12 +8,8 @@
 
 package de.berlin.fu.data.example;
 
-import java.math.*;
-import java.util.Date;
-import java.util.Collection;
 import de.berlin.fu.data.dao.PropertyTypeDao;
 import de.berlin.fu.data.dto.PropertyType;
-import de.berlin.fu.data.exceptions.PropertyTypeDaoException;
 import de.berlin.fu.data.factory.PropertyTypeDaoFactory;
 
 public class PropertyTypeDaoSample

@@ -9,10 +9,10 @@ import java.sql.SQLException;
 
 public class ResourceManager {
 	private static String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-	private static String JDBC_URL = "jdbc:mysql://localhost/telpro";
+	private static String JDBC_URL = "jdbc:mysql://192.168.1.105/telpro";
 
 	private static String JDBC_USER = "root";
-	private static String JDBC_PASSWORD = "";
+	private static String JDBC_PASSWORD = "telematik";
 
 	private static Driver driver = null;
 

@@ -8,12 +8,9 @@
 
 package de.berlin.fu.data.example;
 
-import java.math.*;
 import java.util.Date;
-import java.util.Collection;
 import de.berlin.fu.data.dao.EventDao;
 import de.berlin.fu.data.dto.Event;
-import de.berlin.fu.data.exceptions.EventDaoException;
 import de.berlin.fu.data.factory.EventDaoFactory;
 
 public class EventDaoSample

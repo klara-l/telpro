@@ -8,12 +8,8 @@
 
 package de.berlin.fu.data.example;
 
-import java.math.*;
-import java.util.Date;
-import java.util.Collection;
 import de.berlin.fu.data.dao.DevicesDao;
 import de.berlin.fu.data.dto.Devices;
-import de.berlin.fu.data.exceptions.DevicesDaoException;
 import de.berlin.fu.data.factory.DevicesDaoFactory;
 
 public class DevicesDaoSample

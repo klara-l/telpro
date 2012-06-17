@@ -8,12 +8,8 @@
 
 package de.berlin.fu.data.example;
 
-import java.math.*;
-import java.util.Date;
-import java.util.Collection;
 import de.berlin.fu.data.dao.EventtypeHasActionDao;
 import de.berlin.fu.data.dto.EventtypeHasAction;
-import de.berlin.fu.data.exceptions.EventtypeHasActionDaoException;
 import de.berlin.fu.data.factory.EventtypeHasActionDaoFactory;
 
 public class EventtypeHasActionDaoSample

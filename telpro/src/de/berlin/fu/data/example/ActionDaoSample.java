@@ -8,12 +8,8 @@
 
 package de.berlin.fu.data.example;
 
-import java.math.*;
-import java.util.Date;
-import java.util.Collection;
 import de.berlin.fu.data.dao.ActionDao;
 import de.berlin.fu.data.dto.Action;
-import de.berlin.fu.data.exceptions.ActionDaoException;
 import de.berlin.fu.data.factory.ActionDaoFactory;
 
 public class ActionDaoSample

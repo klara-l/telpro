@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
+import de.berlin.fu.data.dao.ActionDao;
 import de.berlin.fu.data.dao.TriggerDao;
 import de.berlin.fu.data.dto.Action;
 import de.berlin.fu.data.dto.Event;
@@ -14,11 +15,13 @@ import de.berlin.fu.data.dto.Sensor;
 import de.berlin.fu.data.dto.Trigger;
 import de.berlin.fu.data.exceptions.ActionDaoException;
 import de.berlin.fu.data.exceptions.EventDaoException;
+import de.berlin.fu.data.exceptions.PropertyDaoException;
 import de.berlin.fu.data.exceptions.PropertyTypeDaoException;
 import de.berlin.fu.data.exceptions.SensorDaoException;
 import de.berlin.fu.data.exceptions.TriggerDaoException;
 import de.berlin.fu.data.factory.ActionDaoFactory;
 import de.berlin.fu.data.factory.EventDaoFactory;
+import de.berlin.fu.data.factory.PropertyDaoFactory;
 import de.berlin.fu.data.factory.PropertyTypeDaoFactory;
 import de.berlin.fu.data.factory.SensorDaoFactory;
 import de.berlin.fu.data.factory.TriggerDaoFactory;
@@ -90,44 +93,75 @@ public class MyServerImpl extends RemoteServiceServlet implements MyServer {
 		try {
 			_dao.insert(t);
 		} catch (TriggerDaoException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
 	@Override
-	public boolean removeTrigger(Trigger t) {
-		// TODO Auto-generated method stub
-		return false;
+	public void removeTrigger(Trigger t) {
+		TriggerDao _dao = TriggerDaoFactory.create();
+		try {
+			_dao.delete(t.createPk());
+		} catch (TriggerDaoException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
-	public boolean updateTrigger(Trigger t) {
-		// TODO Auto-generated method stub
-		return false;
+	public void updateTrigger(Trigger t) {
+		TriggerDao _dao = TriggerDaoFactory.create();
+		try {
+			_dao.update(t.createPk(), t);
+		} catch (TriggerDaoException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	@Override
 	public void addAction(Action a) {
-		// TODO Auto-generated method stub
+		ActionDao _dao = ActionDaoFactory.create();
+		try {
+			_dao.insert(a);
+		} catch (ActionDaoException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void removeAction(Action a) {
+		ActionDao _dao = ActionDaoFactory.create();
+		try {
+			_dao.delete(a.createPk());
+		} catch (ActionDaoException e) {
+			e.printStackTrace();
+		}
 
 	}
 
 	@Override
-	public boolean removeAction(Action a) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean updateAction(Action a) {
-		// TODO Auto-generated method stub
-		return false;
+	public void updateAction(Action a) {
+		ActionDao _dao = ActionDaoFactory.create();
+		try {
+			_dao.update(a.createPk(), a);
+		} catch (ActionDaoException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public List<Property> getProperty(Sensor s, PropertyType pt) {
-		// TODO Auto-generated method stub
+		Object[] param = { s.getIdSensor(), pt.getIdPropertyType() };
+		try {
+			return Arrays
+					.asList(PropertyDaoFactory
+							.create()
+							.findByDynamicWhere(
+									"Sensor_idSensor = ? AND PropertyType_idPropertyType = ?",
+									param));
+		} catch (PropertyDaoException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 

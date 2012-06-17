@@ -8,12 +8,8 @@
 
 package de.berlin.fu.data.example;
 
-import java.math.*;
-import java.util.Date;
-import java.util.Collection;
 import de.berlin.fu.data.dao.TriggerDao;
 import de.berlin.fu.data.dto.Trigger;
-import de.berlin.fu.data.exceptions.TriggerDaoException;
 import de.berlin.fu.data.factory.TriggerDaoFactory;
 
 public class TriggerDaoSample
