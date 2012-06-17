@@ -102,7 +102,7 @@ public class TelproGWT implements EntryPoint {
 					public void run() {
 						HLayout tempAndHum = new HLayout();
 						tempAndHum.setHeight(400); 
-						tempAndHum.setWidth(600);
+						tempAndHum.setWidth(1000);
 						tempAndHum.setMembersMargin(20);  
 						tempAndHum.setLayoutMargin(10);
 						
@@ -113,7 +113,7 @@ public class TelproGWT implements EntryPoint {
 						
 						HLayout tiltAndRoll = new HLayout();
 						tiltAndRoll.setHeight(400); 
-						tiltAndRoll.setWidth(600);
+						tiltAndRoll.setWidth(1000);
 						tiltAndRoll.setMembersMargin(20);  
 						tiltAndRoll.setLayoutMargin(10);
 						
@@ -306,7 +306,7 @@ public class TelproGWT implements EntryPoint {
 
 	private Options createChartOptions(String title) {
 		Options options = Options.create();
-		options.setWidth(400);
+		options.setWidth(600);
 		options.setHeight(240);
 		options.setTitle(title);
 		return options;
@@ -336,8 +336,8 @@ public class TelproGWT implements EntryPoint {
 
 				getProperties(sensorID, "temperature");
 				getProperties(sensorID, "humidity");
-				//getProperties(sensorID, "tilt");
-				//getProperties(sensorID, "roll");
+				getProperties(sensorID, "tilt");
+				getProperties(sensorID, "roll");
 			}
 		};
 
@@ -349,13 +349,15 @@ public class TelproGWT implements EntryPoint {
 	private void showEvents(String sensorID){
 		VLayout eventTableLayout = new VLayout();
 		eventTableLayout.setShowEdges(true);
+		eventTableLayout.setEdgeSize(3);
 		eventTableLayout.setHeight(300);
+		eventTableLayout.setWidth(600);
 		eventTableLayout.setMembersMargin(10);
 		eventTableLayout.setLayoutMargin(10);
 		
 		
 		Label eventLabelHeader = new Label();
-		eventLabelHeader.setContents("<h3>Events from sensor node"+sensorID +"</h3>");
+		eventLabelHeader.setContents("<h3>Events from sensor node: "+sensorID +"</h3>");
 		eventTableLayout.addMember(eventLabelHeader);
 		
 		final ListGrid eventTable = new ListGrid();
