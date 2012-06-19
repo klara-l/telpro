@@ -188,4 +188,11 @@ public class MyServerImpl extends RemoteServiceServlet implements MyServer {
 		return null;
 
 	}
+
+	@Override
+	public List<Property> getPropertyUpdate(Sensor s, PropertyType pt,
+			int propertyID) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

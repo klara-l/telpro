@@ -44,4 +44,5 @@ public interface MyServer extends RemoteService {
 
 	public List<EventType> getEventTypes();
 
+	public List<Property> getPropertyUpdate(Sensor s, PropertyType pt, int propertyID);
 }
