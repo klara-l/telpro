@@ -1,12 +1,15 @@
 package de.berlin.fu.client;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.visualization.client.AbstractDataTable;
@@ -16,7 +19,6 @@ import com.google.gwt.visualization.client.VisualizationUtils;
 import com.google.gwt.visualization.client.visualizations.LineChart;
 import com.google.gwt.visualization.client.visualizations.LineChart.Options;
 import com.smartgwt.client.types.Alignment;
-import com.smartgwt.client.types.SelectionStyle;
 import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.Button;
 import com.smartgwt.client.widgets.Label;
@@ -39,7 +41,10 @@ import de.berlin.fu.shared.MyServerAsync;
 public class TelproGWT implements EntryPoint {
 
 	private final MyServerAsync server = GWT.create(MyServer.class);
-	private ListGrid sensorTable;
+
+	private ListGrid eventTable;
+
+	ListBox sensorBox;
 
 	private HashMap<String, Sensor> sensors;
 
@@ -56,7 +61,12 @@ public class TelproGWT implements EntryPoint {
 	private boolean firstClick = true;
 
 	private Label textSelectednode;
+	private Label eventLabelHeader;
 
+	private final DateTimeFormat formatter = DateTimeFormat
+			.getFormat("HH:mm:ss");
+
+	@Override
 	public void onModuleLoad() {
 		sensors = new HashMap<String, Sensor>();
 		propTypes = new HashMap<String, PropertyType>();
@@ -67,7 +77,7 @@ public class TelproGWT implements EntryPoint {
 		getAllPropertyTypes();
 		getAllEventTypes();
 
-		createSensorTable();
+		createSensorSelection();
 		updateSensorSelection();
 
 	}
@@ -95,6 +105,7 @@ public class TelproGWT implements EntryPoint {
 	private void drawCharts() {
 		// add Charts
 		Runnable onLoadCallback = new Runnable() {
+			@Override
 			public void run() {
 				HLayout tempAndHum = new HLayout();
 				tempAndHum.setHeight(400);
@@ -130,32 +141,20 @@ public class TelproGWT implements EntryPoint {
 
 		// Load the visualization api, passing the onLoadCallback to be called
 		// when loading is done.
-
 		VisualizationUtils.loadVisualizationApi(onLoadCallback,
 				LineChart.PACKAGE);
 	}
 
-	private void createSensorTable() {
-		HLayout sensorTableLayout = new HLayout();
-		sensorTableLayout.setHeight(200);
-		sensorTableLayout.setWidth(600);
-		sensorTableLayout.setMembersMargin(20);
-		sensorTableLayout.setLayoutMargin(10);
+	private void createSensorSelection() {
 
-		VLayout tableWithButton = new VLayout();
-		tableWithButton.setShowEdges(true);
-		tableWithButton.setEdgeSize(3);
-		tableWithButton.setWidth(600);
-		tableWithButton.setMembersMargin(20);
-		tableWithButton.setLayoutMargin(10);
+		VLayout sensorBoxWithButton = new VLayout();
+		sensorBoxWithButton.setShowEdges(true);
+		sensorBoxWithButton.setEdgeSize(3);
+		sensorBoxWithButton.setWidth(600);
+		sensorBoxWithButton.setMembersMargin(20);
+		sensorBoxWithButton.setLayoutMargin(10);
 
-		sensorTable = new ListGrid();
-		ListGridField idSensor = new ListGridField("idSensor", "Sensor ID");
-		ListGridField location = new ListGridField("location", "Location");
-		ListGridField sensorIp = new ListGridField("sensorIp", "Sensor IP");
-		sensorTable.setFields(idSensor, location, sensorIp);
-		// User can only select one sensor node
-		sensorTable.setSelectionType(SelectionStyle.SINGLE);
+		sensorBox = new ListBox();
 
 		textSelectednode = new Label();
 		textSelectednode.setContents("<h4>Please select a sensor node! </h4>");
@@ -163,15 +162,13 @@ public class TelproGWT implements EntryPoint {
 		Button showDia = new Button("Show Diagrams");
 		addClickhandlerToShowDia(showDia);
 
-		sensorTableLayout.addMember(sensorTable);
-		sensorTableLayout.addMember(textSelectednode);
+		sensorBoxWithButton.addMember(textSelectednode);
+		sensorBoxWithButton.addMember(sensorBox);
+		sensorBoxWithButton.addMember(showDia);
 
-		tableWithButton.addMember(sensorTableLayout);
-		tableWithButton.addMember(showDia);
+		sensorBoxWithButton.setDefaultLayoutAlign(Alignment.CENTER);
 
-		tableWithButton.setDefaultLayoutAlign(Alignment.CENTER);
-
-		panel.add(tableWithButton);
+		panel.add(sensorBoxWithButton);
 
 	}
 
@@ -185,7 +182,7 @@ public class TelproGWT implements EntryPoint {
 			@Override
 			public void onFailure(Throwable caught) {
 				SC.say("Error",
-						"Ups.. you have no access to database. Please reload the page!");
+						"Ups.. you have no access to database. Please reload the page! Sensor");
 
 			}
 
@@ -193,13 +190,11 @@ public class TelproGWT implements EntryPoint {
 			public void onSuccess(List<Sensor> result) {
 				for (Sensor s : result) {
 					// save the Sensors, because we need the nodes later
-					sensors.put(s.getIdSensor(), s);
+					String sensorID = s.getIdSensor();
+					sensors.put(sensorID, s);
 
-					ListGridRecord sensorInfo = new ListGridRecord();
-					sensorInfo.setAttribute("idSensor", s.getIdSensor());
-					sensorInfo.setAttribute("location", s.getLocation());
-					sensorInfo.setAttribute("sensorIp", s.getIp());
-					sensorTable.addData(sensorInfo);
+					sensorBox.addItem(sensorID);
+
 				}
 
 			}
@@ -222,17 +217,12 @@ public class TelproGWT implements EntryPoint {
 			public void onClick(ClickEvent event) {
 				String sensorID = "";
 				try {
-					sensorID = sensorTable.getSelectedRecord().getAttribute(
-							"idSensor");
+					int selectedItemIndex = sensorBox.getSelectedIndex();
+					sensorID = sensorBox.getValue(selectedItemIndex);
 
 					if (firstClick) {
-						(new Timer() {
-
-							@Override
-							public void run() {
-								drawCharts();
-							}
-						}).schedule(1000);
+						drawCharts();
+						drawEventTable();
 						firstClick = false;
 					}
 					textSelectednode
@@ -244,8 +234,6 @@ public class TelproGWT implements EntryPoint {
 					startTimer(sensorID);
 
 					showEvents(sensorID);
-
-					// showEvents();
 				} catch (NullPointerException ex) {
 					SC.say("Error", "Please select a sensor node!");
 				}
@@ -280,7 +268,7 @@ public class TelproGWT implements EntryPoint {
 					@Override
 					public void onFailure(Throwable caught) {
 						SC.say("Error",
-								"Ups.. you have no access to database. Please reload the page!");
+								"Ups.. you have no access to database. Please reload the page! Property");
 					}
 				});
 
@@ -304,7 +292,7 @@ public class TelproGWT implements EntryPoint {
 			@Override
 			public void onFailure(Throwable caught) {
 				SC.say("Error",
-						"Ups.. you have no access to database. Please reload the page!");
+						"Ups.. you have no access to database. Please reload the page! Propertytype");
 
 			}
 		});
@@ -319,14 +307,16 @@ public class TelproGWT implements EntryPoint {
 	}
 
 	private AbstractDataTable createTable(List<Property> list, String title) {
+
 		DataTable data = DataTable.create();
-		data.addColumn(ColumnType.DATE, "Time");
+		data.addColumn(ColumnType.STRING, "Time");
 		data.addColumn(ColumnType.NUMBER, title);
 		int i = 0;
 		if (list != null) {
 			data.addRows(list.size());
 			for (Property p : list) {
-				data.setValue(i, 0, p.getTimestamp());
+				Date time = p.getTimestamp();
+				data.setValue(i, 0, formatter.format(time));
 				data.setValue(i, 1, p.getValue());
 				i++;
 			}
@@ -337,6 +327,7 @@ public class TelproGWT implements EntryPoint {
 
 	private void startTimer(final String sensorID) {
 		Timer t = new Timer() {
+			@Override
 			public void run() {
 
 				getProperties(sensorID, "temperature");
@@ -347,11 +338,12 @@ public class TelproGWT implements EntryPoint {
 		};
 
 		// get all 5 sec new properties
-		t.scheduleRepeating(5000);
+		// t.scheduleRepeating(5000);
+		t.schedule(5000);
 
 	}
 
-	private void showEvents(String sensorID) {
+	private void drawEventTable() {
 		VLayout eventTableLayout = new VLayout();
 		eventTableLayout.setShowEdges(true);
 		eventTableLayout.setEdgeSize(3);
@@ -360,12 +352,10 @@ public class TelproGWT implements EntryPoint {
 		eventTableLayout.setMembersMargin(10);
 		eventTableLayout.setLayoutMargin(10);
 
-		Label eventLabelHeader = new Label();
-		eventLabelHeader.setContents("<h3>Events from sensor node: " + sensorID
-				+ "</h3>");
+		eventLabelHeader = new Label();
 		eventTableLayout.addMember(eventLabelHeader);
 
-		final ListGrid eventTable = new ListGrid();
+		eventTable = new ListGrid();
 		ListGridField timestamp = new ListGridField("timestamp", "Timestamp");
 		ListGridField eventtype = new ListGridField("eventtype", "Event type");
 		ListGridField eventdecription = new ListGridField("eventdecription",
@@ -373,6 +363,18 @@ public class TelproGWT implements EntryPoint {
 		ListGridField sensorId = new ListGridField("sensorId", "Sensor ID");
 		eventTable.setFields(timestamp, eventtype, eventdecription, sensorId);
 
+		eventTableLayout.addMember(eventTable);
+		panel.add(eventTableLayout);
+	}
+
+	private void showEvents(String sensorID) {
+		eventLabelHeader.setContents("<h3>Events from sensor node: " + sensorID
+				+ "</h3>");
+		// remove old records in table
+		ListGridRecord[] records = eventTable.getRecords();
+		for (int i = 0; i < records.length; i++) {
+			eventTable.removeData(records[i]);
+		}
 		server.getEventList(new AsyncCallback<List<Event>>() {
 
 			@Override
@@ -399,7 +401,5 @@ public class TelproGWT implements EntryPoint {
 			}
 		});
 
-		eventTableLayout.addMember(eventTable);
-		panel.add(eventTableLayout);
 	}
 }
