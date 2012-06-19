@@ -1,0 +1,5 @@
+#Mon Jun 18 13:34:36 CEST 2012
+war.name=TelproGWT.war
+compiler.style=OBFUSCATED
+server.path=/home/kaidowei/telpro/telpro
+compiler.memory.max=256m

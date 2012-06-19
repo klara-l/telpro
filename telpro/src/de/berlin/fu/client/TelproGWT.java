@@ -130,6 +130,7 @@ public class TelproGWT implements EntryPoint {
 
 		// Load the visualization api, passing the onLoadCallback to be called
 		// when loading is done.
+
 		VisualizationUtils.loadVisualizationApi(onLoadCallback,
 				LineChart.PACKAGE);
 	}
@@ -225,7 +226,13 @@ public class TelproGWT implements EntryPoint {
 							"idSensor");
 
 					if (firstClick) {
-						drawCharts();
+						(new Timer() {
+
+							@Override
+							public void run() {
+								drawCharts();
+							}
+						}).schedule(1000);
 						firstClick = false;
 					}
 					textSelectednode
@@ -252,7 +259,7 @@ public class TelproGWT implements EntryPoint {
 
 		PropertyType proType = propTypes.get(type);
 
-		server.getProperty(sensor, proType,
+		server.getProperty(sensor, proType, 30,
 				new AsyncCallback<List<Property>>() {
 
 					@Override

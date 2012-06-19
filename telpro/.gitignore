@@ -16,7 +16,7 @@ gwt-unitCache/
 # more caches and things from deploy #
 war/WEB-INF/deploy/
 war/WEB-INF/classes/
-
+*.cache.*
 .settings
 .classpath
 .project

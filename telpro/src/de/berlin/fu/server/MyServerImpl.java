@@ -153,14 +153,14 @@ public class MyServerImpl extends RemoteServiceServlet implements MyServer {
 	}
 
 	@Override
-	public List<Property> getProperty(Sensor s, PropertyType pt) {
-		Object[] param = { s.getIdSensor(), pt.getIdPropertyType() };
+	public List<Property> getProperty(Sensor s, PropertyType pt, int limit) {
+		Object[] param = { s.getIdSensor(), pt.getIdPropertyType(), limit };
 		try {
 			return Arrays
 					.asList(PropertyDaoFactory
 							.create()
-							.findByDynamicWhere(
-									"Sensor_idSensor = ? AND PropertyType_idPropertyType = ?",
+							.findByDynamicSelect(
+									"SELECT * FROM Property WHERE Sensor_idSensor = ? AND PropertyType_idPropertyType = ? ORDER BY idProperty DESC LIMIT ?",
 									param));
 		} catch (PropertyDaoException e) {
 			e.printStackTrace();
