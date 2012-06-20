@@ -19,6 +19,7 @@ import com.google.gwt.visualization.client.VisualizationUtils;
 import com.google.gwt.visualization.client.visualizations.LineChart;
 import com.google.gwt.visualization.client.visualizations.LineChart.Options;
 import com.smartgwt.client.types.Alignment;
+import com.smartgwt.client.types.Side;
 import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.Button;
 import com.smartgwt.client.widgets.Label;
@@ -29,6 +30,10 @@ import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.grid.ListGridRecord;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
+import com.smartgwt.client.widgets.tab.Tab;
+import com.smartgwt.client.widgets.tab.TabSet;
+import com.smartgwt.client.widgets.tab.events.TabSelectedEvent;
+import com.smartgwt.client.widgets.tab.events.TabSelectedHandler;
 
 import de.berlin.fu.data.dto.Event;
 import de.berlin.fu.data.dto.EventType;
@@ -48,9 +53,10 @@ public class TelproGWT implements EntryPoint {
 
 	private HashMap<String, Sensor> sensors;
 
-	private HashMap<String, PropertyType> propTypes;
+	private HashMap<Integer, PropertyType> propTypes;
 	private HashMap<Integer, EventType> eventTypes;
 
+	private HashMap<Integer, LineChart> lineCharts;
 	private LineChart temperature;
 	private LineChart humidity;
 	private LineChart tilt;
@@ -66,20 +72,57 @@ public class TelproGWT implements EntryPoint {
 	private final DateTimeFormat formatter = DateTimeFormat
 			.getFormat("HH:mm:ss");
 
+	private TabSet tabBar;
+
 	@Override
 	public void onModuleLoad() {
 		sensors = new HashMap<String, Sensor>();
-		propTypes = new HashMap<String, PropertyType>();
+		propTypes = new HashMap<Integer, PropertyType>();
 		eventTypes = new HashMap<Integer, EventType>();
+		lineCharts = new HashMap<Integer, LineChart>();
 
 		panel = RootPanel.get();
 
 		getAllPropertyTypes();
 		getAllEventTypes();
 
+		createTabMenu();
 		createSensorSelection();
 		updateSensorSelection();
 
+	}
+
+	private void createTabMenu() {
+		tabBar = new TabSet();
+		tabBar.setTabBarPosition(Side.TOP);
+		tabBar.setTabBarAlign(Side.LEFT);
+		tabBar.setWidth(400);
+		tabBar.setHeight(200);
+
+	}
+
+	/**
+	 * Save all PropertyTypes in a HashMap, because we need the types several
+	 * times
+	 */
+	private void getAllPropertyTypes() {
+		server.getPropertyTypes(new AsyncCallback<List<PropertyType>>() {
+
+			@Override
+			public void onSuccess(List<PropertyType> result) {
+				for (PropertyType type : result) {
+					propTypes.put(type.getIdPropertyType(), type);
+				}
+
+			}
+
+			@Override
+			public void onFailure(Throwable caught) {
+				SC.say("Error",
+						"Ups.. you have no access to database. Please reload the page! Propertytype");
+
+			}
+		});
 	}
 
 	private void getAllEventTypes() {
@@ -102,40 +145,120 @@ public class TelproGWT implements EntryPoint {
 
 	}
 
+	private Options createChartOptions(String title) {
+		Options options = Options.create();
+		options.setWidth(600);
+		options.setHeight(240);
+		options.setTitle(title);
+		return options;
+	}
+
+	private AbstractDataTable createTable(List<Property> list, String title) {
+
+		DataTable data = DataTable.create();
+		data.addColumn(ColumnType.STRING, "Time");
+		data.addColumn(ColumnType.NUMBER, title);
+		int i = 0;
+		if (list != null) {
+			data.addRows(list.size());
+			for (Property p : list) {
+				Date time = p.getTimestamp();
+				data.setValue(i, 0, formatter.format(time));
+				data.setValue(i, 1, p.getValue());
+				i++;
+			}
+		}
+
+		return data;
+	}
+
 	private void drawCharts() {
 		// add Charts
 		Runnable onLoadCallback = new Runnable() {
 			@Override
 			public void run() {
-				HLayout tempAndHum = new HLayout();
-				tempAndHum.setHeight(400);
-				tempAndHum.setWidth(1000);
-				tempAndHum.setMembersMargin(20);
-				tempAndHum.setLayoutMargin(10);
+				for (final Integer pType : propTypes.keySet()) {
+					final String properyTypeName = propTypes.get(pType)
+							.getName();
+					final Tab propTab = new Tab(properyTypeName);
 
-				temperature = new LineChart(createTable(null, "Temperature"),
-						createChartOptions("Temperature"));
-				humidity = new LineChart(createTable(null, "Humidity"),
-						createChartOptions("Humidity"));
-				tempAndHum.addMember(temperature);
-				tempAndHum.addMember(humidity);
+					propTab.addTabSelectedHandler(new TabSelectedHandler() {
 
-				HLayout tiltAndRoll = new HLayout();
-				tiltAndRoll.setHeight(400);
-				tiltAndRoll.setWidth(1000);
-				tiltAndRoll.setMembersMargin(20);
-				tiltAndRoll.setLayoutMargin(10);
+						@Override
+						public void onTabSelected(TabSelectedEvent event) {
+							HLayout chartLayout = new HLayout();
+							chartLayout.setHeight(400);
+							chartLayout.setWidth(1000);
+							chartLayout.setMembersMargin(20);
+							chartLayout.setLayoutMargin(10);
 
-				tilt = new LineChart(createTable(null, "Tilt"),
-						createChartOptions("Tilt"));
-				roll = new LineChart(createTable(null, "Roll"),
-						createChartOptions("Roll"));
+							LineChart chart = new LineChart(createTable(null,
+									properyTypeName),
+									createChartOptions(properyTypeName));
+							lineCharts.put(pType, chart);
 
-				tiltAndRoll.addMember(tilt);
-				tiltAndRoll.addMember(roll);
+							chartLayout.addMember(chart);
 
-				panel.add(tempAndHum);
-				panel.add(tiltAndRoll);
+							propTab.setPane(chartLayout);
+
+						}
+					});
+
+					tabBar.addTab(propTab);
+					// int counter =0;
+					// HLayout chartLayout;
+					// if(counter==0){
+					// //create HLayout (one HLayout for
+					// chartLayout = new HLayout();
+					// chartLayout.setHeight(400);
+					// chartLayout.setWidth(1000);
+					// chartLayout.setMembersMargin(20);
+					// chartLayout.setLayoutMargin(10);
+					//
+					// counter++;
+					// }else if(counter==1){
+					//
+					// }
+					//
+					// String properyTypeName = propTypes.get(pType).getName();
+					// LineChart chart = new LineChart(createTable(null,
+					// properyTypeName),
+					// createChartOptions(properyTypeName));
+					// lineCharts.put(pType, chart);
+					//
+					// chartLayout.addMember(chart);
+
+				}
+				panel.add(tabBar);
+				// HLayout tempAndHum = new HLayout();
+				// tempAndHum.setHeight(400);
+				// tempAndHum.setWidth(1000);
+				// tempAndHum.setMembersMargin(20);
+				// tempAndHum.setLayoutMargin(10);
+				//
+				// temperature = new LineChart(createTable(null, "Temperature"),
+				// createChartOptions("Temperature"));
+				// humidity = new LineChart(createTable(null, "Humidity"),
+				// createChartOptions("Humidity"));
+				// tempAndHum.addMember(temperature);
+				// tempAndHum.addMember(humidity);
+				//
+				// HLayout tiltAndRoll = new HLayout();
+				// tiltAndRoll.setHeight(400);
+				// tiltAndRoll.setWidth(1000);
+				// tiltAndRoll.setMembersMargin(20);
+				// tiltAndRoll.setLayoutMargin(10);
+				//
+				// tilt = new LineChart(createTable(null, "Tilt"),
+				// createChartOptions("Tilt"));
+				// roll = new LineChart(createTable(null, "Roll"),
+				// createChartOptions("Roll"));
+				//
+				// tiltAndRoll.addMember(tilt);
+				// tiltAndRoll.addMember(roll);
+				//
+				// panel.add(tempAndHum);
+				// panel.add(tiltAndRoll);
 			}
 		};
 
@@ -146,10 +269,15 @@ public class TelproGWT implements EntryPoint {
 	}
 
 	private void createSensorSelection() {
+		HLayout boxWithLayer = new HLayout();
+		boxWithLayer.setMembersMargin(20);
+		boxWithLayer.setLayoutMargin(10);
+		boxWithLayer.setHeight(200);
 
 		VLayout sensorBoxWithButton = new VLayout();
 		sensorBoxWithButton.setShowEdges(true);
 		sensorBoxWithButton.setEdgeSize(3);
+		sensorBoxWithButton.setHeight(200);
 		sensorBoxWithButton.setWidth(600);
 		sensorBoxWithButton.setMembersMargin(20);
 		sensorBoxWithButton.setLayoutMargin(10);
@@ -162,8 +290,10 @@ public class TelproGWT implements EntryPoint {
 		Button showDia = new Button("Show Diagrams");
 		addClickhandlerToShowDia(showDia);
 
-		sensorBoxWithButton.addMember(textSelectednode);
-		sensorBoxWithButton.addMember(sensorBox);
+		boxWithLayer.addMember(sensorBox);
+		boxWithLayer.addMember(textSelectednode);
+
+		sensorBoxWithButton.addMember(boxWithLayer);
 		sensorBoxWithButton.addMember(showDia);
 
 		sensorBoxWithButton.setDefaultLayoutAlign(Alignment.CENTER);
@@ -274,66 +404,15 @@ public class TelproGWT implements EntryPoint {
 
 	}
 
-	/**
-	 * Save all PropertyTypes in a HashMap, because we need the types several
-	 * times
-	 */
-	private void getAllPropertyTypes() {
-		server.getPropertyTypes(new AsyncCallback<List<PropertyType>>() {
-
-			@Override
-			public void onSuccess(List<PropertyType> result) {
-				for (PropertyType type : result) {
-					propTypes.put(type.getName(), type);
-				}
-
-			}
-
-			@Override
-			public void onFailure(Throwable caught) {
-				SC.say("Error",
-						"Ups.. you have no access to database. Please reload the page! Propertytype");
-
-			}
-		});
-	}
-
-	private Options createChartOptions(String title) {
-		Options options = Options.create();
-		options.setWidth(600);
-		options.setHeight(240);
-		options.setTitle(title);
-		return options;
-	}
-
-	private AbstractDataTable createTable(List<Property> list, String title) {
-
-		DataTable data = DataTable.create();
-		data.addColumn(ColumnType.STRING, "Time");
-		data.addColumn(ColumnType.NUMBER, title);
-		int i = 0;
-		if (list != null) {
-			data.addRows(list.size());
-			for (Property p : list) {
-				Date time = p.getTimestamp();
-				data.setValue(i, 0, formatter.format(time));
-				data.setValue(i, 1, p.getValue());
-				i++;
-			}
-		}
-
-		return data;
-	}
-
 	private void startTimer(final String sensorID) {
 		Timer t = new Timer() {
 			@Override
 			public void run() {
 
-				getProperties(sensorID, "temperature");
-				getProperties(sensorID, "humidity");
-				getProperties(sensorID, "tilt");
-				getProperties(sensorID, "roll");
+				// getProperties(sensorID, "temperature");
+				// getProperties(sensorID, "humidity");
+				// getProperties(sensorID, "tilt");
+				// getProperties(sensorID, "roll");
 			}
 		};
 
