@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project name="ImageViewer" default="all" basedir="/home/kaidowei/telpro/telpro">
+	<description>
+		This is build file for GWT module 'de.berlin.fu.TelproGWT' deployment.
+		GWT Designer generates it each time when you initiate deployment.
+		
+		You can use this file later for manual deployment, but keep in mind, that
+		classpath is hardcoded in it, so after changes in classpath you should
+		regenerate build file.
+	</description>
+
+	<property name="gwt.home" value="/home/kaidowei/.eclipse/org.eclipse.platform_3.7.0_155965261/plugins/com.google.gwt.eclipse.sdkbundle_2.4.0.v201112160242-rel-r37/gwt-2.4.0" />
+	<property name="gwt.module.id" value="de.berlin.fu.TelproGWT" />
+	<property name="war.name" value="TelproGWT.war" />
+
+	<target name="jars" description="Package up the module project and required projects as jars">
+		<mkdir dir="war/WEB-INF/lib" />
+		<!--=== telpro ===-->
+		<jar destfile='war/WEB-INF/lib/telpro.jar'>
+			<fileset dir="/home/kaidowei/telpro/telpro/src">
+				<include name="**"/>
+			</fileset>
+			<fileset dir="/home/kaidowei/telpro/telpro/war/WEB-INF/classes">
+				<include name="**/*.class"/>
+			</fileset>
+		</jar>
+		<copy todir='war/WEB-INF/lib'>
+			<fileset file="/home/kaidowei/.eclipse/org.eclipse.platform_3.7.0_155965261/plugins/com.google.gwt.eclipse.sdkbundle_2.4.0.v201112160242-rel-r37/gwt-2.4.0/gwt-dev.jar"/>
+			<fileset file="/home/kaidowei/.eclipse/org.eclipse.platform_3.7.0_155965261/plugins/com.google.gwt.eclipse.sdkbundle_2.4.0.v201112160242-rel-r37/gwt-2.4.0/validation-api-1.0.0.GA-sources.jar"/>
+			<fileset file="/home/kaidowei/.eclipse/org.eclipse.platform_3.7.0_155965261/plugins/com.google.gwt.eclipse.sdkbundle_2.4.0.v201112160242-rel-r37/gwt-2.4.0/validation-api-1.0.0.GA.jar"/>
+			<fileset file="/home/kaidowei/telpro/telpro/war/WEB-INF/lib/gwt-servlet.jar"/>
+			<fileset file="/home/kaidowei/telpro/telpro/war/WEB-INF/lib/gwt-visualization.jar"/>
+			<fileset file="/home/kaidowei/telpro/telpro/war/WEB-INF/lib/gwt-visualization-noredist.jar"/>
+			<fileset file="/home/kaidowei/telpro/telpro/war/WEB-INF/lib/mysql-connector-java-5.1.20-bin.jar"/>
+			<fileset file="/home/kaidowei/telpro/telpro/war/WEB-INF/lib/smartgwt-skins.jar"/>
+			<fileset file="/home/kaidowei/telpro/telpro/war/WEB-INF/lib/smartgwt.jar"/>
+		</copy>		
+	</target>
+
+	<target name="gwt-compile" description="Compile to JavaScript">
+		<java classname="com.google.gwt.dev.Compiler" fork="yes" failonerror="true" maxmemory="256m">
+			<classpath>
+				<pathelement location="/home/kaidowei/telpro/telpro/src" />
+				<pathelement location="/home/kaidowei/telpro/telpro/war/WEB-INF/classes" />
+				<pathelement location="/home/kaidowei/.eclipse/org.eclipse.platform_3.7.0_155965261/plugins/com.google.gwt.eclipse.sdkbundle_2.4.0.v201112160242-rel-r37/gwt-2.4.0/gwt-user.jar" />
+				<pathelement location="/home/kaidowei/.eclipse/org.eclipse.platform_3.7.0_155965261/plugins/com.google.gwt.eclipse.sdkbundle_2.4.0.v201112160242-rel-r37/gwt-2.4.0/gwt-dev.jar" />
+				<pathelement location="/home/kaidowei/.eclipse/org.eclipse.platform_3.7.0_155965261/plugins/com.google.gwt.eclipse.sdkbundle_2.4.0.v201112160242-rel-r37/gwt-2.4.0/validation-api-1.0.0.GA-sources.jar" />
+				<pathelement location="/home/kaidowei/.eclipse/org.eclipse.platform_3.7.0_155965261/plugins/com.google.gwt.eclipse.sdkbundle_2.4.0.v201112160242-rel-r37/gwt-2.4.0/validation-api-1.0.0.GA.jar" />
+				<pathelement location="/home/kaidowei/telpro/telpro/war/WEB-INF/lib/gwt-servlet.jar" />
+				<pathelement location="/home/kaidowei/telpro/telpro/war/WEB-INF/lib/gwt-visualization.jar" />
+				<pathelement location="/home/kaidowei/telpro/telpro/war/WEB-INF/lib/gwt-visualization-noredist.jar" />
+				<pathelement location="/home/kaidowei/telpro/telpro/war/WEB-INF/lib/mysql-connector-java-5.1.20-bin.jar" />
+				<pathelement location="/home/kaidowei/telpro/telpro/war/WEB-INF/lib/smartgwt-skins.jar" />
+				<pathelement location="/home/kaidowei/telpro/telpro/war/WEB-INF/lib/smartgwt.jar" />
+				<pathelement location="/home/kaidowei/.eclipse/org.eclipse.platform_3.7.0_155965261/plugins/com.google.gwt.eclipse.sdkbundle_2.4.0.v201112160242-rel-r37/gwt-2.4.0/gwt-dev.jar" />
+			</classpath>
+			<arg value="-style"/>
+			<arg value="OBFUSCATED"/>
+			<arg value="${gwt.module.id}" />
+		</java>
+	</target>
+
+	<target name="war" depends="gwt-compile, jars">
+		<delete file="${war.name}" />
+		<jar destfile="${war.name}" basedir="war" duplicate="preserve" />
+	</target>
+	
+	<target name="deploy" depends="war">
+		<move file="${war.name}" todir="/home/kaidowei/telpro/telpro" />
+	</target>
+
+	<target name="all" depends="deploy" />
+
+</project>

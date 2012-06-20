@@ -15,6 +15,16 @@
     <servlet-name>DataServelet</servlet-name>
     <url-pattern>/telprogwt/data</url-pattern>
   </servlet-mapping>
+
+  <servlet>
+    <servlet-name>DataInput</servlet-name>
+    <servlet-class>de.berlin.fu.server.DataInput</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>DataInput</servlet-name>
+    <url-pattern>/telprogwt/datainput</url-pattern>
+  </servlet-mapping>
   
     <servlet>
     <servlet-name>DataInput</servlet-name>

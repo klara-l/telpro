@@ -16,7 +16,7 @@ gwt-unitCache/
 # more caches and things from deploy #
 war/WEB-INF/deploy/
 war/WEB-INF/classes/
-
+*.cache.*
 .settings
 .classpath
 .project
@@ -25,4 +25,3 @@ war/WEB-INF/classes/
 *.rpc
 
 src/de/berlin/fu/data/jdbc/ResourceManager.java
-src/de/berlin/fu/client/SmartGWTTest.java
