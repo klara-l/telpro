@@ -6,36 +6,31 @@ import java.util.List;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.TabPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.visualization.client.AbstractDataTable;
 import com.google.gwt.visualization.client.AbstractDataTable.ColumnType;
 import com.google.gwt.visualization.client.DataTable;
 import com.google.gwt.visualization.client.VisualizationUtils;
 import com.google.gwt.visualization.client.visualizations.LineChart;
 import com.google.gwt.visualization.client.visualizations.LineChart.Options;
-import com.smartgwt.client.types.Alignment;
-import com.smartgwt.client.types.Side;
+import com.google.gwt.visualization.client.visualizations.Table;
 import com.smartgwt.client.util.SC;
-import com.smartgwt.client.widgets.Button;
+import com.smartgwt.client.widgets.Img;
 import com.smartgwt.client.widgets.Label;
-import com.smartgwt.client.widgets.events.ClickEvent;
-import com.smartgwt.client.widgets.events.ClickHandler;
-import com.smartgwt.client.widgets.grid.ListGrid;
-import com.smartgwt.client.widgets.grid.ListGridField;
-import com.smartgwt.client.widgets.grid.ListGridRecord;
+import com.smartgwt.client.widgets.Window;
 import com.smartgwt.client.widgets.layout.HLayout;
-import com.smartgwt.client.widgets.layout.VLayout;
-import com.smartgwt.client.widgets.tab.Tab;
-import com.smartgwt.client.widgets.tab.TabSet;
-import com.smartgwt.client.widgets.tab.events.TabSelectedEvent;
-import com.smartgwt.client.widgets.tab.events.TabSelectedHandler;
+import com.smartgwt.client.widgets.layout.HStack;
 
-import de.berlin.fu.data.dto.Event;
 import de.berlin.fu.data.dto.EventType;
 import de.berlin.fu.data.dto.Property;
 import de.berlin.fu.data.dto.PropertyType;
@@ -47,63 +42,45 @@ public class TelproGWT implements EntryPoint {
 
 	private final MyServerAsync server = GWT.create(MyServer.class);
 
-	private ListGrid eventTable;
+	ListBox sensorBox = new ListBox();
 
-	ListBox sensorBox;
+	private final HashMap<String, Sensor> sensors = new HashMap<String, Sensor>();
 
-	private HashMap<String, Sensor> sensors;
+	private final HashMap<Integer, PropertyType> propTypes = new HashMap<Integer, PropertyType>();
+	private final HashMap<Integer, EventType> eventTypes = new HashMap<Integer, EventType>();
 
-	private HashMap<Integer, PropertyType> propTypes;
-	private HashMap<Integer, EventType> eventTypes;
-
-	private HashMap<Integer, LineChart> lineCharts;
-	private LineChart temperature;
-	private LineChart humidity;
-	private LineChart tilt;
-	private LineChart roll;
+	private final HashMap<Integer, LineChart> charts = new HashMap<Integer, LineChart>();
 
 	private Panel panel;
 
 	private boolean firstClick = true;
 
-	private Label textSelectednode;
-	private Label eventLabelHeader;
-
+	private final HTML textSelectednode = new HTML();
 	private final DateTimeFormat formatter = DateTimeFormat
 			.getFormat("HH:mm:ss");
 
-	private TabSet tabBar;
+	private final TabPanel tabPanel = new TabPanel();
+
+	private final int refreshInterval = 5;
+
+	private Timer timer = null;
+
+	private final Window waitingWindow = new Window();
 
 	@Override
 	public void onModuleLoad() {
-		sensors = new HashMap<String, Sensor>();
-		propTypes = new HashMap<Integer, PropertyType>();
-		eventTypes = new HashMap<Integer, EventType>();
-		lineCharts = new HashMap<Integer, LineChart>();
-
 		panel = RootPanel.get();
-
 		getAllPropertyTypes();
 		getAllEventTypes();
 
-		createTabMenu();
 		createSensorSelection();
-		updateSensorSelection();
 
-	}
-
-	private void createTabMenu() {
-		tabBar = new TabSet();
-		tabBar.setTabBarPosition(Side.TOP);
-		tabBar.setTabBarAlign(Side.LEFT);
-		tabBar.setWidth(400);
-		tabBar.setHeight(200);
-
+		createWaitingWindow();
 	}
 
 	/**
 	 * Save all PropertyTypes in a HashMap, because we need the types several
-	 * times
+	 * times.
 	 */
 	private void getAllPropertyTypes() {
 		server.getPropertyTypes(new AsyncCallback<List<PropertyType>>() {
@@ -125,6 +102,10 @@ public class TelproGWT implements EntryPoint {
 		});
 	}
 
+	/**
+	 * Save all EventTypes in a HashMap, because we need the types several
+	 * times.
+	 */
 	private void getAllEventTypes() {
 		server.getEventTypes(new AsyncCallback<List<EventType>>() {
 
@@ -145,6 +126,11 @@ public class TelproGWT implements EntryPoint {
 
 	}
 
+	/**
+	 * @param title
+	 *            from chart (PropertyType)
+	 * @return options for this charts
+	 */
 	private Options createChartOptions(String title) {
 		Options options = Options.create();
 		options.setWidth(600);
@@ -153,6 +139,16 @@ public class TelproGWT implements EntryPoint {
 		return options;
 	}
 
+	/**
+	 * Create a datatable for the charts. Google charts need this function to
+	 * draw a chart.
+	 * 
+	 * @param list
+	 *            of all Properties
+	 * @param title
+	 *            from chart
+	 * @return a datatable for this chart
+	 */
 	private AbstractDataTable createTable(List<Property> list, String title) {
 
 		DataTable data = DataTable.create();
@@ -172,138 +168,94 @@ public class TelproGWT implements EntryPoint {
 		return data;
 	}
 
-	private void drawCharts() {
-		// add Charts
-		Runnable onLoadCallback = new Runnable() {
-			@Override
-			public void run() {
-				for (final Integer pType : propTypes.keySet()) {
-					final String properyTypeName = propTypes.get(pType)
-							.getName();
-					final Tab propTab = new Tab(properyTypeName);
-
-					propTab.addTabSelectedHandler(new TabSelectedHandler() {
-
-						@Override
-						public void onTabSelected(TabSelectedEvent event) {
-							HLayout chartLayout = new HLayout();
-							chartLayout.setHeight(400);
-							chartLayout.setWidth(1000);
-							chartLayout.setMembersMargin(20);
-							chartLayout.setLayoutMargin(10);
-
-							LineChart chart = new LineChart(createTable(null,
-									properyTypeName),
-									createChartOptions(properyTypeName));
-							lineCharts.put(pType, chart);
-
-							chartLayout.addMember(chart);
-
-							propTab.setPane(chartLayout);
-
-						}
-					});
-
-					tabBar.addTab(propTab);
-					// int counter =0;
-					// HLayout chartLayout;
-					// if(counter==0){
-					// //create HLayout (one HLayout for
-					// chartLayout = new HLayout();
-					// chartLayout.setHeight(400);
-					// chartLayout.setWidth(1000);
-					// chartLayout.setMembersMargin(20);
-					// chartLayout.setLayoutMargin(10);
-					//
-					// counter++;
-					// }else if(counter==1){
-					//
-					// }
-					//
-					// String properyTypeName = propTypes.get(pType).getName();
-					// LineChart chart = new LineChart(createTable(null,
-					// properyTypeName),
-					// createChartOptions(properyTypeName));
-					// lineCharts.put(pType, chart);
-					//
-					// chartLayout.addMember(chart);
-
-				}
-				panel.add(tabBar);
-				// HLayout tempAndHum = new HLayout();
-				// tempAndHum.setHeight(400);
-				// tempAndHum.setWidth(1000);
-				// tempAndHum.setMembersMargin(20);
-				// tempAndHum.setLayoutMargin(10);
-				//
-				// temperature = new LineChart(createTable(null, "Temperature"),
-				// createChartOptions("Temperature"));
-				// humidity = new LineChart(createTable(null, "Humidity"),
-				// createChartOptions("Humidity"));
-				// tempAndHum.addMember(temperature);
-				// tempAndHum.addMember(humidity);
-				//
-				// HLayout tiltAndRoll = new HLayout();
-				// tiltAndRoll.setHeight(400);
-				// tiltAndRoll.setWidth(1000);
-				// tiltAndRoll.setMembersMargin(20);
-				// tiltAndRoll.setLayoutMargin(10);
-				//
-				// tilt = new LineChart(createTable(null, "Tilt"),
-				// createChartOptions("Tilt"));
-				// roll = new LineChart(createTable(null, "Roll"),
-				// createChartOptions("Roll"));
-				//
-				// tiltAndRoll.addMember(tilt);
-				// tiltAndRoll.addMember(roll);
-				//
-				// panel.add(tempAndHum);
-				// panel.add(tiltAndRoll);
-			}
-		};
-
-		// Load the visualization api, passing the onLoadCallback to be called
-		// when loading is done.
-		VisualizationUtils.loadVisualizationApi(onLoadCallback,
-				LineChart.PACKAGE);
-	}
-
+	/**
+	 * Draw a Layout with the ListBox for the sensor selection.
+	 */
 	private void createSensorSelection() {
 		HLayout boxWithLayer = new HLayout();
 		boxWithLayer.setMembersMargin(20);
 		boxWithLayer.setLayoutMargin(10);
 		boxWithLayer.setHeight(200);
 
-		VLayout sensorBoxWithButton = new VLayout();
-		sensorBoxWithButton.setShowEdges(true);
-		sensorBoxWithButton.setEdgeSize(3);
-		sensorBoxWithButton.setHeight(200);
-		sensorBoxWithButton.setWidth(600);
-		sensorBoxWithButton.setMembersMargin(20);
-		sensorBoxWithButton.setLayoutMargin(10);
+		addSensorHandler();
 
-		sensorBox = new ListBox();
-
-		textSelectednode = new Label();
-		textSelectednode.setContents("<h4>Please select a sensor node! </h4>");
-
-		Button showDia = new Button("Show Diagrams");
-		addClickhandlerToShowDia(showDia);
+		textSelectednode.setHTML("<h4>Please select a sensor node!</h4>");
 
 		boxWithLayer.addMember(sensorBox);
 		boxWithLayer.addMember(textSelectednode);
 
-		sensorBoxWithButton.addMember(boxWithLayer);
-		sensorBoxWithButton.addMember(showDia);
+		updateSensorSelection();
 
-		sensorBoxWithButton.setDefaultLayoutAlign(Alignment.CENTER);
-
-		panel.add(sensorBoxWithButton);
+		panel.add(boxWithLayer);
 
 	}
 
 	/**
-	 * Get the Sensor-ID from Database and add the ID's to the ListBox
+	 * Add a addChangeHandler to sensor selection. If the user select a sensor
+	 * node, the "onChange"-method is called.
+	 */
+	private void addSensorHandler() {
+		sensorBox.addChangeHandler(new ChangeHandler() {
+
+			@Override
+			public void onChange(ChangeEvent event) {
+				int selectedItemIndex = sensorBox.getSelectedIndex();
+				if (selectedItemIndex == 0) {
+					SC.say("Error", "Please select a sensor node!");
+
+				} else {
+					String sensorID = sensorBox.getValue(selectedItemIndex);
+
+					if (firstClick) {
+
+						drawTabMenu(sensorID);
+
+						firstClick = false;
+					}
+					waitingWindow.show();
+					// hide the tabPanel, because we have no data yet
+					tabPanel.setVisible(false);
+					// the first timer react after 1 seconds and run only 1
+					// round
+					firstDBAccess(sensorID);
+					textSelectednode.setHTML("<h4> Diagrams from node: <h4>"
+							+ sensorID);
+					// update the properties periodically
+					startTimer(sensorID);
+
+				}
+
+			}
+		});
+	}
+
+	private void createWaitingWindow() {
+		waitingWindow.setTitle("Waiting...");
+		waitingWindow.setWidth(250);
+		waitingWindow.setCanDragResize(true);
+		waitingWindow.setShowCloseButton(false);
+		waitingWindow.setIsModal(true);
+		waitingWindow.setShowModalMask(true);
+		waitingWindow.centerInPage();
+
+		HStack layout = new HStack();
+		layout.setMembersMargin(10);
+		layout.setLayoutMargin(10);
+
+		Img spinningWheel = new Img("loadingSmall.gif", 16, 16);
+
+		layout.addMember(spinningWheel);
+
+		Label text = new Label();
+		text.setContents("Please wait a moment!");
+
+		layout.addMember(text);
+
+		waitingWindow.addItem(layout);
+	}
+
+	/**
+	 * Get the Sensor-ID from Database and add the ID's to the ListBox.
 	 */
 	private void updateSensorSelection() {
 
@@ -318,6 +270,8 @@ public class TelproGWT implements EntryPoint {
 
 			@Override
 			public void onSuccess(List<Sensor> result) {
+				sensorBox.addItem("Select a node...");
+
 				for (Sensor s : result) {
 					// save the Sensors, because we need the nodes later
 					String sensorID = s.getIdSensor();
@@ -334,151 +288,133 @@ public class TelproGWT implements EntryPoint {
 	}
 
 	/**
-	 * If the user click the Button, he get the selected node and load the
-	 * diagrams of this node
+	 * Draw the tab menu. One tab and one chart for one PropertyType.
 	 * 
-	 * @param showDia
-	 *            Button
+	 * @param sensorID
+	 *            ID from sensor
 	 */
-	private void addClickhandlerToShowDia(Button showDia) {
-		showDia.addClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				String sensorID = "";
-				try {
-					int selectedItemIndex = sensorBox.getSelectedIndex();
-					sensorID = sensorBox.getValue(selectedItemIndex);
-
-					if (firstClick) {
-						drawCharts();
-						drawEventTable();
-						firstClick = false;
-					}
-					textSelectednode
-							.setContents("<h4>Diagrams from node: </h4>"
-									+ sensorID);
-					// failure here... think, the diagrams are not ready
-					// getProperties(sensorID, "temperature");
-					// getProperties(sensorID, "humidity");
-					startTimer(sensorID);
-
-					showEvents(sensorID);
-				} catch (NullPointerException ex) {
-					SC.say("Error", "Please select a sensor node!");
-				}
-			}
-		});
-
-	}
-
-	private void getProperties(String sensorID, final String type) {
-		Sensor sensor = sensors.get(sensorID);
-
-		PropertyType proType = propTypes.get(type);
-
-		server.getProperty(sensor, proType, 30,
-				new AsyncCallback<List<Property>>() {
-
-					@Override
-					public void onSuccess(List<Property> result) {
-						AbstractDataTable table = createTable(result, type);
-						if (type.equals("temperature")) {
-							temperature.draw(table);
-						} else if (type.equals("humidity")) {
-							humidity.draw(table);
-						} else if (type.equals("tilt")) {
-							tilt.draw(table);
-						} else {
-							roll.draw(table);
-						}
-
-					}
-
-					@Override
-					public void onFailure(Throwable caught) {
-						SC.say("Error",
-								"Ups.. you have no access to database. Please reload the page! Property");
-					}
-				});
-
-	}
-
-	private void startTimer(final String sensorID) {
-		Timer t = new Timer() {
+	private void drawTabMenu(String sensorID) {
+		VisualizationUtils.loadVisualizationApi(new Runnable() {
 			@Override
 			public void run() {
+				final VerticalPanel vp = new VerticalPanel();
+				vp.getElement().getStyle().setPropertyPx("margin", 15);
+				panel.add(vp);
+				vp.add(tabPanel);
+				tabPanel.setWidth("800");
+				tabPanel.setHeight("600");
 
-				// getProperties(sensorID, "temperature");
-				// getProperties(sensorID, "humidity");
-				// getProperties(sensorID, "tilt");
-				// getProperties(sensorID, "roll");
+				for (Integer type : propTypes.keySet()) {
+					String propName = propTypes.get(type).getName();
+					LineChart chart = createLineChart(propName);
+					charts.put(type, chart);
+					tabPanel.add(chart, propName);
+				}
+
+				// tabPanel.add(createDataView(), "Events");
+				tabPanel.selectTab(0);
+			}
+		}, LineChart.PACKAGE, Table.PACKAGE);
+
+		tabPanel.setVisible(false);
+
+	}
+
+	/**
+	 * @param propName
+	 *            the PropertyType name
+	 * @return a generated LineChart
+	 */
+	private LineChart createLineChart(String propName) {
+		LineChart chart = new LineChart(createTable(null, propName),
+				createChartOptions(propName));
+		return chart;
+
+	}
+
+	/**
+	 * Get the last 30 entries per PropertyType from database and display the
+	 * data in LineChart.
+	 * 
+	 * @param sensorID
+	 *            ID from sensor
+	 */
+	private void getProperties(String sensorID) {
+		Sensor sensor = sensors.get(sensorID);
+
+		for (Integer type : propTypes.keySet()) {
+			final String propName = propTypes.get(type).getName();
+			final LineChart chart = charts.get(type);
+
+			server.getProperty(sensor, propTypes.get(type), 30,
+					new AsyncCallback<List<Property>>() {
+
+						@Override
+						public void onSuccess(List<Property> result) {
+							AbstractDataTable table = createTable(result,
+									propName);
+
+							chart.draw(table, createChartOptions(propName));
+						}
+
+						@Override
+						public void onFailure(Throwable caught) {
+							SC.say("Error",
+									"Ups.. you have no access to database. Please reload the page! Property");
+						}
+					});
+
+		}
+
+	}
+
+	/**
+	 * Start a timer, which terminate after 2 seconds and make the first access
+	 * to database. (We need the timer, because it takes a while to draw the
+	 * charts)
+	 * 
+	 * @param sensorID
+	 *            ID from sensor
+	 */
+	private void firstDBAccess(final String sensorID) {
+
+		Timer firstTimer = new Timer() {
+
+			@Override
+			public void run() {
+				getProperties(sensorID);
+				tabPanel.setVisible(true);
+				waitingWindow.hide();
 			}
 		};
 
-		// get all 5 sec new properties
-		// t.scheduleRepeating(5000);
-		t.schedule(5000);
-
+		firstTimer.schedule(1000);
 	}
 
-	private void drawEventTable() {
-		VLayout eventTableLayout = new VLayout();
-		eventTableLayout.setShowEdges(true);
-		eventTableLayout.setEdgeSize(3);
-		eventTableLayout.setHeight(300);
-		eventTableLayout.setWidth(600);
-		eventTableLayout.setMembersMargin(10);
-		eventTableLayout.setLayoutMargin(10);
-
-		eventLabelHeader = new Label();
-		eventTableLayout.addMember(eventLabelHeader);
-
-		eventTable = new ListGrid();
-		ListGridField timestamp = new ListGridField("timestamp", "Timestamp");
-		ListGridField eventtype = new ListGridField("eventtype", "Event type");
-		ListGridField eventdecription = new ListGridField("eventdecription",
-				"Description type");
-		ListGridField sensorId = new ListGridField("sensorId", "Sensor ID");
-		eventTable.setFields(timestamp, eventtype, eventdecription, sensorId);
-
-		eventTableLayout.addMember(eventTable);
-		panel.add(eventTableLayout);
-	}
-
-	private void showEvents(String sensorID) {
-		eventLabelHeader.setContents("<h3>Events from sensor node: " + sensorID
-				+ "</h3>");
-		// remove old records in table
-		ListGridRecord[] records = eventTable.getRecords();
-		for (int i = 0; i < records.length; i++) {
-			eventTable.removeData(records[i]);
+	/**
+	 * Start a timer, which refresh the data all {@value #refreshInterval}
+	 * seconds
+	 * 
+	 * @param sensorID
+	 *            ID from sensor
+	 */
+	private void startTimer(final String sensorID) {
+		if (timer != null) {
+			// kill the old timer
+			timer.cancel();
 		}
-		server.getEventList(new AsyncCallback<List<Event>>() {
 
+		timer = new Timer() {
 			@Override
-			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
+			public void run() {
 
+				System.out.println("--------------------------------------");
+				getProperties(sensorID);
 			}
+		};
 
-			@Override
-			public void onSuccess(List<Event> result) {
-				for (Event e : result) {
-					ListGridRecord eventInfo = new ListGridRecord();
-					eventInfo.setAttribute("timestamp", e.getTimestamp()
-							.toString());
-					EventType eventType = eventTypes.get(e
-							.getEventtypeIdeventtype());
-					eventInfo.setAttribute("eventtype", eventType.getName());
-					eventInfo.setAttribute("eventdecription",
-							eventType.getDescription());
-					eventInfo.setAttribute("sensorId", e.getSensorIdsensor());
-					eventTable.addData(eventInfo);
-				}
-
-			}
-		});
-
+		// timer.scheduleRepeating(refreshInterval * 1000);
+		timer.schedule(refreshInterval * 1000);
 	}
+
 }
