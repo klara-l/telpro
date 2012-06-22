@@ -139,8 +139,8 @@ public class TelproGWT implements EntryPoint {
 	 */
 	private Options createChartOptions(String title) {
 		Options options = Options.create();
-		options.setWidth(600);
-		options.setHeight(240);
+		options.setWidth(900);
+		options.setHeight(600);
 		options.setTitle(title);
 		options.setLegend(LegendPosition.NONE);
 		return options;
@@ -333,8 +333,8 @@ public class TelproGWT implements EntryPoint {
 				vp.getElement().getStyle().setPropertyPx("margin", 15);
 				panel.add(vp);
 				vp.add(tabPanel);
-				tabPanel.setWidth("800");
-				tabPanel.setHeight("600");
+				tabPanel.setWidth("1000");
+				tabPanel.setHeight("1000");
 
 				for (Integer type : propTypes.keySet()) {
 					String propName = propTypes.get(type).getName();
