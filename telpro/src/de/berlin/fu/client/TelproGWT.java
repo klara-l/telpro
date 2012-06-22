@@ -11,7 +11,6 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -31,6 +30,7 @@ import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.Window;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.HStack;
+import com.smartgwt.client.widgets.layout.VLayout;
 
 import de.berlin.fu.data.dto.EventType;
 import de.berlin.fu.data.dto.Property;
@@ -56,7 +56,6 @@ public class TelproGWT implements EntryPoint {
 
 	private boolean firstClick = true;
 
-	private final HTML textSelectednode = new HTML();
 	private final DateTimeFormat formatter = DateTimeFormat
 			.getFormat("HH:mm:ss");
 
@@ -67,6 +66,12 @@ public class TelproGWT implements EntryPoint {
 	private Timer timer = null;
 
 	private final Window waitingWindow = new Window();
+
+	private final VLayout sensorInfoLayout = new VLayout();
+
+	private final Label sensorInfoID = new Label();
+	private final Label sensorInfoLoc = new Label();
+	private final Label sensorInfoIp = new Label();
 
 	@Override
 	public void onModuleLoad() {
@@ -177,15 +182,29 @@ public class TelproGWT implements EntryPoint {
 		HLayout boxWithLayer = new HLayout();
 		boxWithLayer.setMembersMargin(20);
 		boxWithLayer.setLayoutMargin(10);
-		boxWithLayer.setHeight(100);
-		boxWithLayer.setWidth100();
+		boxWithLayer.setWidth(600);
 
 		addSensorHandler();
 
-		textSelectednode.setHTML("<h4>Please select a sensor node!</h4>");
+		sensorInfoLayout.setMembersMargin(10);
+		sensorInfoLayout.setLayoutMargin(10);
+		sensorInfoLayout.setWidth(400);
+		sensorInfoLayout.setHeight(150);
+		sensorInfoLayout.setShowEdges(true);
+		sensorInfoLayout.setEdgeSize(3);
+
+		sensorInfoID.setHeight(30);
+		sensorInfoLoc.setHeight(30);
+		sensorInfoIp.setHeight(30);
+
+		sensorInfoLayout.addMember(sensorInfoID);
+		sensorInfoLayout.addMember(sensorInfoLoc);
+		sensorInfoLayout.addMember(sensorInfoIp);
 
 		boxWithLayer.addMember(sensorBox);
-		boxWithLayer.addMember(textSelectednode);
+		boxWithLayer.addMember(sensorInfoLayout);
+
+		sensorInfoLayout.hide();
 
 		updateSensorSelection();
 
@@ -205,6 +224,10 @@ public class TelproGWT implements EntryPoint {
 				int selectedItemIndex = sensorBox.getSelectedIndex();
 				if (selectedItemIndex == 0) {
 					SC.say("Error", "Please select a sensor node!");
+					// hide the sensor information
+					sensorInfoLayout.hide();
+					// hide the tab-menu with diagrams
+					tabPanel.setVisible(false);
 
 				} else {
 					String sensorID = sensorBox.getValue(selectedItemIndex);
@@ -216,15 +239,19 @@ public class TelproGWT implements EntryPoint {
 
 						firstClick = false;
 					}
+					sensorInfoLayout.show();
 					waitingWindow.show();
 					// hide the tabPanel, because we have no data yet
 					tabPanel.setVisible(false);
 					// the first timer react after 1 seconds and run only 1
 					// round
 					firstDBAccess(sensorID);
-					textSelectednode.setHTML("<h4> Diagrams from node: <h4>"
-							+ sensorID + " at " + sensor.getLocation()
-							+ "(IP: " + sensor.getIpString() + ")");
+					sensorInfoID.setContents("<strong> node: </strong>"
+							+ sensorID);
+					sensorInfoLoc.setContents("<strong> location: </strong>"
+							+ sensor.getLocation());
+					sensorInfoIp.setContents("<strong> IP: </strong>"
+							+ sensor.getIpString());
 					// update the properties periodically
 					startTimer(sensorID);
 
