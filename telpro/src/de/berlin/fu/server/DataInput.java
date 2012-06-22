@@ -8,34 +8,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import de.berlin.fu.data.dao.EventDao;
 import de.berlin.fu.data.dao.PropertyDao;
 import de.berlin.fu.data.dao.SensorDao;
+import de.berlin.fu.data.dto.Event;
 import de.berlin.fu.data.dto.Property;
 import de.berlin.fu.data.dto.Sensor;
+import de.berlin.fu.data.exceptions.EventDaoException;
 import de.berlin.fu.data.exceptions.PropertyDaoException;
 import de.berlin.fu.data.exceptions.SensorDaoException;
+import de.berlin.fu.data.factory.EventDaoFactory;
 import de.berlin.fu.data.factory.PropertyDaoFactory;
 import de.berlin.fu.data.factory.SensorDaoFactory;
 
 public class DataInput extends HttpServlet {
-
-	public static int ipToInt(String addr) {
-		String[] addrArray = addr.split("\\.");
-
-		int num = 0;
-
-		for (int i = 0; i < addrArray.length; i++) {
-			int power = 3 - i;
-			num += ((Integer.parseInt(addrArray[i]) % 256 * Math
-					.pow(256, power)));
-		}
-		return num;
-	}
-
-	public static String intToIp(int i) {
-		return ((i >> 24) & 0xFF) + "." + ((i >> 16) & 0xFF) + "."
-				+ ((i >> 8) & 0xFF) + "." + (i & 0xFF);
-	}
 
 	/**
 	 * 
@@ -45,20 +31,48 @@ public class DataInput extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String deviceID = (String) request.getParameter("deviceID");
+		String action = (String) request.getParameter("action");
+
+		if (action.equalsIgnoreCase("property")) {
+			doProperty(deviceID, request, response);
+		} else if (action.equalsIgnoreCase("keyevent")) {
+			doKeyEvent(deviceID, request, response);
+		}
+
+		response.setStatus(200);
+	}
+
+	private void doKeyEvent(String deviceID, HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		Event e = new Event();
+		EventDao edao = EventDaoFactory.create();
+		e.setValue((String) request.getParameter("key"));
+		e.setEventtypeIdeventtype(1);
+		e.setTimestamp(new Date());
+		e.setSensorIdsensor(deviceID);
+		try {
+			edao.insert(e);
+			// TODO handle event type actions
+		} catch (EventDaoException e1) {
+			e1.printStackTrace();
+		}
+
+	}
+
+	private void doProperty(String deviceID, HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		Sensor s = new Sensor();
+		SensorDao sdao = SensorDaoFactory.create();
+		PropertyDao pdao = PropertyDaoFactory.create();
 		float temp = Float.parseFloat((String) request.getParameter("temp"));
 		float humid = Float.parseFloat((String) request.getParameter("humid"));
 		float tilt = Float.parseFloat((String) request.getParameter("tilt"));
 		float roll = Float.parseFloat((String) request.getParameter("roll"));
-		int ip = ipToInt(request.getRemoteAddr());
 
-		Sensor s = new Sensor();
-		s.setIp(ip);
-		SensorDao sdao = SensorDaoFactory.create();
-		PropertyDao pdao = PropertyDaoFactory.create();
 		try {
 			// updating ip
 			s = sdao.findWhereIdSensorEquals(deviceID)[0];
-			s.setIp(ip);
+			s.setIp(request.getRemoteAddr());
 			sdao.update(s.createPk(), s);
 			// adding the fields
 			Property prop = new Property();
@@ -87,6 +101,5 @@ public class DataInput extends HttpServlet {
 			e.printStackTrace();
 		}
 
-		response.setStatus(200);
 	}
 }

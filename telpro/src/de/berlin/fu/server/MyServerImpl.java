@@ -37,9 +37,10 @@ import de.berlin.fu.shared.MyServer;
 public class MyServerImpl extends RemoteServiceServlet implements MyServer {
 
 	@Override
-	public List<Event> getEventList() {
+	public List<Event> getEventList(Sensor s) {
 		try {
-			return Arrays.asList(EventDaoFactory.create().findAll());
+			return Arrays.asList(EventDaoFactory.create().findBySensor(
+					s.getIdSensor()));
 		} catch (EventDaoException e) {
 			e.printStackTrace();
 		}
@@ -47,11 +48,11 @@ public class MyServerImpl extends RemoteServiceServlet implements MyServer {
 	}
 
 	@Override
-	public List<Event> getNewEvents(int idEvent) {
-		Integer[] param = { idEvent };
+	public List<Event> getNewEvents(Sensor s, int idEvent) {
+		Object[] param = { s.getIdSensor(), idEvent };
 		try {
 			return Arrays.asList(EventDaoFactory.create().findByDynamicWhere(
-					"idEvent > ?", param));
+					"AND Sensor_idSensor = ? idEvent > ?", param));
 		} catch (EventDaoException e) {
 			e.printStackTrace();
 		}
@@ -160,7 +161,8 @@ public class MyServerImpl extends RemoteServiceServlet implements MyServer {
 					.asList(PropertyDaoFactory
 							.create()
 							.findByDynamicSelect(
-									"SELECT * FROM Property WHERE Sensor_idSensor = ? AND PropertyType_idPropertyType = ? ORDER BY idProperty DESC LIMIT ?",
+									"SELECT * FROM Property WHERE Sensor_idSensor = ? AND PropertyType_idPropertyType = ? AND idProperty > ((SELECT max(idProperty - ?) FROM Property ))",
+									// "SELECT * FROM Property WHERE Sensor_idSensor = ? AND PropertyType_idPropertyType = ? ORDER BY idProperty DESC LIMIT ?",
 									param));
 		} catch (PropertyDaoException e) {
 			e.printStackTrace();

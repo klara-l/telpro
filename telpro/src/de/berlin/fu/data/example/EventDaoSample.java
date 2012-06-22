@@ -34,6 +34,7 @@ public class EventDaoSample
 		// findWhereTimestampEquals(null);
 		// findWhereSensorIdsensorEquals("");
 		// findWhereTriggerIdtriggerEquals(0);
+		// findWhereValueEquals("");
 	}
 
 	/**
@@ -225,6 +226,27 @@ public class EventDaoSample
 	}
 
 	/**
+	 * Method 'findWhereValueEquals'
+	 * 
+	 * @param value
+	 */
+	public static void findWhereValueEquals(String value)
+	{
+		try {
+			EventDao _dao = getEventDao();
+			Event _result[] = _dao.findWhereValueEquals(value);
+			for (int i=0; i<_result.length; i++ ) {
+				display( _result[i] );
+			}
+		
+		}
+		catch (Exception _e) {
+			_e.printStackTrace();
+		}
+		
+	}
+
+	/**
 	 * Method 'getEventDao'
 	 * 
 	 * @return EventDao
@@ -251,6 +273,8 @@ public class EventDaoSample
 		buf.append( dto.getSensorIdsensor() );
 		buf.append( ", " );
 		buf.append( dto.getTriggerIdtrigger() );
+		buf.append( ", " );
+		buf.append( dto.getValue() );
 		System.out.println( buf.toString() );
 	}
 

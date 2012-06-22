@@ -16,9 +16,9 @@ import de.berlin.fu.data.dto.Trigger;
 @RemoteServiceRelativePath("data")
 public interface MyServer extends RemoteService {
 
-	public List<Event> getEventList();
+	public List<Event> getEventList(Sensor s);
 
-	public List<Event> getNewEvents(int idEvent);
+	public List<Event> getNewEvents(Sensor s, int idEvent);
 
 	public List<Sensor> getSensors();
 
@@ -44,5 +44,6 @@ public interface MyServer extends RemoteService {
 
 	public List<EventType> getEventTypes();
 
-	public List<Property> getPropertyUpdate(Sensor s, PropertyType pt, int propertyID);
+	public List<Property> getPropertyUpdate(Sensor s, PropertyType pt,
+			int propertyID);
 }

@@ -11,49 +11,54 @@ package de.berlin.fu.data.dto;
 import java.io.Serializable;
 import java.util.Date;
 
-public class Event implements Serializable {
+public class Event implements Serializable
+{
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 5375115859392724284L;
+	private static final long serialVersionUID = -9063496743741181897L;
 
-	/**
+	/** 
 	 * This attribute maps to the column idEvent in the Event table.
 	 */
 	protected int idEvent;
 
-	/**
-	 * This attribute maps to the column EventType_idEventType in the Event
-	 * table.
+	/** 
+	 * This attribute maps to the column EventType_idEventType in the Event table.
 	 */
 	protected int eventtypeIdeventtype;
 
-	/**
+	/** 
 	 * This attribute maps to the column Timestamp in the Event table.
 	 */
 	protected Date timestamp;
 
-	/**
+	/** 
 	 * This attribute maps to the column Sensor_idSensor in the Event table.
 	 */
 	protected String sensorIdsensor;
 
-	/**
+	/** 
 	 * This attribute maps to the column Trigger_idTrigger in the Event table.
 	 */
 	protected int triggerIdtrigger;
 
-	/**
-	 * This attribute represents whether the primitive attribute
-	 * triggerIdtrigger is null.
+	/** 
+	 * This attribute represents whether the primitive attribute triggerIdtrigger is null.
 	 */
 	protected boolean triggerIdtriggerNull = true;
+
+	/** 
+	 * This attribute maps to the column Value in the Event table.
+	 */
+	protected String value;
 
 	/**
 	 * Method 'Event'
 	 * 
 	 */
-	public Event() {
+	public Event()
+	{
 	}
 
 	/**
@@ -61,7 +66,8 @@ public class Event implements Serializable {
 	 * 
 	 * @return int
 	 */
-	public int getIdEvent() {
+	public int getIdEvent()
+	{
 		return idEvent;
 	}
 
@@ -70,7 +76,8 @@ public class Event implements Serializable {
 	 * 
 	 * @param idEvent
 	 */
-	public void setIdEvent(int idEvent) {
+	public void setIdEvent(int idEvent)
+	{
 		this.idEvent = idEvent;
 	}
 
@@ -79,7 +86,8 @@ public class Event implements Serializable {
 	 * 
 	 * @return int
 	 */
-	public int getEventtypeIdeventtype() {
+	public int getEventtypeIdeventtype()
+	{
 		return eventtypeIdeventtype;
 	}
 
@@ -88,7 +96,8 @@ public class Event implements Serializable {
 	 * 
 	 * @param eventtypeIdeventtype
 	 */
-	public void setEventtypeIdeventtype(int eventtypeIdeventtype) {
+	public void setEventtypeIdeventtype(int eventtypeIdeventtype)
+	{
 		this.eventtypeIdeventtype = eventtypeIdeventtype;
 	}
 
@@ -97,7 +106,8 @@ public class Event implements Serializable {
 	 * 
 	 * @return Date
 	 */
-	public Date getTimestamp() {
+	public Date getTimestamp()
+	{
 		return timestamp;
 	}
 
@@ -106,7 +116,8 @@ public class Event implements Serializable {
 	 * 
 	 * @param timestamp
 	 */
-	public void setTimestamp(Date timestamp) {
+	public void setTimestamp(Date timestamp)
+	{
 		this.timestamp = timestamp;
 	}
 
@@ -115,7 +126,8 @@ public class Event implements Serializable {
 	 * 
 	 * @return String
 	 */
-	public String getSensorIdsensor() {
+	public String getSensorIdsensor()
+	{
 		return sensorIdsensor;
 	}
 
@@ -124,7 +136,8 @@ public class Event implements Serializable {
 	 * 
 	 * @param sensorIdsensor
 	 */
-	public void setSensorIdsensor(String sensorIdsensor) {
+	public void setSensorIdsensor(String sensorIdsensor)
+	{
 		this.sensorIdsensor = sensorIdsensor;
 	}
 
@@ -133,7 +146,8 @@ public class Event implements Serializable {
 	 * 
 	 * @return int
 	 */
-	public int getTriggerIdtrigger() {
+	public int getTriggerIdtrigger()
+	{
 		return triggerIdtrigger;
 	}
 
@@ -142,7 +156,8 @@ public class Event implements Serializable {
 	 * 
 	 * @param triggerIdtrigger
 	 */
-	public void setTriggerIdtrigger(int triggerIdtrigger) {
+	public void setTriggerIdtrigger(int triggerIdtrigger)
+	{
 		this.triggerIdtrigger = triggerIdtrigger;
 		this.triggerIdtriggerNull = false;
 	}
@@ -152,7 +167,8 @@ public class Event implements Serializable {
 	 * 
 	 * @param value
 	 */
-	public void setTriggerIdtriggerNull(boolean value) {
+	public void setTriggerIdtriggerNull(boolean value)
+	{
 		this.triggerIdtriggerNull = value;
 	}
 
@@ -161,8 +177,29 @@ public class Event implements Serializable {
 	 * 
 	 * @return boolean
 	 */
-	public boolean isTriggerIdtriggerNull() {
+	public boolean isTriggerIdtriggerNull()
+	{
 		return triggerIdtriggerNull;
+	}
+
+	/**
+	 * Method 'getValue'
+	 * 
+	 * @return String
+	 */
+	public String getValue()
+	{
+		return value;
+	}
+
+	/**
+	 * Method 'setValue'
+	 * 
+	 * @param value
+	 */
+	public void setValue(String value)
+	{
+		this.value = value;
 	}
 
 	/**
@@ -171,46 +208,50 @@ public class Event implements Serializable {
 	 * @param _other
 	 * @return boolean
 	 */
-	public boolean equals(Object _other) {
+	@Override
+	public boolean equals(Object _other)
+	{
 		if (_other == null) {
 			return false;
 		}
-
+		
 		if (_other == this) {
 			return true;
 		}
-
+		
 		if (!(_other instanceof Event)) {
 			return false;
 		}
-
+		
 		final Event _cast = (Event) _other;
 		if (idEvent != _cast.idEvent) {
 			return false;
 		}
-
+		
 		if (eventtypeIdeventtype != _cast.eventtypeIdeventtype) {
 			return false;
 		}
-
-		if (timestamp == null ? _cast.timestamp != timestamp : !timestamp
-				.equals(_cast.timestamp)) {
+		
+		if (timestamp == null ? _cast.timestamp != timestamp : !timestamp.equals( _cast.timestamp )) {
 			return false;
 		}
-
-		if (sensorIdsensor == null ? _cast.sensorIdsensor != sensorIdsensor
-				: !sensorIdsensor.equals(_cast.sensorIdsensor)) {
+		
+		if (sensorIdsensor == null ? _cast.sensorIdsensor != sensorIdsensor : !sensorIdsensor.equals( _cast.sensorIdsensor )) {
 			return false;
 		}
-
+		
 		if (triggerIdtrigger != _cast.triggerIdtrigger) {
 			return false;
 		}
-
+		
 		if (triggerIdtriggerNull != _cast.triggerIdtriggerNull) {
 			return false;
 		}
-
+		
+		if (value == null ? _cast.value != value : !value.equals( _cast.value )) {
+			return false;
+		}
+		
 		return true;
 	}
 
@@ -219,20 +260,26 @@ public class Event implements Serializable {
 	 * 
 	 * @return int
 	 */
-	public int hashCode() {
+	@Override
+	public int hashCode()
+	{
 		int _hashCode = 0;
 		_hashCode = 29 * _hashCode + idEvent;
 		_hashCode = 29 * _hashCode + eventtypeIdeventtype;
 		if (timestamp != null) {
 			_hashCode = 29 * _hashCode + timestamp.hashCode();
 		}
-
+		
 		if (sensorIdsensor != null) {
 			_hashCode = 29 * _hashCode + sensorIdsensor.hashCode();
 		}
-
+		
 		_hashCode = 29 * _hashCode + triggerIdtrigger;
 		_hashCode = 29 * _hashCode + (triggerIdtriggerNull ? 1 : 0);
+		if (value != null) {
+			_hashCode = 29 * _hashCode + value.hashCode();
+		}
+		
 		return _hashCode;
 	}
 
@@ -241,7 +288,8 @@ public class Event implements Serializable {
 	 * 
 	 * @return EventPk
 	 */
-	public EventPk createPk() {
+	public EventPk createPk()
+	{
 		return new EventPk(idEvent, eventtypeIdeventtype);
 	}
 
@@ -250,14 +298,17 @@ public class Event implements Serializable {
 	 * 
 	 * @return String
 	 */
-	public String toString() {
+	@Override
+	public String toString()
+	{
 		StringBuffer ret = new StringBuffer();
-		ret.append("de.berlin.fu.data.dto.Event: ");
-		ret.append("idEvent=" + idEvent);
-		ret.append(", eventtypeIdeventtype=" + eventtypeIdeventtype);
-		ret.append(", timestamp=" + timestamp);
-		ret.append(", sensorIdsensor=" + sensorIdsensor);
-		ret.append(", triggerIdtrigger=" + triggerIdtrigger);
+		ret.append( "de.berlin.fu.data.dto.Event: " );
+		ret.append( "idEvent=" + idEvent );
+		ret.append( ", eventtypeIdeventtype=" + eventtypeIdeventtype );
+		ret.append( ", timestamp=" + timestamp );
+		ret.append( ", sensorIdsensor=" + sensorIdsensor );
+		ret.append( ", triggerIdtrigger=" + triggerIdtrigger );
+		ret.append( ", value=" + value );
 		return ret.toString();
 	}
 

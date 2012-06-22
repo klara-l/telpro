@@ -10,29 +10,28 @@ package de.berlin.fu.data.dto;
 
 import java.io.Serializable;
 
-public class Sensor implements Serializable
-{
+public class Sensor implements Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -6446184005235445168L;
 
-	/** 
+	/**
 	 * This attribute maps to the column idSensor in the Sensor table.
 	 */
 	protected String idSensor;
 
-	/** 
+	/**
 	 * This attribute maps to the column IP in the Sensor table.
 	 */
 	protected int ip;
 
-	/** 
+	/**
 	 * This attribute represents whether the primitive attribute ip is null.
 	 */
 	protected boolean ipNull = true;
 
-	/** 
+	/**
 	 * This attribute maps to the column Location in the Sensor table.
 	 */
 	protected String location;
@@ -41,8 +40,7 @@ public class Sensor implements Serializable
 	 * Method 'Sensor'
 	 * 
 	 */
-	public Sensor()
-	{
+	public Sensor() {
 	}
 
 	/**
@@ -50,8 +48,7 @@ public class Sensor implements Serializable
 	 * 
 	 * @return String
 	 */
-	public String getIdSensor()
-	{
+	public String getIdSensor() {
 		return idSensor;
 	}
 
@@ -60,9 +57,26 @@ public class Sensor implements Serializable
 	 * 
 	 * @param idSensor
 	 */
-	public void setIdSensor(String idSensor)
-	{
+	public void setIdSensor(String idSensor) {
 		this.idSensor = idSensor;
+	}
+
+	private static int ipToInt(String addr) {
+		String[] addrArray = addr.split("\\.");
+
+		int num = 0;
+
+		for (int i = 0; i < addrArray.length; i++) {
+			int power = 3 - i;
+			num += ((Integer.parseInt(addrArray[i]) % 256 * Math
+					.pow(256, power)));
+		}
+		return num;
+	}
+
+	private static String intToIp(int i) {
+		return ((i >> 24) & 0xFF) + "." + ((i >> 16) & 0xFF) + "."
+				+ ((i >> 8) & 0xFF) + "." + (i & 0xFF);
 	}
 
 	/**
@@ -70,9 +84,17 @@ public class Sensor implements Serializable
 	 * 
 	 * @return int
 	 */
-	public int getIp()
-	{
+	public int getIp() {
 		return ip;
+	}
+
+	/**
+	 * Method 'getIp'
+	 * 
+	 * @return String
+	 */
+	public String getIpString() {
+		return intToIp(ip);
 	}
 
 	/**
@@ -80,9 +102,18 @@ public class Sensor implements Serializable
 	 * 
 	 * @param ip
 	 */
-	public void setIp(int ip)
-	{
+	public void setIp(int ip) {
 		this.ip = ip;
+		this.ipNull = false;
+	}
+
+	/**
+	 * Method 'setIp'
+	 * 
+	 * @param ip
+	 */
+	public void setIp(String ip) {
+		this.ip = ipToInt(ip);
 		this.ipNull = false;
 	}
 
@@ -91,8 +122,7 @@ public class Sensor implements Serializable
 	 * 
 	 * @param value
 	 */
-	public void setIpNull(boolean value)
-	{
+	public void setIpNull(boolean value) {
 		this.ipNull = value;
 	}
 
@@ -101,8 +131,7 @@ public class Sensor implements Serializable
 	 * 
 	 * @return boolean
 	 */
-	public boolean isIpNull()
-	{
+	public boolean isIpNull() {
 		return ipNull;
 	}
 
@@ -111,8 +140,7 @@ public class Sensor implements Serializable
 	 * 
 	 * @return String
 	 */
-	public String getLocation()
-	{
+	public String getLocation() {
 		return location;
 	}
 
@@ -121,8 +149,7 @@ public class Sensor implements Serializable
 	 * 
 	 * @param location
 	 */
-	public void setLocation(String location)
-	{
+	public void setLocation(String location) {
 		this.location = location;
 	}
 
@@ -133,37 +160,38 @@ public class Sensor implements Serializable
 	 * @return boolean
 	 */
 	@Override
-	public boolean equals(Object _other)
-	{
+	public boolean equals(Object _other) {
 		if (_other == null) {
 			return false;
 		}
-		
+
 		if (_other == this) {
 			return true;
 		}
-		
+
 		if (!(_other instanceof Sensor)) {
 			return false;
 		}
-		
+
 		final Sensor _cast = (Sensor) _other;
-		if (idSensor == null ? _cast.idSensor != idSensor : !idSensor.equals( _cast.idSensor )) {
+		if (idSensor == null ? _cast.idSensor != idSensor : !idSensor
+				.equals(_cast.idSensor)) {
 			return false;
 		}
-		
+
 		if (ip != _cast.ip) {
 			return false;
 		}
-		
+
 		if (ipNull != _cast.ipNull) {
 			return false;
 		}
-		
-		if (location == null ? _cast.location != location : !location.equals( _cast.location )) {
+
+		if (location == null ? _cast.location != location : !location
+				.equals(_cast.location)) {
 			return false;
 		}
-		
+
 		return true;
 	}
 
@@ -173,19 +201,18 @@ public class Sensor implements Serializable
 	 * @return int
 	 */
 	@Override
-	public int hashCode()
-	{
+	public int hashCode() {
 		int _hashCode = 0;
 		if (idSensor != null) {
 			_hashCode = 29 * _hashCode + idSensor.hashCode();
 		}
-		
+
 		_hashCode = 29 * _hashCode + ip;
 		_hashCode = 29 * _hashCode + (ipNull ? 1 : 0);
 		if (location != null) {
 			_hashCode = 29 * _hashCode + location.hashCode();
 		}
-		
+
 		return _hashCode;
 	}
 
@@ -194,8 +221,7 @@ public class Sensor implements Serializable
 	 * 
 	 * @return SensorPk
 	 */
-	public SensorPk createPk()
-	{
+	public SensorPk createPk() {
 		return new SensorPk(idSensor);
 	}
 
@@ -205,13 +231,12 @@ public class Sensor implements Serializable
 	 * @return String
 	 */
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		StringBuffer ret = new StringBuffer();
-		ret.append( "de.berlin.fu.data.dto.Sensor: " );
-		ret.append( "idSensor=" + idSensor );
-		ret.append( ", ip=" + ip );
-		ret.append( ", location=" + location );
+		ret.append("de.berlin.fu.data.dto.Sensor: ");
+		ret.append("idSensor=" + idSensor);
+		ret.append(", ip=" + ip);
+		ret.append(", location=" + location);
 		return ret.toString();
 	}
 

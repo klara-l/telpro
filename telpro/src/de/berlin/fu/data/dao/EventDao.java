@@ -85,6 +85,11 @@ public interface EventDao
 	public Event[] findWhereTriggerIdtriggerEquals(int triggerIdtrigger) throws EventDaoException;
 
 	/** 
+	 * Returns all rows from the Event table that match the criteria 'Value = :value'.
+	 */
+	public Event[] findWhereValueEquals(String value) throws EventDaoException;
+
+	/** 
 	 * Sets the value of maxRows
 	 */
 	public void setMaxRows(int maxRows);

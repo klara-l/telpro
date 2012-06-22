@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.visualization.client.AbstractDataTable;
 import com.google.gwt.visualization.client.AbstractDataTable.ColumnType;
 import com.google.gwt.visualization.client.DataTable;
+import com.google.gwt.visualization.client.LegendPosition;
 import com.google.gwt.visualization.client.VisualizationUtils;
 import com.google.gwt.visualization.client.visualizations.LineChart;
 import com.google.gwt.visualization.client.visualizations.LineChart.Options;
@@ -136,6 +137,7 @@ public class TelproGWT implements EntryPoint {
 		options.setWidth(600);
 		options.setHeight(240);
 		options.setTitle(title);
+		options.setLegend(LegendPosition.NONE);
 		return options;
 	}
 
@@ -175,7 +177,8 @@ public class TelproGWT implements EntryPoint {
 		HLayout boxWithLayer = new HLayout();
 		boxWithLayer.setMembersMargin(20);
 		boxWithLayer.setLayoutMargin(10);
-		boxWithLayer.setHeight(200);
+		boxWithLayer.setHeight(100);
+		boxWithLayer.setWidth100();
 
 		addSensorHandler();
 
@@ -205,6 +208,7 @@ public class TelproGWT implements EntryPoint {
 
 				} else {
 					String sensorID = sensorBox.getValue(selectedItemIndex);
+					Sensor sensor = sensors.get(sensorID);
 
 					if (firstClick) {
 
@@ -219,7 +223,8 @@ public class TelproGWT implements EntryPoint {
 					// round
 					firstDBAccess(sensorID);
 					textSelectednode.setHTML("<h4> Diagrams from node: <h4>"
-							+ sensorID);
+							+ sensorID + " at " + sensor.getLocation()
+							+ "(IP: " + sensor.getIpString() + ")");
 					// update the properties periodically
 					startTimer(sensorID);
 

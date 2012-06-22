@@ -28,7 +28,6 @@
 			<fileset file="/home/kaidowei/.eclipse/org.eclipse.platform_3.7.0_155965261/plugins/com.google.gwt.eclipse.sdkbundle_2.4.0.v201112160242-rel-r37/gwt-2.4.0/gwt-dev.jar"/>
 			<fileset file="/home/kaidowei/.eclipse/org.eclipse.platform_3.7.0_155965261/plugins/com.google.gwt.eclipse.sdkbundle_2.4.0.v201112160242-rel-r37/gwt-2.4.0/validation-api-1.0.0.GA-sources.jar"/>
 			<fileset file="/home/kaidowei/.eclipse/org.eclipse.platform_3.7.0_155965261/plugins/com.google.gwt.eclipse.sdkbundle_2.4.0.v201112160242-rel-r37/gwt-2.4.0/validation-api-1.0.0.GA.jar"/>
-			<fileset file="/home/kaidowei/telpro/telpro/war/WEB-INF/lib/gwt-servlet.jar"/>
 			<fileset file="/home/kaidowei/telpro/telpro/war/WEB-INF/lib/gwt-visualization.jar"/>
 			<fileset file="/home/kaidowei/telpro/telpro/war/WEB-INF/lib/gwt-visualization-noredist.jar"/>
 			<fileset file="/home/kaidowei/telpro/telpro/war/WEB-INF/lib/mysql-connector-java-5.1.20-bin.jar"/>
@@ -46,7 +45,6 @@
 				<pathelement location="/home/kaidowei/.eclipse/org.eclipse.platform_3.7.0_155965261/plugins/com.google.gwt.eclipse.sdkbundle_2.4.0.v201112160242-rel-r37/gwt-2.4.0/gwt-dev.jar" />
 				<pathelement location="/home/kaidowei/.eclipse/org.eclipse.platform_3.7.0_155965261/plugins/com.google.gwt.eclipse.sdkbundle_2.4.0.v201112160242-rel-r37/gwt-2.4.0/validation-api-1.0.0.GA-sources.jar" />
 				<pathelement location="/home/kaidowei/.eclipse/org.eclipse.platform_3.7.0_155965261/plugins/com.google.gwt.eclipse.sdkbundle_2.4.0.v201112160242-rel-r37/gwt-2.4.0/validation-api-1.0.0.GA.jar" />
-				<pathelement location="/home/kaidowei/telpro/telpro/war/WEB-INF/lib/gwt-servlet.jar" />
 				<pathelement location="/home/kaidowei/telpro/telpro/war/WEB-INF/lib/gwt-visualization.jar" />
 				<pathelement location="/home/kaidowei/telpro/telpro/war/WEB-INF/lib/gwt-visualization-noredist.jar" />
 				<pathelement location="/home/kaidowei/telpro/telpro/war/WEB-INF/lib/mysql-connector-java-5.1.20-bin.jar" />

@@ -36,7 +36,7 @@ public class EventDaoImpl extends AbstractDAO implements EventDao {
 	 * All finder methods in this class use this SELECT constant to build their
 	 * queries
 	 */
-	protected final String SQL_SELECT = "SELECT idEvent, EventType_idEventType, Timestamp, Sensor_idSensor, Trigger_idTrigger FROM "
+	protected final String SQL_SELECT = "SELECT idEvent, EventType_idEventType, Timestamp, Sensor_idSensor, Trigger_idTrigger, Value FROM "
 			+ getTableName() + "";
 
 	/**
@@ -49,14 +49,14 @@ public class EventDaoImpl extends AbstractDAO implements EventDao {
 	 */
 	protected final String SQL_INSERT = "INSERT INTO "
 			+ getTableName()
-			+ " ( idEvent, EventType_idEventType, Timestamp, Sensor_idSensor, Trigger_idTrigger ) VALUES ( ?, ?, ?, ?, ? )";
+			+ " ( idEvent, EventType_idEventType, Timestamp, Sensor_idSensor, Trigger_idTrigger, Value ) VALUES ( ?, ?, ?, ?, ?, ? )";
 
 	/**
 	 * SQL UPDATE statement for this table
 	 */
 	protected final String SQL_UPDATE = "UPDATE "
 			+ getTableName()
-			+ " SET idEvent = ?, EventType_idEventType = ?, Timestamp = ?, Sensor_idSensor = ?, Trigger_idTrigger = ? WHERE idEvent = ? AND EventType_idEventType = ?";
+			+ " SET idEvent = ?, EventType_idEventType = ?, Timestamp = ?, Sensor_idSensor = ?, Trigger_idTrigger = ?, Value = ? WHERE idEvent = ? AND EventType_idEventType = ?";
 
 	/**
 	 * SQL DELETE statement for this table
@@ -90,9 +90,14 @@ public class EventDaoImpl extends AbstractDAO implements EventDao {
 	protected static final int COLUMN_TRIGGER_IDTRIGGER = 5;
 
 	/**
+	 * Index of column Value
+	 */
+	protected static final int COLUMN_VALUE = 6;
+
+	/**
 	 * Number of columns
 	 */
-	protected static final int NUMBER_OF_COLUMNS = 5;
+	protected static final int NUMBER_OF_COLUMNS = 6;
 
 	/**
 	 * Index of primary-key column idEvent
@@ -107,6 +112,7 @@ public class EventDaoImpl extends AbstractDAO implements EventDao {
 	/**
 	 * Inserts a new row in the Event table.
 	 */
+	@Override
 	public EventPk insert(Event dto) throws EventDaoException {
 		long t1 = System.currentTimeMillis();
 		// declare variables
@@ -134,6 +140,7 @@ public class EventDaoImpl extends AbstractDAO implements EventDao {
 				stmt.setInt(index++, dto.getTriggerIdtrigger());
 			}
 
+			stmt.setString(index++, dto.getValue());
 			System.out.println("Executing " + SQL_INSERT + " with DTO: " + dto);
 			int rows = stmt.executeUpdate();
 			long t2 = System.currentTimeMillis();
@@ -163,6 +170,7 @@ public class EventDaoImpl extends AbstractDAO implements EventDao {
 	/**
 	 * Updates a single row in the Event table.
 	 */
+	@Override
 	public void update(EventPk pk, Event dto) throws EventDaoException {
 		long t1 = System.currentTimeMillis();
 		// declare variables
@@ -189,8 +197,9 @@ public class EventDaoImpl extends AbstractDAO implements EventDao {
 				stmt.setInt(index++, dto.getTriggerIdtrigger());
 			}
 
-			stmt.setInt(6, pk.getIdEvent());
-			stmt.setInt(7, pk.getEventtypeIdeventtype());
+			stmt.setString(index++, dto.getValue());
+			stmt.setInt(7, pk.getIdEvent());
+			stmt.setInt(8, pk.getEventtypeIdeventtype());
 			int rows = stmt.executeUpdate();
 			reset(dto);
 			long t2 = System.currentTimeMillis();
@@ -211,6 +220,7 @@ public class EventDaoImpl extends AbstractDAO implements EventDao {
 	/**
 	 * Deletes a single row in the Event table.
 	 */
+	@Override
 	public void delete(EventPk pk) throws EventDaoException {
 		long t1 = System.currentTimeMillis();
 		// declare variables
@@ -247,6 +257,7 @@ public class EventDaoImpl extends AbstractDAO implements EventDao {
 	 * Returns the rows from the Event table that matches the specified
 	 * primary-key value.
 	 */
+	@Override
 	public Event findByPrimaryKey(EventPk pk) throws EventDaoException {
 		return findByPrimaryKey(pk.getIdEvent(), pk.getEventtypeIdeventtype());
 	}
@@ -255,6 +266,7 @@ public class EventDaoImpl extends AbstractDAO implements EventDao {
 	 * Returns all rows from the Event table that match the criteria 'idEvent =
 	 * :idEvent AND EventType_idEventType = :eventtypeIdeventtype'.
 	 */
+	@Override
 	public Event findByPrimaryKey(int idEvent, int eventtypeIdeventtype)
 			throws EventDaoException {
 		Event ret[] = findByDynamicSelect(SQL_SELECT
@@ -267,6 +279,7 @@ public class EventDaoImpl extends AbstractDAO implements EventDao {
 	/**
 	 * Returns all rows from the Event table that match the criteria ''.
 	 */
+	@Override
 	public Event[] findAll() throws EventDaoException {
 		return findByDynamicSelect(SQL_SELECT
 				+ " ORDER BY idEvent, EventType_idEventType", null);
@@ -276,6 +289,7 @@ public class EventDaoImpl extends AbstractDAO implements EventDao {
 	 * Returns all rows from the Event table that match the criteria
 	 * 'EventType_idEventType = :eventtypeIdeventtype'.
 	 */
+	@Override
 	public Event[] findByEventType(int eventtypeIdeventtype)
 			throws EventDaoException {
 		return findByDynamicSelect(SQL_SELECT
@@ -287,6 +301,7 @@ public class EventDaoImpl extends AbstractDAO implements EventDao {
 	 * Returns all rows from the Event table that match the criteria
 	 * 'Sensor_idSensor = :sensorIdsensor'.
 	 */
+	@Override
 	public Event[] findBySensor(String sensorIdsensor) throws EventDaoException {
 		return findByDynamicSelect(SQL_SELECT + " WHERE Sensor_idSensor = ?",
 				new Object[] { sensorIdsensor });
@@ -296,6 +311,7 @@ public class EventDaoImpl extends AbstractDAO implements EventDao {
 	 * Returns all rows from the Event table that match the criteria
 	 * 'Trigger_idTrigger = :triggerIdtrigger'.
 	 */
+	@Override
 	public Event[] findByTrigger(int triggerIdtrigger) throws EventDaoException {
 		return findByDynamicSelect(SQL_SELECT + " WHERE Trigger_idTrigger = ?",
 				new Object[] { new Integer(triggerIdtrigger) });
@@ -305,6 +321,7 @@ public class EventDaoImpl extends AbstractDAO implements EventDao {
 	 * Returns all rows from the Event table that match the criteria 'idEvent =
 	 * :idEvent'.
 	 */
+	@Override
 	public Event[] findWhereIdEventEquals(int idEvent) throws EventDaoException {
 		return findByDynamicSelect(SQL_SELECT
 				+ " WHERE idEvent = ? ORDER BY idEvent",
@@ -315,6 +332,7 @@ public class EventDaoImpl extends AbstractDAO implements EventDao {
 	 * Returns all rows from the Event table that match the criteria
 	 * 'EventType_idEventType = :eventtypeIdeventtype'.
 	 */
+	@Override
 	public Event[] findWhereEventtypeIdeventtypeEquals(int eventtypeIdeventtype)
 			throws EventDaoException {
 		return findByDynamicSelect(
@@ -327,6 +345,7 @@ public class EventDaoImpl extends AbstractDAO implements EventDao {
 	 * Returns all rows from the Event table that match the criteria 'Timestamp
 	 * = :timestamp'.
 	 */
+	@Override
 	public Event[] findWhereTimestampEquals(Date timestamp)
 			throws EventDaoException {
 		return findByDynamicSelect(SQL_SELECT
@@ -339,6 +358,7 @@ public class EventDaoImpl extends AbstractDAO implements EventDao {
 	 * Returns all rows from the Event table that match the criteria
 	 * 'Sensor_idSensor = :sensorIdsensor'.
 	 */
+	@Override
 	public Event[] findWhereSensorIdsensorEquals(String sensorIdsensor)
 			throws EventDaoException {
 		return findByDynamicSelect(SQL_SELECT
@@ -350,11 +370,22 @@ public class EventDaoImpl extends AbstractDAO implements EventDao {
 	 * Returns all rows from the Event table that match the criteria
 	 * 'Trigger_idTrigger = :triggerIdtrigger'.
 	 */
+	@Override
 	public Event[] findWhereTriggerIdtriggerEquals(int triggerIdtrigger)
 			throws EventDaoException {
 		return findByDynamicSelect(SQL_SELECT
 				+ " WHERE Trigger_idTrigger = ? ORDER BY Trigger_idTrigger",
 				new Object[] { new Integer(triggerIdtrigger) });
+	}
+
+	/**
+	 * Returns all rows from the Event table that match the criteria 'Value =
+	 * :value'.
+	 */
+	@Override
+	public Event[] findWhereValueEquals(String value) throws EventDaoException {
+		return findByDynamicSelect(SQL_SELECT
+				+ " WHERE Value = ? ORDER BY Value", new Object[] { value });
 	}
 
 	/**
@@ -376,6 +407,7 @@ public class EventDaoImpl extends AbstractDAO implements EventDao {
 	/**
 	 * Sets the value of maxRows
 	 */
+	@Override
 	public void setMaxRows(int maxRows) {
 		this.maxRows = maxRows;
 	}
@@ -383,6 +415,7 @@ public class EventDaoImpl extends AbstractDAO implements EventDao {
 	/**
 	 * Gets the value of maxRows
 	 */
+	@Override
 	public int getMaxRows() {
 		return maxRows;
 	}
@@ -439,6 +472,7 @@ public class EventDaoImpl extends AbstractDAO implements EventDao {
 			dto.setTriggerIdtriggerNull(true);
 		}
 
+		dto.setValue(rs.getString(COLUMN_VALUE));
 	}
 
 	/**
@@ -451,6 +485,7 @@ public class EventDaoImpl extends AbstractDAO implements EventDao {
 	 * Returns all rows from the Event table that match the specified arbitrary
 	 * SQL statement
 	 */
+	@Override
 	public Event[] findByDynamicSelect(String sql, Object[] sqlParams)
 			throws EventDaoException {
 		// declare variables
@@ -499,6 +534,7 @@ public class EventDaoImpl extends AbstractDAO implements EventDao {
 	 * Returns all rows from the Event table that match the specified arbitrary
 	 * SQL statement
 	 */
+	@Override
 	public Event[] findByDynamicWhere(String sql, Object[] sqlParams)
 			throws EventDaoException {
 		// declare variables

@@ -357,6 +357,20 @@
             <auto-increment>false</auto-increment>
             <sequence-name />
           </column>
+          <column>
+            <java-name>value</java-name>
+            <java-type>java.lang.String</java-type>
+            <java-default-value />
+            <sql-name>Value</sql-name>
+            <sql-type>VARCHAR</sql-type>
+            <jdbc-type>VARCHAR</jdbc-type>
+            <jdbc-precision>100</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>true</nullable>
+            <unique>false</unique>
+            <auto-increment>false</auto-increment>
+            <sequence-name />
+          </column>
         </column-list>
         <finder-list>
           <finder>
@@ -518,6 +532,22 @@
               </parameter>
             </parameter-list>
           </finder>
+          <finder>
+            <name>findWhereValueEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>Value = :value</where>
+            <order-by>Value</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>value</java-name>
+                <java-type>java.lang.String</java-type>
+                <jdbc-type>VARCHAR</jdbc-type>
+                <jdbc-precision>100</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
         </finder-list>
       </table>
       <table>
@@ -658,32 +688,32 @@
         </primary-key>
         <foreign-key-list>
           <foreign-key>
-            <name>fk_EventType_has_Action_Action1</name>
-            <parent-table>Action</parent-table>
-            <cardinality>1-many</cardinality>
-            <nav-to-parent-term>Action</nav-to-parent-term>
-            <nav-to-child-term>EventtypeHasAction</nav-to-child-term>
-            <nav-to-parent>true</nav-to-parent>
-            <nav-to-child>false</nav-to-child>
-            <column-list>
-              <column>
-                <column-name>Action_idAction</column-name>
-                <ref-column-name>idAction</ref-column-name>
-              </column>
-            </column-list>
-          </foreign-key>
-          <foreign-key>
             <name>fk_EventType_has_Action_EventType1</name>
             <parent-table>EventType</parent-table>
             <cardinality>1-many</cardinality>
             <nav-to-parent-term>EventType</nav-to-parent-term>
-            <nav-to-child-term>EventtypeHasAction1</nav-to-child-term>
+            <nav-to-child-term>EventtypeHasAction</nav-to-child-term>
             <nav-to-parent>true</nav-to-parent>
             <nav-to-child>false</nav-to-child>
             <column-list>
               <column>
                 <column-name>EventType_idEventType</column-name>
                 <ref-column-name>idEventType</ref-column-name>
+              </column>
+            </column-list>
+          </foreign-key>
+          <foreign-key>
+            <name>fk_EventType_has_Action_Action1</name>
+            <parent-table>Action</parent-table>
+            <cardinality>1-many</cardinality>
+            <nav-to-parent-term>Action</nav-to-parent-term>
+            <nav-to-child-term>EventtypeHasAction1</nav-to-child-term>
+            <nav-to-parent>true</nav-to-parent>
+            <nav-to-child>false</nav-to-child>
+            <column-list>
+              <column>
+                <column-name>Action_idAction</column-name>
+                <ref-column-name>idAction</ref-column-name>
               </column>
             </column-list>
           </foreign-key>
@@ -751,22 +781,6 @@
             <parameter-list />
           </finder>
           <finder>
-            <name>findByAction</name>
-            <multi-finder>true</multi-finder>
-            <where>Action_idAction = :actionIdaction</where>
-            <order-by />
-            <query-type>WHERE</query-type>
-            <parameter-list>
-              <parameter>
-                <java-name>actionIdaction</java-name>
-                <java-type>int</java-type>
-                <jdbc-type>INTEGER</jdbc-type>
-                <jdbc-precision>10</jdbc-precision>
-                <jdbc-scale>0</jdbc-scale>
-              </parameter>
-            </parameter-list>
-          </finder>
-          <finder>
             <name>findByEventType</name>
             <multi-finder>true</multi-finder>
             <where>EventType_idEventType = :eventtypeIdeventtype</where>
@@ -775,6 +789,22 @@
             <parameter-list>
               <parameter>
                 <java-name>eventtypeIdeventtype</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findByAction</name>
+            <multi-finder>true</multi-finder>
+            <where>Action_idAction = :actionIdaction</where>
+            <order-by />
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>actionIdaction</java-name>
                 <java-type>int</java-type>
                 <jdbc-type>INTEGER</jdbc-type>
                 <jdbc-precision>10</jdbc-precision>
@@ -1318,32 +1348,32 @@
         </primary-key>
         <foreign-key-list>
           <foreign-key>
-            <name>fk_Sensor_has_PropertyType_PropertyType1</name>
-            <parent-table>PropertyType</parent-table>
-            <cardinality>1-many</cardinality>
-            <nav-to-parent-term>PropertyType</nav-to-parent-term>
-            <nav-to-child-term>SensorHasPropertytype</nav-to-child-term>
-            <nav-to-parent>true</nav-to-parent>
-            <nav-to-child>false</nav-to-child>
-            <column-list>
-              <column>
-                <column-name>PropertyType_idPropertyType</column-name>
-                <ref-column-name>idPropertyType</ref-column-name>
-              </column>
-            </column-list>
-          </foreign-key>
-          <foreign-key>
             <name>fk_Sensor_has_PropertyType_Sensor1</name>
             <parent-table>Sensor</parent-table>
             <cardinality>1-many</cardinality>
             <nav-to-parent-term>Sensor</nav-to-parent-term>
-            <nav-to-child-term>SensorHasPropertytype1</nav-to-child-term>
+            <nav-to-child-term>SensorHasPropertytype</nav-to-child-term>
             <nav-to-parent>true</nav-to-parent>
             <nav-to-child>false</nav-to-child>
             <column-list>
               <column>
                 <column-name>Sensor_idSensor</column-name>
                 <ref-column-name>idSensor</ref-column-name>
+              </column>
+            </column-list>
+          </foreign-key>
+          <foreign-key>
+            <name>fk_Sensor_has_PropertyType_PropertyType1</name>
+            <parent-table>PropertyType</parent-table>
+            <cardinality>1-many</cardinality>
+            <nav-to-parent-term>PropertyType</nav-to-parent-term>
+            <nav-to-child-term>SensorHasPropertytype1</nav-to-child-term>
+            <nav-to-parent>true</nav-to-parent>
+            <nav-to-child>false</nav-to-child>
+            <column-list>
+              <column>
+                <column-name>PropertyType_idPropertyType</column-name>
+                <ref-column-name>idPropertyType</ref-column-name>
               </column>
             </column-list>
           </foreign-key>
@@ -1411,22 +1441,6 @@
             <parameter-list />
           </finder>
           <finder>
-            <name>findByPropertyType</name>
-            <multi-finder>true</multi-finder>
-            <where>PropertyType_idPropertyType = :propertytypeIdpropertytype</where>
-            <order-by />
-            <query-type>WHERE</query-type>
-            <parameter-list>
-              <parameter>
-                <java-name>propertytypeIdpropertytype</java-name>
-                <java-type>int</java-type>
-                <jdbc-type>INTEGER</jdbc-type>
-                <jdbc-precision>10</jdbc-precision>
-                <jdbc-scale>0</jdbc-scale>
-              </parameter>
-            </parameter-list>
-          </finder>
-          <finder>
             <name>findBySensor</name>
             <multi-finder>true</multi-finder>
             <where>Sensor_idSensor = :sensorIdsensor</where>
@@ -1438,6 +1452,22 @@
                 <java-type>java.lang.String</java-type>
                 <jdbc-type>VARCHAR</jdbc-type>
                 <jdbc-precision>16</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findByPropertyType</name>
+            <multi-finder>true</multi-finder>
+            <where>PropertyType_idPropertyType = :propertytypeIdpropertytype</where>
+            <order-by />
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>propertytypeIdpropertytype</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
                 <jdbc-scale>0</jdbc-scale>
               </parameter>
             </parameter-list>
@@ -1655,32 +1685,32 @@
         </primary-key>
         <foreign-key-list>
           <foreign-key>
-            <name>fk_Trigger_EventType1</name>
-            <parent-table>EventType</parent-table>
-            <cardinality>1-many</cardinality>
-            <nav-to-parent-term>EventType</nav-to-parent-term>
-            <nav-to-child-term>Trigger</nav-to-child-term>
-            <nav-to-parent>true</nav-to-parent>
-            <nav-to-child>false</nav-to-child>
-            <column-list>
-              <column>
-                <column-name>EventType_idEventType</column-name>
-                <ref-column-name>idEventType</ref-column-name>
-              </column>
-            </column-list>
-          </foreign-key>
-          <foreign-key>
             <name>fk_Trigger_PropertyType1</name>
             <parent-table>PropertyType</parent-table>
             <cardinality>1-many</cardinality>
             <nav-to-parent-term>PropertyType</nav-to-parent-term>
-            <nav-to-child-term>Trigger1</nav-to-child-term>
+            <nav-to-child-term>Trigger</nav-to-child-term>
             <nav-to-parent>true</nav-to-parent>
             <nav-to-child>false</nav-to-child>
             <column-list>
               <column>
                 <column-name>PropertyType_idPropertyType</column-name>
                 <ref-column-name>idPropertyType</ref-column-name>
+              </column>
+            </column-list>
+          </foreign-key>
+          <foreign-key>
+            <name>fk_Trigger_EventType1</name>
+            <parent-table>EventType</parent-table>
+            <cardinality>1-many</cardinality>
+            <nav-to-parent-term>EventType</nav-to-parent-term>
+            <nav-to-child-term>Trigger1</nav-to-child-term>
+            <nav-to-parent>true</nav-to-parent>
+            <nav-to-child>false</nav-to-child>
+            <column-list>
+              <column>
+                <column-name>EventType_idEventType</column-name>
+                <ref-column-name>idEventType</ref-column-name>
               </column>
             </column-list>
           </foreign-key>
@@ -1755,22 +1785,6 @@
             <parameter-list />
           </finder>
           <finder>
-            <name>findByEventType</name>
-            <multi-finder>true</multi-finder>
-            <where>EventType_idEventType = :eventtypeIdeventtype</where>
-            <order-by />
-            <query-type>WHERE</query-type>
-            <parameter-list>
-              <parameter>
-                <java-name>eventtypeIdeventtype</java-name>
-                <java-type>int</java-type>
-                <jdbc-type>INTEGER</jdbc-type>
-                <jdbc-precision>10</jdbc-precision>
-                <jdbc-scale>0</jdbc-scale>
-              </parameter>
-            </parameter-list>
-          </finder>
-          <finder>
             <name>findByPropertyType</name>
             <multi-finder>true</multi-finder>
             <where>PropertyType_idPropertyType = :propertytypeIdpropertytype</where>
@@ -1779,6 +1793,22 @@
             <parameter-list>
               <parameter>
                 <java-name>propertytypeIdpropertytype</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findByEventType</name>
+            <multi-finder>true</multi-finder>
+            <where>EventType_idEventType = :eventtypeIdeventtype</where>
+            <order-by />
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>eventtypeIdeventtype</java-name>
                 <java-type>int</java-type>
                 <jdbc-type>INTEGER</jdbc-type>
                 <jdbc-precision>10</jdbc-precision>
@@ -1853,7 +1883,7 @@
       <property key="jdbc-driver" value="com.mysql.jdbc.Driver" />
       <property key="jdbc-pwd" value="telematik" />
       <property key="jdbc-table-aliases" value="false" />
-      <property key="jdbc-url" value="jdbc:mysql://192.168.1.105/telpro" />
+      <property key="jdbc-url" value="jdbc:mysql://localhost/telpro" />
       <property key="jdbc-user" value="root" />
       <property key="jdbc30-capable" value="true" />
       <property key="logging" value="stdout" />

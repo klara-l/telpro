@@ -20,10 +20,6 @@ public interface MyServerAsync {
 
 	void getActions(AsyncCallback<List<Action>> callback);
 
-	void getEventList(AsyncCallback<List<Event>> callback);
-
-	void getNewEvents(int idEvent, AsyncCallback<List<Event>> callback);
-
 	void getProperty(Sensor s, PropertyType pt, int limit,
 			AsyncCallback<List<Property>> callback);
 
@@ -45,5 +41,9 @@ public interface MyServerAsync {
 
 	void getPropertyUpdate(Sensor s, PropertyType pt, int propertyID,
 			AsyncCallback<List<Property>> callback);
+
+	void getEventList(Sensor s, AsyncCallback<List<Event>> callback);
+
+	void getNewEvents(Sensor s, int idEvent, AsyncCallback<List<Event>> callback);
 
 }
