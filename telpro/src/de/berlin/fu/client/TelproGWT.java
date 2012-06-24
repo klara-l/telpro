@@ -50,6 +50,8 @@ public class TelproGWT implements EntryPoint {
 
 	private final HashMap<String, Sensor> sensors = new HashMap<String, Sensor>();
 
+	private Sensor currentSensor = null;
+
 	private final HashMap<Integer, PropertyType> propTypes = new HashMap<Integer, PropertyType>();
 	private final HashMap<Integer, EventType> eventTypes = new HashMap<Integer, EventType>();
 
@@ -195,12 +197,12 @@ public class TelproGWT implements EntryPoint {
 					tabPanel.setVisible(false);
 
 				} else {
-					String sensorID = sensorBox.getValue(selectedItemIndex);
-					Sensor sensor = sensors.get(sensorID);
+					currentSensor = sensors.get(sensorBox
+							.getValue(selectedItemIndex));
 
 					if (firstClick) {
 
-						drawTabMenu(sensorID);
+						drawTabMenu(currentSensor.getIdSensor());
 
 						firstClick = false;
 					}
@@ -210,15 +212,15 @@ public class TelproGWT implements EntryPoint {
 					tabPanel.setVisible(false);
 					// the first timer react after 1 seconds and run only 1
 					// round
-					firstDBAccess(sensorID);
+					firstDBAccess(currentSensor);
 					sensorInfoID.setContents("<strong> node: </strong>"
-							+ sensorID);
+							+ currentSensor.getIdSensor());
 					sensorInfoLoc.setContents("<strong> location: </strong>"
-							+ sensor.getLocation());
+							+ currentSensor.getLocation());
 					sensorInfoIp.setContents("<strong> IP: </strong>"
-							+ sensor.getIpString());
+							+ currentSensor.getIpString());
 					// update the properties periodically
-					startTimer(sensorID);
+					startTimer(currentSensor);
 
 				}
 
@@ -300,7 +302,7 @@ public class TelproGWT implements EntryPoint {
 				panel.add(vp);
 				vp.add(tabPanel);
 				tabPanel.setWidth("1000");
-				tabPanel.setHeight("1000");
+				tabPanel.setHeight("700");
 
 				for (Integer type : propTypes.keySet()) {
 					String propName = propTypes.get(type).getName();
@@ -336,7 +338,19 @@ public class TelproGWT implements EntryPoint {
 		hPanel.add(flowPanel);
 		flowPanel.add(eventTable);
 
-		eventTable.draw(createEventTable(null));
+		server.getEventList(sensors.get(currentSensor),
+				new AsyncCallback<List<Event>>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+					}
+
+					@Override
+					public void onSuccess(List<Event> result) {
+						eventTable.draw(createEventTable(result));
+
+					}
+				});
 		return eventTable;
 	}
 
@@ -394,7 +408,7 @@ public class TelproGWT implements EntryPoint {
 		DataTable data = DataTable.create();
 		data.addColumn(ColumnType.STRING, "Timestamp");
 		data.addColumn(ColumnType.STRING, "Eventtype");
-		data.addColumn(ColumnType.STRING, "Eventdescription");
+		data.addColumn(ColumnType.STRING, "Details");
 		data.addColumn(ColumnType.STRING, "SensorID");
 		int i = 0;
 		if (list != null) {
@@ -405,7 +419,8 @@ public class TelproGWT implements EntryPoint {
 				Date time = e.getTimestamp();
 				data.setValue(i, 0, formatter.format(time));
 				data.setValue(i, 1, eventType.getName());
-				data.setValue(i, 2, eventType.getDescription());
+				data.setValue(i, 2,
+						eventType.getDescription() + " " + e.getValue());
 				data.setValue(i, 3, e.getSensorIdsensor());
 				i++;
 			}
@@ -421,14 +436,13 @@ public class TelproGWT implements EntryPoint {
 	 * @param sensorID
 	 *            ID from sensor
 	 */
-	private void getProperties(String sensorID) {
-		Sensor sensor = sensors.get(sensorID);
+	private void getProperties(Sensor s) {
 
 		for (Integer type : propTypes.keySet()) {
 			final String propName = propTypes.get(type).getName();
 			final LineChart chart = charts.get(type);
 
-			server.getProperty(sensor, propTypes.get(type), 30,
+			server.getProperty(s, propTypes.get(type), 30,
 					new AsyncCallback<List<Property>>() {
 
 						@Override
@@ -450,15 +464,14 @@ public class TelproGWT implements EntryPoint {
 
 	}
 
-	private void getEvents(String sensorID) {
-		Sensor sensor = sensors.get(sensorID);
+	private void getEvents(Sensor s) {
 
-		server.getEventList(sensor, new AsyncCallback<List<Event>>() {
+		server.getEventList(s, new AsyncCallback<List<Event>>() {
 
 			@Override
 			public void onSuccess(List<Event> result) {
 				AbstractDataTable table = createEventTable(result);
-				// eventTable.draw(table);
+				eventTable.draw(table);
 
 			}
 
@@ -479,14 +492,14 @@ public class TelproGWT implements EntryPoint {
 	 * @param sensorID
 	 *            ID from sensor
 	 */
-	private void firstDBAccess(final String sensorID) {
+	private void firstDBAccess(final Sensor s) {
 
 		Timer firstTimer = new Timer() {
 
 			@Override
 			public void run() {
-				getProperties(sensorID);
-				getEvents(sensorID);
+				getProperties(s);
+				getEvents(s);
 				tabPanel.setVisible(true);
 				waitingWindow.hide();
 			}
@@ -502,7 +515,7 @@ public class TelproGWT implements EntryPoint {
 	 * @param sensorID
 	 *            ID from sensor
 	 */
-	private void startTimer(final String sensorID) {
+	private void startTimer(final Sensor s) {
 		if (timer != null) {
 			// kill the old timer
 			timer.cancel();
@@ -513,8 +526,8 @@ public class TelproGWT implements EntryPoint {
 			public void run() {
 
 				System.out.println("--------------------------------------");
-				getProperties(sensorID);
-				getEvents(sensorID);
+				getProperties(s);
+				getEvents(s);
 			}
 		};
 
