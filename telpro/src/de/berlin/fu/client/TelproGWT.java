@@ -11,7 +11,8 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -31,7 +32,9 @@ import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.Window;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.HStack;
+import com.smartgwt.client.widgets.layout.VLayout;
 
+import de.berlin.fu.data.dto.Event;
 import de.berlin.fu.data.dto.EventType;
 import de.berlin.fu.data.dto.Property;
 import de.berlin.fu.data.dto.PropertyType;
@@ -56,17 +59,27 @@ public class TelproGWT implements EntryPoint {
 
 	private boolean firstClick = true;
 
-	private final HTML textSelectednode = new HTML();
 	private final DateTimeFormat formatter = DateTimeFormat
 			.getFormat("HH:mm:ss");
 
 	private final TabPanel tabPanel = new TabPanel();
 
+	/**
+	 * Refresh interval from timer in seconds
+	 */
 	private final int refreshInterval = 5;
 
 	private Timer timer = null;
 
 	private final Window waitingWindow = new Window();
+
+	private final VLayout sensorInfoLayout = new VLayout();
+
+	private final Label sensorInfoID = new Label();
+	private final Label sensorInfoLoc = new Label();
+	private final Label sensorInfoIp = new Label();
+
+	private Table eventTable;
 
 	@Override
 	public void onModuleLoad() {
@@ -128,64 +141,35 @@ public class TelproGWT implements EntryPoint {
 	}
 
 	/**
-	 * @param title
-	 *            from chart (PropertyType)
-	 * @return options for this charts
-	 */
-	private Options createChartOptions(String title) {
-		Options options = Options.create();
-		options.setWidth(600);
-		options.setHeight(240);
-		options.setTitle(title);
-		options.setLegend(LegendPosition.NONE);
-		return options;
-	}
-
-	/**
-	 * Create a datatable for the charts. Google charts need this function to
-	 * draw a chart.
-	 * 
-	 * @param list
-	 *            of all Properties
-	 * @param title
-	 *            from chart
-	 * @return a datatable for this chart
-	 */
-	private AbstractDataTable createTable(List<Property> list, String title) {
-
-		DataTable data = DataTable.create();
-		data.addColumn(ColumnType.STRING, "Time");
-		data.addColumn(ColumnType.NUMBER, title);
-		int i = 0;
-		if (list != null) {
-			data.addRows(list.size());
-			for (Property p : list) {
-				Date time = p.getTimestamp();
-				data.setValue(i, 0, formatter.format(time));
-				data.setValue(i, 1, p.getValue());
-				i++;
-			}
-		}
-
-		return data;
-	}
-
-	/**
 	 * Draw a Layout with the ListBox for the sensor selection.
 	 */
 	private void createSensorSelection() {
 		HLayout boxWithLayer = new HLayout();
 		boxWithLayer.setMembersMargin(20);
 		boxWithLayer.setLayoutMargin(10);
-		boxWithLayer.setHeight(100);
-		boxWithLayer.setWidth100();
+		boxWithLayer.setWidth(600);
 
 		addSensorHandler();
 
-		textSelectednode.setHTML("<h4>Please select a sensor node!</h4>");
+		sensorInfoLayout.setMembersMargin(10);
+		sensorInfoLayout.setLayoutMargin(10);
+		sensorInfoLayout.setWidth(400);
+		sensorInfoLayout.setHeight(150);
+		sensorInfoLayout.setShowEdges(true);
+		sensorInfoLayout.setEdgeSize(3);
+
+		sensorInfoID.setHeight(30);
+		sensorInfoLoc.setHeight(30);
+		sensorInfoIp.setHeight(30);
+
+		sensorInfoLayout.addMember(sensorInfoID);
+		sensorInfoLayout.addMember(sensorInfoLoc);
+		sensorInfoLayout.addMember(sensorInfoIp);
 
 		boxWithLayer.addMember(sensorBox);
-		boxWithLayer.addMember(textSelectednode);
+		boxWithLayer.addMember(sensorInfoLayout);
+
+		sensorInfoLayout.hide();
 
 		updateSensorSelection();
 
@@ -205,6 +189,10 @@ public class TelproGWT implements EntryPoint {
 				int selectedItemIndex = sensorBox.getSelectedIndex();
 				if (selectedItemIndex == 0) {
 					SC.say("Error", "Please select a sensor node!");
+					// hide the sensor information
+					sensorInfoLayout.hide();
+					// hide the tab-menu with diagrams
+					tabPanel.setVisible(false);
 
 				} else {
 					String sensorID = sensorBox.getValue(selectedItemIndex);
@@ -216,15 +204,19 @@ public class TelproGWT implements EntryPoint {
 
 						firstClick = false;
 					}
+					sensorInfoLayout.show();
 					waitingWindow.show();
 					// hide the tabPanel, because we have no data yet
 					tabPanel.setVisible(false);
 					// the first timer react after 1 seconds and run only 1
 					// round
 					firstDBAccess(sensorID);
-					textSelectednode.setHTML("<h4> Diagrams from node: <h4>"
-							+ sensorID + " at " + sensor.getLocation()
-							+ "(IP: " + sensor.getIpString() + ")");
+					sensorInfoID.setContents("<strong> node: </strong>"
+							+ sensorID);
+					sensorInfoLoc.setContents("<strong> location: </strong>"
+							+ sensor.getLocation());
+					sensorInfoIp.setContents("<strong> IP: </strong>"
+							+ sensor.getIpString());
 					// update the properties periodically
 					startTimer(sensorID);
 
@@ -302,12 +294,13 @@ public class TelproGWT implements EntryPoint {
 		VisualizationUtils.loadVisualizationApi(new Runnable() {
 			@Override
 			public void run() {
+				eventTable = new Table();
 				final VerticalPanel vp = new VerticalPanel();
 				vp.getElement().getStyle().setPropertyPx("margin", 15);
 				panel.add(vp);
 				vp.add(tabPanel);
-				tabPanel.setWidth("800");
-				tabPanel.setHeight("600");
+				tabPanel.setWidth("1000");
+				tabPanel.setHeight("1000");
 
 				for (Integer type : propTypes.keySet()) {
 					String propName = propTypes.get(type).getName();
@@ -316,7 +309,7 @@ public class TelproGWT implements EntryPoint {
 					tabPanel.add(chart, propName);
 				}
 
-				// tabPanel.add(createDataView(), "Events");
+				tabPanel.add(createEventTable(), "Events");
 				tabPanel.selectTab(0);
 			}
 		}, LineChart.PACKAGE, Table.PACKAGE);
@@ -331,10 +324,94 @@ public class TelproGWT implements EntryPoint {
 	 * @return a generated LineChart
 	 */
 	private LineChart createLineChart(String propName) {
-		LineChart chart = new LineChart(createTable(null, propName),
+		LineChart chart = new LineChart(createChartTable(null, propName),
 				createChartOptions(propName));
 		return chart;
 
+	}
+
+	private Table createEventTable() {
+		Panel hPanel = new HorizontalPanel();
+		Panel flowPanel = new FlowPanel();
+		hPanel.add(flowPanel);
+		flowPanel.add(eventTable);
+
+		eventTable.draw(createEventTable(null));
+		return eventTable;
+	}
+
+	/**
+	 * @param title
+	 *            from chart (PropertyType)
+	 * @return options for this charts
+	 */
+	private Options createChartOptions(String title) {
+		Options options = Options.create();
+		options.setWidth(900);
+		options.setHeight(600);
+		options.setTitle(title);
+		options.setLegend(LegendPosition.NONE);
+		return options;
+	}
+
+	/**
+	 * Create a datatable for the charts. Google charts need this function to
+	 * draw a chart.
+	 * 
+	 * @param list
+	 *            of all Properties
+	 * @param title
+	 *            from chart
+	 * @return a datatable for this chart
+	 */
+	private AbstractDataTable createChartTable(List<Property> list, String title) {
+
+		DataTable data = DataTable.create();
+		data.addColumn(ColumnType.STRING, "Time");
+		data.addColumn(ColumnType.NUMBER, title);
+		int i = 0;
+		if (list != null) {
+			data.addRows(list.size());
+			for (Property p : list) {
+				Date time = p.getTimestamp();
+				data.setValue(i, 0, formatter.format(time));
+				data.setValue(i, 1, p.getValue());
+				i++;
+			}
+		}
+
+		return data;
+	}
+
+	/**
+	 * Create datatable for event view.
+	 * 
+	 * @param list
+	 *            of events per sensor
+	 * @return a datatable for event view
+	 */
+	private AbstractDataTable createEventTable(List<Event> list) {
+		DataTable data = DataTable.create();
+		data.addColumn(ColumnType.STRING, "Timestamp");
+		data.addColumn(ColumnType.STRING, "Eventtype");
+		data.addColumn(ColumnType.STRING, "Eventdescription");
+		data.addColumn(ColumnType.STRING, "SensorID");
+		int i = 0;
+		if (list != null) {
+			data.addRows(list.size());
+			for (Event e : list) {
+				EventType eventType = eventTypes.get(e
+						.getEventtypeIdeventtype());
+				Date time = e.getTimestamp();
+				data.setValue(i, 0, formatter.format(time));
+				data.setValue(i, 1, eventType.getName());
+				data.setValue(i, 2, eventType.getDescription());
+				data.setValue(i, 3, e.getSensorIdsensor());
+				i++;
+			}
+		}
+
+		return data;
 	}
 
 	/**
@@ -356,7 +433,7 @@ public class TelproGWT implements EntryPoint {
 
 						@Override
 						public void onSuccess(List<Property> result) {
-							AbstractDataTable table = createTable(result,
+							AbstractDataTable table = createChartTable(result,
 									propName);
 
 							chart.draw(table, createChartOptions(propName));
@@ -371,6 +448,27 @@ public class TelproGWT implements EntryPoint {
 
 		}
 
+	}
+
+	private void getEvents(String sensorID) {
+		Sensor sensor = sensors.get(sensorID);
+
+		server.getEventList(sensor, new AsyncCallback<List<Event>>() {
+
+			@Override
+			public void onSuccess(List<Event> result) {
+				AbstractDataTable table = createEventTable(result);
+				// eventTable.draw(table);
+
+			}
+
+			@Override
+			public void onFailure(Throwable caught) {
+				SC.say("Error",
+						"Ups.. you have no access to database. Please reload the page! Event");
+
+			}
+		});
 	}
 
 	/**
@@ -388,6 +486,7 @@ public class TelproGWT implements EntryPoint {
 			@Override
 			public void run() {
 				getProperties(sensorID);
+				getEvents(sensorID);
 				tabPanel.setVisible(true);
 				waitingWindow.hide();
 			}
@@ -415,6 +514,7 @@ public class TelproGWT implements EntryPoint {
 
 				System.out.println("--------------------------------------");
 				getProperties(sensorID);
+				getEvents(sensorID);
 			}
 		};
 
