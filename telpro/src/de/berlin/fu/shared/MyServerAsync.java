@@ -46,4 +46,9 @@ public interface MyServerAsync {
 
 	void getNewEvents(Sensor s, int idEvent, AsyncCallback<List<Event>> callback);
 
+	void getProperty(Sensor s, PropertyType pt, int limit, int stretch,
+			AsyncCallback<List<Property>> callback);
+
+	void updateSensor(Sensor s, AsyncCallback<Void> callback);
+
 }

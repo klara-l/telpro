@@ -222,9 +222,11 @@ public class SensorHasTriggerDaoImpl extends AbstractDAO implements
 	 */
 	public SensorHasTrigger findByPrimaryKey(String sensorIdsensor,
 			int triggerIdtrigger) throws SensorHasTriggerDaoException {
-		SensorHasTrigger ret[] = findByDynamicSelect(SQL_SELECT
-				+ " WHERE Sensor_idSensor = ? AND Trigger_idTrigger = ?",
-				new Object[] { sensorIdsensor, new Integer(triggerIdtrigger) });
+		SensorHasTrigger ret[] = findByDynamicSelect(
+				SQL_SELECT
+						+ " WHERE Sensor_idSensor = ? AND Trigger_idTrigger = ?",
+				new Object[] { sensorIdsensor,
+						Integer.valueOf(triggerIdtrigger) });
 		return ret.length == 0 ? null : ret[0];
 	}
 
@@ -254,7 +256,7 @@ public class SensorHasTriggerDaoImpl extends AbstractDAO implements
 	public SensorHasTrigger[] findByTrigger(int triggerIdtrigger)
 			throws SensorHasTriggerDaoException {
 		return findByDynamicSelect(SQL_SELECT + " WHERE Trigger_idTrigger = ?",
-				new Object[] { new Integer(triggerIdtrigger) });
+				new Object[] { Integer.valueOf(triggerIdtrigger) });
 	}
 
 	/**
@@ -276,7 +278,7 @@ public class SensorHasTriggerDaoImpl extends AbstractDAO implements
 			int triggerIdtrigger) throws SensorHasTriggerDaoException {
 		return findByDynamicSelect(SQL_SELECT
 				+ " WHERE Trigger_idTrigger = ? ORDER BY Trigger_idTrigger",
-				new Object[] { new Integer(triggerIdtrigger) });
+				new Object[] { Integer.valueOf(triggerIdtrigger) });
 	}
 
 	/**

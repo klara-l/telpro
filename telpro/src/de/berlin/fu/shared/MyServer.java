@@ -40,10 +40,16 @@ public interface MyServer extends RemoteService {
 
 	public List<Property> getProperty(Sensor s, PropertyType pt, int limit);
 
+	public List<Property> getProperty(Sensor s, PropertyType pt, int limit,
+			int stretch);
+
 	public List<PropertyType> getPropertyTypes();
 
 	public List<EventType> getEventTypes();
 
 	public List<Property> getPropertyUpdate(Sensor s, PropertyType pt,
 			int propertyID);
+
+	public void updateSensor(Sensor s);
+
 }

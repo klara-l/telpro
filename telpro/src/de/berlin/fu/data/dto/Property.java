@@ -119,12 +119,12 @@ public class Property implements Serializable {
 	}
 
 	/**
-	 * Method 'setValue'
+	 * Method 'setValue', rounds to 3 numbers after the comma
 	 * 
 	 * @param value
 	 */
 	public void setValue(double value) {
-		this.value = value;
+		this.value = Math.round(value * 1000) / 1000.0;
 		this.valueNull = false;
 	}
 
@@ -197,7 +197,7 @@ public class Property implements Serializable {
 			return false;
 		}
 
-		if (value != _cast.value) {
+		if (Math.abs(value - _cast.value) > .0000001) {
 			return false;
 		}
 

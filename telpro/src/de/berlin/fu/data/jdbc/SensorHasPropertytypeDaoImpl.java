@@ -228,7 +228,7 @@ public class SensorHasPropertytypeDaoImpl extends AbstractDAO implements
 				SQL_SELECT
 						+ " WHERE Sensor_idSensor = ? AND PropertyType_idPropertyType = ?",
 				new Object[] { sensorIdsensor,
-						new Integer(propertytypeIdpropertytype) });
+						Integer.valueOf(propertytypeIdpropertytype) });
 		return ret.length == 0 ? null : ret[0];
 	}
 
@@ -252,7 +252,7 @@ public class SensorHasPropertytypeDaoImpl extends AbstractDAO implements
 			throws SensorHasPropertytypeDaoException {
 		return findByDynamicSelect(SQL_SELECT
 				+ " WHERE PropertyType_idPropertyType = ?",
-				new Object[] { new Integer(propertytypeIdpropertytype) });
+				new Object[] { Integer.valueOf(propertytypeIdpropertytype) });
 	}
 
 	/**
@@ -286,7 +286,7 @@ public class SensorHasPropertytypeDaoImpl extends AbstractDAO implements
 		return findByDynamicSelect(
 				SQL_SELECT
 						+ " WHERE PropertyType_idPropertyType = ? ORDER BY PropertyType_idPropertyType",
-				new Object[] { new Integer(propertytypeIdpropertytype) });
+				new Object[] { Integer.valueOf(propertytypeIdpropertytype) });
 	}
 
 	/**

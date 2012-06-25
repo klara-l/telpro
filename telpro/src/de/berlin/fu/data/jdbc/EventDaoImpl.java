@@ -269,10 +269,10 @@ public class EventDaoImpl extends AbstractDAO implements EventDao {
 	@Override
 	public Event findByPrimaryKey(int idEvent, int eventtypeIdeventtype)
 			throws EventDaoException {
-		Event ret[] = findByDynamicSelect(SQL_SELECT
-				+ " WHERE idEvent = ? AND EventType_idEventType = ?",
-				new Object[] { new Integer(idEvent),
-						new Integer(eventtypeIdeventtype) });
+		Event ret[] = findByDynamicSelect(
+				SQL_SELECT + " WHERE idEvent = ? AND EventType_idEventType = ?",
+				new Object[] { Integer.valueOf(idEvent),
+						Integer.valueOf(eventtypeIdeventtype) });
 		return ret.length == 0 ? null : ret[0];
 	}
 
@@ -294,7 +294,7 @@ public class EventDaoImpl extends AbstractDAO implements EventDao {
 			throws EventDaoException {
 		return findByDynamicSelect(SQL_SELECT
 				+ " WHERE EventType_idEventType = ?",
-				new Object[] { new Integer(eventtypeIdeventtype) });
+				new Object[] { Integer.valueOf(eventtypeIdeventtype) });
 	}
 
 	/**
@@ -314,7 +314,7 @@ public class EventDaoImpl extends AbstractDAO implements EventDao {
 	@Override
 	public Event[] findByTrigger(int triggerIdtrigger) throws EventDaoException {
 		return findByDynamicSelect(SQL_SELECT + " WHERE Trigger_idTrigger = ?",
-				new Object[] { new Integer(triggerIdtrigger) });
+				new Object[] { Integer.valueOf(triggerIdtrigger) });
 	}
 
 	/**
@@ -325,7 +325,7 @@ public class EventDaoImpl extends AbstractDAO implements EventDao {
 	public Event[] findWhereIdEventEquals(int idEvent) throws EventDaoException {
 		return findByDynamicSelect(SQL_SELECT
 				+ " WHERE idEvent = ? ORDER BY idEvent",
-				new Object[] { new Integer(idEvent) });
+				new Object[] { Integer.valueOf(idEvent) });
 	}
 
 	/**
@@ -338,7 +338,7 @@ public class EventDaoImpl extends AbstractDAO implements EventDao {
 		return findByDynamicSelect(
 				SQL_SELECT
 						+ " WHERE EventType_idEventType = ? ORDER BY EventType_idEventType",
-				new Object[] { new Integer(eventtypeIdeventtype) });
+				new Object[] { Integer.valueOf(eventtypeIdeventtype) });
 	}
 
 	/**
@@ -375,7 +375,7 @@ public class EventDaoImpl extends AbstractDAO implements EventDao {
 			throws EventDaoException {
 		return findByDynamicSelect(SQL_SELECT
 				+ " WHERE Trigger_idTrigger = ? ORDER BY Trigger_idTrigger",
-				new Object[] { new Integer(triggerIdtrigger) });
+				new Object[] { Integer.valueOf(triggerIdtrigger) });
 	}
 
 	/**

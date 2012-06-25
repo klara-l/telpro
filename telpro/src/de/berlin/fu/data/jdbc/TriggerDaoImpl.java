@@ -213,7 +213,7 @@ public class TriggerDaoImpl extends AbstractDAO implements TriggerDao {
 	public Trigger findByPrimaryKey(int idTrigger) throws TriggerDaoException {
 		Trigger ret[] = findByDynamicSelect(
 				SQL_SELECT + " WHERE idTrigger = ?",
-				new Object[] { new Integer(idTrigger) });
+				new Object[] { Integer.valueOf(idTrigger) });
 		return ret.length == 0 ? null : ret[0];
 	}
 
@@ -232,7 +232,7 @@ public class TriggerDaoImpl extends AbstractDAO implements TriggerDao {
 			throws TriggerDaoException {
 		return findByDynamicSelect(SQL_SELECT
 				+ " WHERE EventType_idEventType = ?",
-				new Object[] { new Integer(eventtypeIdeventtype) });
+				new Object[] { Integer.valueOf(eventtypeIdeventtype) });
 	}
 
 	/**
@@ -243,7 +243,7 @@ public class TriggerDaoImpl extends AbstractDAO implements TriggerDao {
 			throws TriggerDaoException {
 		return findByDynamicSelect(SQL_SELECT
 				+ " WHERE PropertyType_idPropertyType = ?",
-				new Object[] { new Integer(propertytypeIdpropertytype) });
+				new Object[] { Integer.valueOf(propertytypeIdpropertytype) });
 	}
 
 	/**
@@ -254,7 +254,7 @@ public class TriggerDaoImpl extends AbstractDAO implements TriggerDao {
 			throws TriggerDaoException {
 		return findByDynamicSelect(SQL_SELECT
 				+ " WHERE idTrigger = ? ORDER BY idTrigger",
-				new Object[] { new Integer(idTrigger) });
+				new Object[] { Integer.valueOf(idTrigger) });
 	}
 
 	/**
@@ -266,7 +266,7 @@ public class TriggerDaoImpl extends AbstractDAO implements TriggerDao {
 		return findByDynamicSelect(
 				SQL_SELECT
 						+ " WHERE PropertyType_idPropertyType = ? ORDER BY PropertyType_idPropertyType",
-				new Object[] { new Integer(propertytypeIdpropertytype) });
+				new Object[] { Integer.valueOf(propertytypeIdpropertytype) });
 	}
 
 	/**
@@ -278,7 +278,7 @@ public class TriggerDaoImpl extends AbstractDAO implements TriggerDao {
 		return findByDynamicSelect(
 				SQL_SELECT
 						+ " WHERE EventType_idEventType = ? ORDER BY EventType_idEventType",
-				new Object[] { new Integer(eventtypeIdeventtype) });
+				new Object[] { Integer.valueOf(eventtypeIdeventtype) });
 	}
 
 	/**
