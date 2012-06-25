@@ -225,8 +225,8 @@ public class EventTypeDaoImpl extends AbstractDAO implements EventTypeDao {
 	public EventType findByPrimaryKey(int idEventType)
 			throws EventTypeDaoException {
 		EventType ret[] = findByDynamicSelect(SQL_SELECT
-				+ " WHERE idEventType = ?", new Object[] { new Integer(
-				idEventType) });
+				+ " WHERE idEventType = ?",
+				new Object[] { Integer.valueOf(idEventType) });
 		return ret.length == 0 ? null : ret[0];
 	}
 
@@ -245,7 +245,7 @@ public class EventTypeDaoImpl extends AbstractDAO implements EventTypeDao {
 			throws EventTypeDaoException {
 		return findByDynamicSelect(SQL_SELECT
 				+ " WHERE idEventType = ? ORDER BY idEventType",
-				new Object[] { new Integer(idEventType) });
+				new Object[] { Integer.valueOf(idEventType) });
 	}
 
 	/**

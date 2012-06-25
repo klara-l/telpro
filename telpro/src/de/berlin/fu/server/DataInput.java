@@ -61,7 +61,7 @@ public class DataInput extends HttpServlet {
 
 	private void doProperty(String deviceID, HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		Sensor s = new Sensor();
+		Sensor s;
 		SensorDao sdao = SensorDaoFactory.create();
 		PropertyDao pdao = PropertyDaoFactory.create();
 		float temp = Float.parseFloat((String) request.getParameter("temp"));

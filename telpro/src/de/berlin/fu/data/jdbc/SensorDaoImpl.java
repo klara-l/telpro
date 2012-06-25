@@ -249,7 +249,7 @@ public class SensorDaoImpl extends AbstractDAO implements SensorDao {
 	 */
 	public Sensor[] findWhereIpEquals(int ip) throws SensorDaoException {
 		return findByDynamicSelect(SQL_SELECT + " WHERE IP = ? ORDER BY IP",
-				new Object[] { new Integer(ip) });
+				new Object[] { Integer.valueOf(ip) });
 	}
 
 	/**

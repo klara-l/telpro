@@ -221,7 +221,7 @@ public class ActionDaoImpl extends AbstractDAO implements ActionDao {
 	 */
 	public Action findByPrimaryKey(int idAction) throws ActionDaoException {
 		Action ret[] = findByDynamicSelect(SQL_SELECT + " WHERE idAction = ?",
-				new Object[] { new Integer(idAction) });
+				new Object[] { Integer.valueOf(idAction) });
 		return ret.length == 0 ? null : ret[0];
 	}
 
@@ -240,7 +240,7 @@ public class ActionDaoImpl extends AbstractDAO implements ActionDao {
 			throws ActionDaoException {
 		return findByDynamicSelect(SQL_SELECT
 				+ " WHERE idAction = ? ORDER BY idAction",
-				new Object[] { new Integer(idAction) });
+				new Object[] { Integer.valueOf(idAction) });
 	}
 
 	/**

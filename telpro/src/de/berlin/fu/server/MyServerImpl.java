@@ -6,6 +6,7 @@ import java.util.List;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import de.berlin.fu.data.dao.ActionDao;
+import de.berlin.fu.data.dao.SensorDao;
 import de.berlin.fu.data.dao.TriggerDao;
 import de.berlin.fu.data.dto.Action;
 import de.berlin.fu.data.dto.Event;
@@ -33,8 +34,12 @@ import de.berlin.fu.shared.MyServer;
 /**
  * The server side implementation of the RPC service.
  */
-@SuppressWarnings("serial")
 public class MyServerImpl extends RemoteServiceServlet implements MyServer {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1893722591009147486L;
 
 	@Override
 	public List<Event> getEventList(Sensor s) {
@@ -52,7 +57,7 @@ public class MyServerImpl extends RemoteServiceServlet implements MyServer {
 		Object[] param = { s.getIdSensor(), idEvent };
 		try {
 			return Arrays.asList(EventDaoFactory.create().findByDynamicWhere(
-					"AND Sensor_idSensor = ? idEvent > ?", param));
+					"Sensor_idSensor = ? AND idEvent > ?", param));
 		} catch (EventDaoException e) {
 			e.printStackTrace();
 		}
@@ -67,6 +72,17 @@ public class MyServerImpl extends RemoteServiceServlet implements MyServer {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	public void updateSensor(Sensor s) {
+		SensorDao _dao = SensorDaoFactory.create();
+		try {
+			_dao.update(s.createPk(), s);
+		} catch (SensorDaoException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	@Override
@@ -153,6 +169,25 @@ public class MyServerImpl extends RemoteServiceServlet implements MyServer {
 		}
 	}
 
+	//
+	@Override
+	public List<Property> getProperty(Sensor s, PropertyType pt, int limit,
+			int stretch) {
+		Object[] param = { s.getIdSensor(), pt.getIdPropertyType(), stretch,
+				stretch * limit };
+		try {
+			return Arrays
+					.asList(PropertyDaoFactory
+							.create()
+							.findByDynamicSelect(
+									"SELECT * FROM Property WHERE Sensor_idSensor = ? AND PropertyType_idPropertyType = ? AND idProperty % ? = 0 AND idProperty > (SELECT max(idProperty - ?) FROM Property)",
+									param));
+		} catch (PropertyDaoException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	@Override
 	public List<Property> getProperty(Sensor s, PropertyType pt, int limit) {
 		Object[] param = { s.getIdSensor(), pt.getIdPropertyType(), limit };
@@ -162,7 +197,6 @@ public class MyServerImpl extends RemoteServiceServlet implements MyServer {
 							.create()
 							.findByDynamicSelect(
 									"SELECT * FROM Property WHERE Sensor_idSensor = ? AND PropertyType_idPropertyType = ? AND idProperty > ((SELECT max(idProperty - ?) FROM Property ))",
-									// "SELECT * FROM Property WHERE Sensor_idSensor = ? AND PropertyType_idPropertyType = ? ORDER BY idProperty DESC LIMIT ?",
 									param));
 		} catch (PropertyDaoException e) {
 			e.printStackTrace();

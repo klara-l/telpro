@@ -271,8 +271,9 @@ public class PropertyDaoImpl extends AbstractDAO implements PropertyDao {
 		Property ret[] = findByDynamicSelect(
 				SQL_SELECT
 						+ " WHERE idProperty = ? AND PropertyType_idPropertyType = ? AND Sensor_idSensor = ?",
-				new Object[] { new Integer(idProperty),
-						new Integer(propertytypeIdpropertytype), sensorIdsensor });
+				new Object[] { Integer.valueOf(idProperty),
+						Integer.valueOf(propertytypeIdpropertytype),
+						sensorIdsensor });
 		return ret.length == 0 ? null : ret[0];
 	}
 
@@ -294,7 +295,7 @@ public class PropertyDaoImpl extends AbstractDAO implements PropertyDao {
 			throws PropertyDaoException {
 		return findByDynamicSelect(SQL_SELECT
 				+ " WHERE PropertyType_idPropertyType = ?",
-				new Object[] { new Integer(propertytypeIdpropertytype) });
+				new Object[] { Integer.valueOf(propertytypeIdpropertytype) });
 	}
 
 	/**
@@ -315,7 +316,7 @@ public class PropertyDaoImpl extends AbstractDAO implements PropertyDao {
 			throws PropertyDaoException {
 		return findByDynamicSelect(SQL_SELECT
 				+ " WHERE idProperty = ? ORDER BY idProperty",
-				new Object[] { new Integer(idProperty) });
+				new Object[] { Integer.valueOf(idProperty) });
 	}
 
 	/**
@@ -327,7 +328,7 @@ public class PropertyDaoImpl extends AbstractDAO implements PropertyDao {
 		return findByDynamicSelect(
 				SQL_SELECT
 						+ " WHERE PropertyType_idPropertyType = ? ORDER BY PropertyType_idPropertyType",
-				new Object[] { new Integer(propertytypeIdpropertytype) });
+				new Object[] { Integer.valueOf(propertytypeIdpropertytype) });
 	}
 
 	/**
@@ -348,8 +349,8 @@ public class PropertyDaoImpl extends AbstractDAO implements PropertyDao {
 	public Property[] findWhereValueEquals(double value)
 			throws PropertyDaoException {
 		return findByDynamicSelect(SQL_SELECT
-				+ " WHERE Value = ? ORDER BY Value", new Object[] { new Double(
-				value) });
+				+ " WHERE Value = ? ORDER BY Value",
+				new Object[] { Double.valueOf(value) });
 	}
 
 	/**

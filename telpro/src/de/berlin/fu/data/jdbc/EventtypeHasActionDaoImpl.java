@@ -221,10 +221,11 @@ public class EventtypeHasActionDaoImpl extends AbstractDAO implements
 	 */
 	public EventtypeHasAction findByPrimaryKey(int eventtypeIdeventtype,
 			int actionIdaction) throws EventtypeHasActionDaoException {
-		EventtypeHasAction ret[] = findByDynamicSelect(SQL_SELECT
-				+ " WHERE EventType_idEventType = ? AND Action_idAction = ?",
-				new Object[] { new Integer(eventtypeIdeventtype),
-						new Integer(actionIdaction) });
+		EventtypeHasAction ret[] = findByDynamicSelect(
+				SQL_SELECT
+						+ " WHERE EventType_idEventType = ? AND Action_idAction = ?",
+				new Object[] { Integer.valueOf(eventtypeIdeventtype),
+						Integer.valueOf(actionIdaction) });
 		return ret.length == 0 ? null : ret[0];
 	}
 
@@ -244,7 +245,7 @@ public class EventtypeHasActionDaoImpl extends AbstractDAO implements
 	public EventtypeHasAction[] findByAction(int actionIdaction)
 			throws EventtypeHasActionDaoException {
 		return findByDynamicSelect(SQL_SELECT + " WHERE Action_idAction = ?",
-				new Object[] { new Integer(actionIdaction) });
+				new Object[] { Integer.valueOf(actionIdaction) });
 	}
 
 	/**
@@ -255,7 +256,7 @@ public class EventtypeHasActionDaoImpl extends AbstractDAO implements
 			throws EventtypeHasActionDaoException {
 		return findByDynamicSelect(SQL_SELECT
 				+ " WHERE EventType_idEventType = ?",
-				new Object[] { new Integer(eventtypeIdeventtype) });
+				new Object[] { Integer.valueOf(eventtypeIdeventtype) });
 	}
 
 	/**
@@ -267,7 +268,7 @@ public class EventtypeHasActionDaoImpl extends AbstractDAO implements
 		return findByDynamicSelect(
 				SQL_SELECT
 						+ " WHERE EventType_idEventType = ? ORDER BY EventType_idEventType",
-				new Object[] { new Integer(eventtypeIdeventtype) });
+				new Object[] { Integer.valueOf(eventtypeIdeventtype) });
 	}
 
 	/**
@@ -278,7 +279,7 @@ public class EventtypeHasActionDaoImpl extends AbstractDAO implements
 			throws EventtypeHasActionDaoException {
 		return findByDynamicSelect(SQL_SELECT
 				+ " WHERE Action_idAction = ? ORDER BY Action_idAction",
-				new Object[] { new Integer(actionIdaction) });
+				new Object[] { Integer.valueOf(actionIdaction) });
 	}
 
 	/**

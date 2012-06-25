@@ -69,7 +69,7 @@ public class TelproGWT implements EntryPoint {
 	/**
 	 * Refresh interval from timer in seconds
 	 */
-	private final int refreshInterval = 5;
+	private static final int refreshInterval = 5;
 
 	private Timer timer = null;
 
@@ -338,19 +338,18 @@ public class TelproGWT implements EntryPoint {
 		hPanel.add(flowPanel);
 		flowPanel.add(eventTable);
 
-		server.getEventList(sensors.get(currentSensor),
-				new AsyncCallback<List<Event>>() {
+		server.getEventList(currentSensor, new AsyncCallback<List<Event>>() {
 
-					@Override
-					public void onFailure(Throwable caught) {
-					}
+			@Override
+			public void onFailure(Throwable caught) {
+			}
 
-					@Override
-					public void onSuccess(List<Event> result) {
-						eventTable.draw(createEventTable(result));
+			@Override
+			public void onSuccess(List<Event> result) {
+				eventTable.draw(createEventTable(result));
 
-					}
-				});
+			}
+		});
 		return eventTable;
 	}
 
@@ -442,7 +441,7 @@ public class TelproGWT implements EntryPoint {
 			final String propName = propTypes.get(type).getName();
 			final LineChart chart = charts.get(type);
 
-			server.getProperty(s, propTypes.get(type), 30,
+			server.getProperty(s, propTypes.get(type), 30, 2,
 					new AsyncCallback<List<Property>>() {
 
 						@Override

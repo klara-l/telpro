@@ -221,8 +221,8 @@ public class PropertyTypeDaoImpl extends AbstractDAO implements PropertyTypeDao 
 	public PropertyType findByPrimaryKey(int idPropertyType)
 			throws PropertyTypeDaoException {
 		PropertyType ret[] = findByDynamicSelect(SQL_SELECT
-				+ " WHERE idPropertyType = ?", new Object[] { new Integer(
-				idPropertyType) });
+				+ " WHERE idPropertyType = ?",
+				new Object[] { Integer.valueOf(idPropertyType) });
 		return ret.length == 0 ? null : ret[0];
 	}
 
@@ -242,7 +242,7 @@ public class PropertyTypeDaoImpl extends AbstractDAO implements PropertyTypeDao 
 			throws PropertyTypeDaoException {
 		return findByDynamicSelect(SQL_SELECT
 				+ " WHERE idPropertyType = ? ORDER BY idPropertyType",
-				new Object[] { new Integer(idPropertyType) });
+				new Object[] { Integer.valueOf(idPropertyType) });
 	}
 
 	/**
