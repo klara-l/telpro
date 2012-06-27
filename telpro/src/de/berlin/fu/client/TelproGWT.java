@@ -8,6 +8,8 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -27,6 +29,7 @@ import com.google.gwt.visualization.client.visualizations.LineChart;
 import com.google.gwt.visualization.client.visualizations.LineChart.Options;
 import com.google.gwt.visualization.client.visualizations.Table;
 import com.smartgwt.client.util.SC;
+import com.smartgwt.client.widgets.Button;
 import com.smartgwt.client.widgets.Img;
 import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.Window;
@@ -75,13 +78,20 @@ public class TelproGWT implements EntryPoint {
 
 	private final Window waitingWindow = new Window();
 
-	private final VLayout sensorInfoLayout = new VLayout();
+	private final HLayout sensorInfoAndButton = new HLayout();
 
 	private final Label sensorInfoID = new Label();
 	private final Label sensorInfoLoc = new Label();
 	private final Label sensorInfoIp = new Label();
 
 	private Table eventTable;
+
+	private int selectedType;
+
+	// key is tab-number and value is the id from propertytype
+	private final HashMap<Integer, Integer> tabs = new HashMap<Integer, Integer>();
+
+	private boolean firstDBAcc;
 
 	@Override
 	public void onModuleLoad() {
@@ -153,12 +163,11 @@ public class TelproGWT implements EntryPoint {
 
 		addSensorHandler();
 
+		VLayout sensorInfoLayout = new VLayout();
 		sensorInfoLayout.setMembersMargin(10);
 		sensorInfoLayout.setLayoutMargin(10);
-		sensorInfoLayout.setWidth(400);
+		sensorInfoLayout.setWidth(300);
 		sensorInfoLayout.setHeight(150);
-		sensorInfoLayout.setShowEdges(true);
-		sensorInfoLayout.setEdgeSize(3);
 
 		sensorInfoID.setHeight(30);
 		sensorInfoLoc.setHeight(30);
@@ -168,10 +177,22 @@ public class TelproGWT implements EntryPoint {
 		sensorInfoLayout.addMember(sensorInfoLoc);
 		sensorInfoLayout.addMember(sensorInfoIp);
 
-		boxWithLayer.addMember(sensorBox);
-		boxWithLayer.addMember(sensorInfoLayout);
+		sensorInfoAndButton.setMembersMargin(10);
+		sensorInfoAndButton.setLayoutMargin(10);
+		sensorInfoAndButton.setHeight(150);
+		sensorInfoAndButton.setShowEdges(true);
+		sensorInfoAndButton.setEdgeSize(3);
 
-		sensorInfoLayout.hide();
+		sensorInfoAndButton.addMember(sensorInfoLayout);
+
+		Button editSensorInfo = new Button("Edit");
+
+		sensorInfoAndButton.addMember(editSensorInfo);
+
+		boxWithLayer.addMember(sensorBox);
+		boxWithLayer.addMember(sensorInfoAndButton);
+
+		sensorInfoAndButton.hide();
 
 		updateSensorSelection();
 
@@ -192,7 +213,7 @@ public class TelproGWT implements EntryPoint {
 				if (selectedItemIndex == 0) {
 					SC.say("Error", "Please select a sensor node!");
 					// hide the sensor information
-					sensorInfoLayout.hide();
+					sensorInfoAndButton.hide();
 					// hide the tab-menu with diagrams
 					tabPanel.setVisible(false);
 
@@ -206,7 +227,7 @@ public class TelproGWT implements EntryPoint {
 
 						firstClick = false;
 					}
-					sensorInfoLayout.show();
+					sensorInfoAndButton.show();
 					waitingWindow.show();
 					// hide the tabPanel, because we have no data yet
 					tabPanel.setVisible(false);
@@ -304,15 +325,35 @@ public class TelproGWT implements EntryPoint {
 				tabPanel.setWidth("1000");
 				tabPanel.setHeight("700");
 
+				int i = 0;
+
 				for (Integer type : propTypes.keySet()) {
 					String propName = propTypes.get(type).getName();
 					LineChart chart = createLineChart(propName);
 					charts.put(type, chart);
 					tabPanel.add(chart, propName);
+
+					tabs.put(i, type);
+					i++;
+
 				}
 
 				tabPanel.add(createEventTable(), "Events");
+				// events get -1, because the propertyTypes are positive
+				tabs.put(i, -1);
+
 				tabPanel.selectTab(0);
+				selectedType = tabs.get(0);
+
+				tabPanel.addSelectionHandler(new SelectionHandler<Integer>() {
+
+					@Override
+					public void onSelection(SelectionEvent<Integer> event) {
+						selectedType = tabs.get(event.getSelectedItem());
+						getData(currentSensor);
+
+					}
+				});
 			}
 		}, LineChart.PACKAGE, Table.PACKAGE);
 
@@ -338,18 +379,18 @@ public class TelproGWT implements EntryPoint {
 		hPanel.add(flowPanel);
 		flowPanel.add(eventTable);
 
-		server.getEventList(currentSensor, new AsyncCallback<List<Event>>() {
-
-			@Override
-			public void onFailure(Throwable caught) {
-			}
-
-			@Override
-			public void onSuccess(List<Event> result) {
-				eventTable.draw(createEventTable(result));
-
-			}
-		});
+		// server.getEventList(currentSensor, new AsyncCallback<List<Event>>() {
+		//
+		// @Override
+		// public void onFailure(Throwable caught) {
+		// }
+		//
+		// @Override
+		// public void onSuccess(List<Event> result) {
+		// eventTable.draw(createEventTable(result));
+		//
+		// }
+		// });
 		return eventTable;
 	}
 
@@ -435,13 +476,15 @@ public class TelproGWT implements EntryPoint {
 	 * @param sensorID
 	 *            ID from sensor
 	 */
-	private void getProperties(Sensor s) {
 
-		for (Integer type : propTypes.keySet()) {
-			final String propName = propTypes.get(type).getName();
-			final LineChart chart = charts.get(type);
+	private void getData(Sensor s) {
 
-			server.getProperty(s, propTypes.get(type), 30, 2,
+		if (selectedType != -1) {
+			// events isn't selected
+			final LineChart chart = charts.get(selectedType);
+			final String propName = propTypes.get(selectedType).getName();
+
+			server.getProperty(s, propTypes.get(selectedType), 30, 2,
 					new AsyncCallback<List<Property>>() {
 
 						@Override
@@ -450,6 +493,18 @@ public class TelproGWT implements EntryPoint {
 									propName);
 
 							chart.draw(table, createChartOptions(propName));
+
+							System.out.println("refresh proptype: " + propName);
+
+							if (firstDBAcc) {
+								// hide the waiting window, if we get the data
+								// and set tab-menu visible
+								tabPanel.setVisible(true);
+								waitingWindow.hide();
+
+								firstDBAcc = false;
+							}
+
 						}
 
 						@Override
@@ -458,29 +513,27 @@ public class TelproGWT implements EntryPoint {
 									"Ups.. you have no access to database. Please reload the page! Property");
 						}
 					});
+		} else {
+			// user selected the event-tab
 
+			server.getEventList(s, new AsyncCallback<List<Event>>() {
+
+				@Override
+				public void onSuccess(List<Event> result) {
+					AbstractDataTable table = createEventTable(result);
+					eventTable.draw(table);
+
+				}
+
+				@Override
+				public void onFailure(Throwable caught) {
+					SC.say("Error",
+							"Ups.. you have no access to database. Please reload the page! Event");
+
+				}
+			});
 		}
 
-	}
-
-	private void getEvents(Sensor s) {
-
-		server.getEventList(s, new AsyncCallback<List<Event>>() {
-
-			@Override
-			public void onSuccess(List<Event> result) {
-				AbstractDataTable table = createEventTable(result);
-				eventTable.draw(table);
-
-			}
-
-			@Override
-			public void onFailure(Throwable caught) {
-				SC.say("Error",
-						"Ups.. you have no access to database. Please reload the page! Event");
-
-			}
-		});
 	}
 
 	/**
@@ -497,10 +550,9 @@ public class TelproGWT implements EntryPoint {
 
 			@Override
 			public void run() {
-				getProperties(s);
-				getEvents(s);
-				tabPanel.setVisible(true);
-				waitingWindow.hide();
+				firstDBAcc = true;
+				getData(s);
+
 			}
 		};
 
@@ -525,13 +577,12 @@ public class TelproGWT implements EntryPoint {
 			public void run() {
 
 				System.out.println("--------------------------------------");
-				getProperties(s);
-				getEvents(s);
+				getData(s);
 			}
 		};
 
-		timer.scheduleRepeating(refreshInterval * 1000);
-		// timer.schedule(refreshInterval * 1000);
+		// timer.scheduleRepeating(refreshInterval * 1000);
+		timer.schedule(refreshInterval * 1000);
 	}
 
 }
