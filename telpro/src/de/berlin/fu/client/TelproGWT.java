@@ -33,6 +33,8 @@ import com.smartgwt.client.widgets.Button;
 import com.smartgwt.client.widgets.Img;
 import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.Window;
+import com.smartgwt.client.widgets.events.ClickEvent;
+import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.HStack;
 import com.smartgwt.client.widgets.layout.VLayout;
@@ -186,6 +188,17 @@ public class TelproGWT implements EntryPoint {
 		sensorInfoAndButton.addMember(sensorInfoLayout);
 
 		Button editSensorInfo = new Button("Edit");
+		// editSensorInfo.setIcon("icons/16/icon_add_files.png");
+
+		// if user click the edit button
+		editSensorInfo.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				editWindow();
+
+			}
+		});
 
 		sensorInfoAndButton.addMember(editSensorInfo);
 
@@ -197,6 +210,10 @@ public class TelproGWT implements EntryPoint {
 		updateSensorSelection();
 
 		panel.add(boxWithLayer);
+
+	}
+
+	private void editWindow() {
 
 	}
 
