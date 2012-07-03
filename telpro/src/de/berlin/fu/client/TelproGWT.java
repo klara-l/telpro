@@ -253,7 +253,7 @@ public class TelproGWT implements EntryPoint {
 		DynamicForm sensorInfoForm = new DynamicForm();
 		sensorInfoForm.setLayoutAlign(VerticalAlignment.BOTTOM);
 
-		TextItem sensorLocation = new TextItem();
+		final TextItem sensorLocation = new TextItem();
 		sensorLocation.setTitle("sensor location");
 		sensorLocation.setValue(currentSensor.getLocation());
 
@@ -268,6 +268,16 @@ public class TelproGWT implements EntryPoint {
 			}
 		});
 
+		submitEdit.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+
+				sendNewSensorInfo(sensorLocation.getValueAsString());
+				editWindow.hide();
+			}
+		});
+
 		twoButtonsLayout.addMember(submitEdit);
 		twoButtonsLayout.addMember(cancel);
 
@@ -277,6 +287,31 @@ public class TelproGWT implements EntryPoint {
 		editWindow.addItem(sensorInfoLayout);
 		editWindow.addItem(twoButtonsLayout);
 		editWindow.show();
+	}
+
+	private void sendNewSensorInfo(String sensorLoc) {
+
+		final String oldLoc = currentSensor.getLocation();
+
+		currentSensor.setLocation(sensorLoc);
+		server.updateSensor(currentSensor, new AsyncCallback<Void>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				currentSensor.setLocation(oldLoc);
+				SC.say("Error", "Something goes wrong with database!");
+
+			}
+
+			@Override
+			public void onSuccess(Void result) {
+				sensorInfoLoc.setContents("<strong> location: </strong>"
+						+ currentSensor.getLocation());
+
+				SC.say("Success", "Update sensor information!");
+
+			}
+		});
 	}
 
 	/**
