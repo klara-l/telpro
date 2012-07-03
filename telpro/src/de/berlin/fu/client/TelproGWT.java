@@ -28,6 +28,8 @@ import com.google.gwt.visualization.client.VisualizationUtils;
 import com.google.gwt.visualization.client.visualizations.LineChart;
 import com.google.gwt.visualization.client.visualizations.LineChart.Options;
 import com.google.gwt.visualization.client.visualizations.Table;
+import com.smartgwt.client.types.Alignment;
+import com.smartgwt.client.types.VerticalAlignment;
 import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.Button;
 import com.smartgwt.client.widgets.Img;
@@ -35,6 +37,8 @@ import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.Window;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
+import com.smartgwt.client.widgets.form.DynamicForm;
+import com.smartgwt.client.widgets.form.fields.TextItem;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.HStack;
 import com.smartgwt.client.widgets.layout.VLayout;
@@ -210,11 +214,69 @@ public class TelproGWT implements EntryPoint {
 		updateSensorSelection();
 
 		panel.add(boxWithLayer);
-
 	}
 
 	private void editWindow() {
+		final Window editWindow = new Window();
+		editWindow.setTitle("Edit sensor information");
 
+		editWindow.setWidth(300);
+		editWindow.setHeight(200);
+		editWindow.setCanDragResize(true);
+		editWindow.setIsModal(true);
+		editWindow.setShowModalMask(true);
+		editWindow.centerInPage();
+
+		HLayout twoButtonsLayout = new HLayout();
+		twoButtonsLayout.setMembersMargin(10);
+		twoButtonsLayout.setLayoutMargin(10);
+		twoButtonsLayout.setHeight(60);
+
+		VLayout sensorInfoLayout = new VLayout();
+		sensorInfoLayout.setMembersMargin(10);
+		sensorInfoLayout.setLayoutMargin(10);
+		sensorInfoLayout.setDefaultLayoutAlign(Alignment.CENTER);
+
+		Label sensorIDlabel = new Label("<strong> node: </strong>"
+				+ currentSensor.getIdSensor());
+		sensorIDlabel.setHeight(20);
+
+		Label sensorIplabel = new Label("<strong> IP: </strong>"
+				+ currentSensor.getIpString());
+		sensorIplabel.setHeight(20);
+
+		sensorInfoLayout.addMember(sensorIDlabel);
+		sensorInfoLayout.addMember(sensorIplabel);
+
+		// we need to put the textitem in a dynamicform, because a simple
+		// textitem can't be put to a window
+		DynamicForm sensorInfoForm = new DynamicForm();
+		sensorInfoForm.setLayoutAlign(VerticalAlignment.BOTTOM);
+
+		TextItem sensorLocation = new TextItem();
+		sensorLocation.setTitle("sensor location");
+		sensorLocation.setValue(currentSensor.getLocation());
+
+		Button submitEdit = new Button("Accept");
+		Button cancel = new Button("Cancel");
+		cancel.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				editWindow.hide();
+
+			}
+		});
+
+		twoButtonsLayout.addMember(submitEdit);
+		twoButtonsLayout.addMember(cancel);
+
+		sensorInfoForm.setFields(sensorLocation);
+
+		editWindow.addItem(sensorInfoForm);
+		editWindow.addItem(sensorInfoLayout);
+		editWindow.addItem(twoButtonsLayout);
+		editWindow.show();
 	}
 
 	/**
@@ -395,19 +457,6 @@ public class TelproGWT implements EntryPoint {
 		Panel flowPanel = new FlowPanel();
 		hPanel.add(flowPanel);
 		flowPanel.add(eventTable);
-
-		// server.getEventList(currentSensor, new AsyncCallback<List<Event>>() {
-		//
-		// @Override
-		// public void onFailure(Throwable caught) {
-		// }
-		//
-		// @Override
-		// public void onSuccess(List<Event> result) {
-		// eventTable.draw(createEventTable(result));
-		//
-		// }
-		// });
 		return eventTable;
 	}
 
@@ -498,6 +547,8 @@ public class TelproGWT implements EntryPoint {
 
 		if (selectedType != -1) {
 			// events isn't selected
+
+			// TODO add here try catch, if we had no internet access
 			final LineChart chart = charts.get(selectedType);
 			final String propName = propTypes.get(selectedType).getName();
 
