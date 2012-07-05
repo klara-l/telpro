@@ -37,8 +37,6 @@ public interface MyServerAsync {
 
 	void getPropertyTypes(AsyncCallback<List<PropertyType>> callback);
 
-	void getEventTypes(AsyncCallback<List<EventType>> callback);
-
 	void getPropertyUpdate(Sensor s, PropertyType pt, int propertyID,
 			AsyncCallback<List<Property>> callback);
 
@@ -50,5 +48,9 @@ public interface MyServerAsync {
 			AsyncCallback<List<Property>> callback);
 
 	void updateSensor(Sensor s, AsyncCallback<Void> callback);
+
+	void getActionsForEvent(Event e, AsyncCallback<List<Action>> callback);
+
+	void getEventTypes(AsyncCallback<List<EventType>> asyncCallback);
 
 }

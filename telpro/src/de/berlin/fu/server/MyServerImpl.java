@@ -1,16 +1,20 @@
 package de.berlin.fu.server;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import de.berlin.fu.data.dao.ActionDao;
+import de.berlin.fu.data.dao.EventTypeDao;
+import de.berlin.fu.data.dao.EventtypeHasActionDao;
 import de.berlin.fu.data.dao.SensorDao;
 import de.berlin.fu.data.dao.TriggerDao;
 import de.berlin.fu.data.dto.Action;
 import de.berlin.fu.data.dto.Event;
 import de.berlin.fu.data.dto.EventType;
+import de.berlin.fu.data.dto.EventtypeHasAction;
 import de.berlin.fu.data.dto.Property;
 import de.berlin.fu.data.dto.PropertyType;
 import de.berlin.fu.data.dto.Sensor;
@@ -18,6 +22,7 @@ import de.berlin.fu.data.dto.Trigger;
 import de.berlin.fu.data.exceptions.ActionDaoException;
 import de.berlin.fu.data.exceptions.EventDaoException;
 import de.berlin.fu.data.exceptions.EventTypeDaoException;
+import de.berlin.fu.data.exceptions.EventtypeHasActionDaoException;
 import de.berlin.fu.data.exceptions.PropertyDaoException;
 import de.berlin.fu.data.exceptions.PropertyTypeDaoException;
 import de.berlin.fu.data.exceptions.SensorDaoException;
@@ -25,6 +30,7 @@ import de.berlin.fu.data.exceptions.TriggerDaoException;
 import de.berlin.fu.data.factory.ActionDaoFactory;
 import de.berlin.fu.data.factory.EventDaoFactory;
 import de.berlin.fu.data.factory.EventTypeDaoFactory;
+import de.berlin.fu.data.factory.EventtypeHasActionDaoFactory;
 import de.berlin.fu.data.factory.PropertyDaoFactory;
 import de.berlin.fu.data.factory.PropertyTypeDaoFactory;
 import de.berlin.fu.data.factory.SensorDaoFactory;
@@ -230,5 +236,33 @@ public class MyServerImpl extends RemoteServiceServlet implements MyServer {
 			int propertyID) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<Action> getActionsForEvent(Event e) {
+		List<Action> result = null;
+		try {
+			EventTypeDao etdao = EventTypeDaoFactory.create();
+			EventtypeHasActionDao eadao = EventtypeHasActionDaoFactory.create();
+			// getting the event type
+			ActionDao adao = ActionDaoFactory.create();
+			etdao.findWhereIdEventTypeEquals(e.getEventtypeIdeventtype());
+			EventtypeHasAction[] actionKeys = eadao.findByEventType(e
+					.getEventtypeIdeventtype());
+			result = new LinkedList<Action>();
+			for (int i = 0; i < actionKeys.length; i++) {
+				Action[] actions = adao.findWhereIdActionEquals(actionKeys[i]
+						.getActionIdaction());
+				if (actions[0].isClientSide())
+					result.add(actions[0]);
+			}
+		} catch (EventTypeDaoException e1) {
+			e1.printStackTrace();
+		} catch (EventtypeHasActionDaoException e2) {
+			e2.printStackTrace();
+		} catch (ActionDaoException e3) {
+			e3.printStackTrace();
+		}
+		return result;
 	}
 }

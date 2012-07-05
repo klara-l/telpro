@@ -26,6 +26,8 @@ public interface MyServer extends RemoteService {
 
 	public List<Action> getActions();
 
+	public List<Action> getActionsForEvent(Event e);
+
 	public void addTrigger(Trigger t);
 
 	public void removeTrigger(Trigger t);
@@ -45,11 +47,11 @@ public interface MyServer extends RemoteService {
 
 	public List<PropertyType> getPropertyTypes();
 
-	public List<EventType> getEventTypes();
-
 	public List<Property> getPropertyUpdate(Sensor s, PropertyType pt,
 			int propertyID);
 
 	public void updateSensor(Sensor s);
+
+	List<EventType> getEventTypes();
 
 }

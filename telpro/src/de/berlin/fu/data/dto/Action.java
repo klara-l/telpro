@@ -10,7 +10,11 @@ package de.berlin.fu.data.dto;
 
 import java.io.Serializable;
 
-public class Action implements Serializable {
+import de.berlin.fu.shared.actions.DialogBoxAction;
+import de.berlin.fu.shared.actions.IAction;
+import de.berlin.fu.shared.actions.SysoutAction;
+
+public class Action implements Serializable, IAction {
 	/**
 	 * 
 	 */
@@ -30,6 +34,11 @@ public class Action implements Serializable {
 	 * This attribute maps to the column Description in the Action table.
 	 */
 	protected String description;
+
+	/**
+	 * This attribute is a delegate for the actions execution code.
+	 */
+	transient protected IAction execAction;
 
 	/**
 	 * Method 'Action'
@@ -54,6 +63,7 @@ public class Action implements Serializable {
 	 */
 	public void setIdAction(int idAction) {
 		this.idAction = idAction;
+		setExecAction(true);
 	}
 
 	/**
@@ -168,6 +178,45 @@ public class Action implements Serializable {
 		ret.append(", name=" + name);
 		ret.append(", description=" + description);
 		return ret.toString();
+	}
+
+	protected void setExecAction(boolean override) {
+		if (!override && execAction != null)
+			return;
+		switch (idAction) {
+		case 1:
+			execAction = new DialogBoxAction();
+			break;
+		case 2:
+			execAction = new SysoutAction();
+			break;
+		default:
+			execAction = null;
+			break;
+		}
+
+	}
+
+	/**
+	 * @return true, if this action should be executed on a client
+	 */
+	public boolean isClientSide() {
+		setExecAction(false);
+		return (execAction != null) ? execAction.isClientSide() : false;
+	}
+
+	/**
+	 * @return true, if this action should be executed on a server
+	 */
+	public boolean isServerSide() {
+		setExecAction(false);
+		return (execAction != null) ? execAction.isServerSide() : false;
+	}
+
+	public void execute(Event e, EventType et) {
+		setExecAction(false);
+		if (execAction != null)
+			execAction.execute(e, et);
 	}
 
 }

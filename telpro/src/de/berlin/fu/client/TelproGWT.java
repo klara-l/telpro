@@ -2,6 +2,7 @@ package de.berlin.fu.client;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.google.gwt.core.client.EntryPoint;
@@ -43,6 +44,7 @@ import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.HStack;
 import com.smartgwt.client.widgets.layout.VLayout;
 
+import de.berlin.fu.data.dto.Action;
 import de.berlin.fu.data.dto.Event;
 import de.berlin.fu.data.dto.EventType;
 import de.berlin.fu.data.dto.Property;
@@ -91,6 +93,8 @@ public class TelproGWT implements EntryPoint {
 	private final Label sensorInfoIp = new Label();
 
 	private Table eventTable;
+	private int eventId = -1;
+	private List<Event> eventList = new LinkedList<Event>();
 
 	private int selectedType;
 
@@ -129,7 +133,6 @@ public class TelproGWT implements EntryPoint {
 			public void onFailure(Throwable caught) {
 				SC.say("Error",
 						"Ups.. you have no access to database. Please reload the page! Propertytype");
-
 			}
 		});
 	}
@@ -616,14 +619,18 @@ public class TelproGWT implements EntryPoint {
 									"Ups.. you have no access to database. Please reload the page! Property");
 						}
 					});
-		} else {
-			// user selected the event-tab
-
+		}
+		// user selected the event-tab
+		// alsways refresh the event stuff
+		if (eventId == -1) {
 			server.getEventList(s, new AsyncCallback<List<Event>>() {
 
 				@Override
 				public void onSuccess(List<Event> result) {
-					AbstractDataTable table = createEventTable(result);
+					eventList.addAll(result);
+					if (result.size() != 0)
+						eventId = result.get(result.size() - 1).getIdEvent();
+					AbstractDataTable table = createEventTable(eventList);
 					eventTable.draw(table);
 
 				}
@@ -633,6 +640,51 @@ public class TelproGWT implements EntryPoint {
 					SC.say("Error",
 							"Ups.. you have no access to database. Please reload the page! Event");
 
+				}
+			});
+		} else {
+			server.getNewEvents(s, eventId, new AsyncCallback<List<Event>>() {
+
+				@Override
+				public void onSuccess(List<Event> result) {
+					// break, if there is no new event
+					if (result.size() == 0)
+						return;
+					eventList.addAll(result);
+					eventId = result.get(result.size() - 1).getIdEvent();
+					AbstractDataTable table = createEventTable(eventList);
+					eventTable.draw(table);
+					for (final Event event : result) {
+						final EventType et = eventTypes.get(event
+								.getEventtypeIdeventtype());
+
+						server.getActionsForEvent(event,
+								new AsyncCallback<List<Action>>() {
+
+									@Override
+									public void onFailure(Throwable caught) {
+										SC.say("Error",
+												"Ups.. you have no access to database. Please reload the page! Actions");
+
+									}
+
+									@Override
+									public void onSuccess(List<Action> result) {
+										for (Action action : result) {
+											action.execute(event, et);
+										}
+
+									}
+								});
+
+					}
+
+				}
+
+				@Override
+				public void onFailure(Throwable caught) {
+					SC.say("Error",
+							"Ups.. you have no access to database. Please reload the page! Event");
 				}
 			});
 		}
@@ -684,8 +736,8 @@ public class TelproGWT implements EntryPoint {
 			}
 		};
 
-		// timer.scheduleRepeating(refreshInterval * 1000);
-		timer.schedule(refreshInterval * 1000);
+		timer.scheduleRepeating(refreshInterval * 1000);
+		// timer.schedule(refreshInterval * 1000);
 	}
 
 }
