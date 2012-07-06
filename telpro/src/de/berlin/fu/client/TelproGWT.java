@@ -103,6 +103,11 @@ public class TelproGWT implements EntryPoint {
 
 	private boolean firstDBAcc;
 
+	private final VLayout settings = new VLayout();
+
+	private int numberOfPoints = 30;
+	private int spreadingFactor = 2;
+
 	@Override
 	public void onModuleLoad() {
 		panel = RootPanel.get();
@@ -112,6 +117,8 @@ public class TelproGWT implements EntryPoint {
 		createSensorSelection();
 
 		createWaitingWindow();
+
+		createSettingsView();
 	}
 
 	/**
@@ -133,6 +140,7 @@ public class TelproGWT implements EntryPoint {
 			public void onFailure(Throwable caught) {
 				SC.say("Error",
 						"Ups.. you have no access to database. Please reload the page! Propertytype");
+
 			}
 		});
 	}
@@ -219,6 +227,9 @@ public class TelproGWT implements EntryPoint {
 		panel.add(boxWithLayer);
 	}
 
+	/**
+	 * Create window in which the user can edit the sensor location information.
+	 */
 	private void editWindow() {
 		final Window editWindow = new Window();
 		editWindow.setTitle("Edit sensor information");
@@ -333,6 +344,7 @@ public class TelproGWT implements EntryPoint {
 					sensorInfoAndButton.hide();
 					// hide the tab-menu with diagrams
 					tabPanel.setVisible(false);
+					settings.hide();
 
 				} else {
 					currentSensor = sensors.get(sensorBox
@@ -341,7 +353,7 @@ public class TelproGWT implements EntryPoint {
 					if (firstClick) {
 
 						drawTabMenu(currentSensor.getIdSensor());
-
+						settings.show();
 						firstClick = false;
 					}
 					sensorInfoAndButton.show();
@@ -350,7 +362,7 @@ public class TelproGWT implements EntryPoint {
 					tabPanel.setVisible(false);
 					// the first timer react after 1 seconds and run only 1
 					// round
-					firstDBAccess(currentSensor);
+					firstDBAccess();
 					sensorInfoID.setContents("<strong> node: </strong>"
 							+ currentSensor.getIdSensor());
 					sensorInfoLoc.setContents("<strong> location: </strong>"
@@ -358,7 +370,7 @@ public class TelproGWT implements EntryPoint {
 					sensorInfoIp.setContents("<strong> IP: </strong>"
 							+ currentSensor.getIpString());
 					// update the properties periodically
-					startTimer(currentSensor);
+					startTimer();
 
 				}
 
@@ -467,7 +479,7 @@ public class TelproGWT implements EntryPoint {
 					@Override
 					public void onSelection(SelectionEvent<Integer> event) {
 						selectedType = tabs.get(event.getSelectedItem());
-						getData(currentSensor);
+						getData();
 
 					}
 				});
@@ -581,7 +593,7 @@ public class TelproGWT implements EntryPoint {
 	 *            ID from sensor
 	 */
 
-	private void getData(Sensor s) {
+	private void getData() {
 
 		if (selectedType != -1) {
 			// events isn't selected
@@ -590,7 +602,8 @@ public class TelproGWT implements EntryPoint {
 			final LineChart chart = charts.get(selectedType);
 			final String propName = propTypes.get(selectedType).getName();
 
-			server.getProperty(s, propTypes.get(selectedType), 30, 2,
+			server.getProperty(currentSensor, propTypes.get(selectedType),
+					numberOfPoints, spreadingFactor,
 					new AsyncCallback<List<Property>>() {
 
 						@Override
@@ -623,70 +636,76 @@ public class TelproGWT implements EntryPoint {
 		// user selected the event-tab
 		// alsways refresh the event stuff
 		if (eventId == -1) {
-			server.getEventList(s, new AsyncCallback<List<Event>>() {
+			server.getEventList(currentSensor,
+					new AsyncCallback<List<Event>>() {
 
-				@Override
-				public void onSuccess(List<Event> result) {
-					eventList.addAll(result);
-					if (result.size() != 0)
-						eventId = result.get(result.size() - 1).getIdEvent();
-					AbstractDataTable table = createEventTable(eventList);
-					eventTable.draw(table);
+						@Override
+						public void onSuccess(List<Event> result) {
+							eventList.addAll(result);
+							if (result.size() != 0)
+								eventId = result.get(result.size() - 1)
+										.getIdEvent();
+							AbstractDataTable table = createEventTable(eventList);
+							eventTable.draw(table);
 
-				}
+						}
 
-				@Override
-				public void onFailure(Throwable caught) {
-					SC.say("Error",
-							"Ups.. you have no access to database. Please reload the page! Event");
+						@Override
+						public void onFailure(Throwable caught) {
+							SC.say("Error",
+									"Ups.. you have no access to database. Please reload the page! Event");
 
-				}
-			});
+						}
+					});
 		} else {
-			server.getNewEvents(s, eventId, new AsyncCallback<List<Event>>() {
+			server.getNewEvents(currentSensor, eventId,
+					new AsyncCallback<List<Event>>() {
 
-				@Override
-				public void onSuccess(List<Event> result) {
-					// break, if there is no new event
-					if (result.size() == 0)
-						return;
-					eventList.addAll(result);
-					eventId = result.get(result.size() - 1).getIdEvent();
-					AbstractDataTable table = createEventTable(eventList);
-					eventTable.draw(table);
-					for (final Event event : result) {
-						final EventType et = eventTypes.get(event
-								.getEventtypeIdeventtype());
+						@Override
+						public void onSuccess(List<Event> result) {
+							// break, if there is no new event
+							if (result.size() == 0)
+								return;
+							eventList.addAll(result);
+							eventId = result.get(result.size() - 1)
+									.getIdEvent();
+							AbstractDataTable table = createEventTable(eventList);
+							eventTable.draw(table);
+							for (final Event event : result) {
+								final EventType et = eventTypes.get(event
+										.getEventtypeIdeventtype());
 
-						server.getActionsForEvent(event,
-								new AsyncCallback<List<Action>>() {
+								server.getActionsForEvent(event,
+										new AsyncCallback<List<Action>>() {
 
-									@Override
-									public void onFailure(Throwable caught) {
-										SC.say("Error",
-												"Ups.. you have no access to database. Please reload the page! Actions");
+											@Override
+											public void onFailure(
+													Throwable caught) {
+												SC.say("Error",
+														"Ups.. you have no access to database. Please reload the page! Actions");
 
-									}
+											}
 
-									@Override
-									public void onSuccess(List<Action> result) {
-										for (Action action : result) {
-											action.execute(event, et);
-										}
+											@Override
+											public void onSuccess(
+													List<Action> result) {
+												for (Action action : result) {
+													action.execute(event, et);
+												}
 
-									}
-								});
+											}
+										});
 
-					}
+							}
 
-				}
+						}
 
-				@Override
-				public void onFailure(Throwable caught) {
-					SC.say("Error",
-							"Ups.. you have no access to database. Please reload the page! Event");
-				}
-			});
+						@Override
+						public void onFailure(Throwable caught) {
+							SC.say("Error",
+									"Ups.. you have no access to database. Please reload the page! Event");
+						}
+					});
 		}
 
 	}
@@ -699,14 +718,14 @@ public class TelproGWT implements EntryPoint {
 	 * @param sensorID
 	 *            ID from sensor
 	 */
-	private void firstDBAccess(final Sensor s) {
+	private void firstDBAccess() {
 
 		Timer firstTimer = new Timer() {
 
 			@Override
 			public void run() {
 				firstDBAcc = true;
-				getData(s);
+				getData();
 
 			}
 		};
@@ -721,7 +740,7 @@ public class TelproGWT implements EntryPoint {
 	 * @param sensorID
 	 *            ID from sensor
 	 */
-	private void startTimer(final Sensor s) {
+	private void startTimer() {
 		if (timer != null) {
 			// kill the old timer
 			timer.cancel();
@@ -732,7 +751,7 @@ public class TelproGWT implements EntryPoint {
 			public void run() {
 
 				System.out.println("--------------------------------------");
-				getData(s);
+				getData();
 			}
 		};
 
@@ -740,4 +759,85 @@ public class TelproGWT implements EntryPoint {
 		// timer.schedule(refreshInterval * 1000);
 	}
 
+	/**
+	 * Create view with settings for spreading factor and number of points in
+	 * one chart.
+	 */
+	private void createSettingsView() {
+
+		settings.setMembersMargin(10);
+		settings.setLayoutMargin(10);
+		settings.setWidth(150);
+		settings.setShowEdges(true);
+		settings.setEdgeSize(3);
+
+		Label title = new Label("<strong> Settings for diagrams </strong>");
+		title.setHeight(25);
+		final Label numberOfPointsLabel = new Label("Number of Points: "
+				+ numberOfPoints);
+		numberOfPointsLabel.setHeight(20);
+		final Label spreadingFacLabel = new Label("Spreading factor: "
+				+ spreadingFactor);
+		spreadingFacLabel.setHeight(20);
+
+		HLayout twoTextItems = new HLayout();
+		twoTextItems.setMembersMargin(10);
+		twoTextItems.setLayoutMargin(10);
+		twoTextItems.setHeight(100);
+
+		DynamicForm twoTextDyn = new DynamicForm();
+		twoTextDyn.setLayoutAlign(VerticalAlignment.BOTTOM);
+
+		DynamicForm twoTextDyn2 = new DynamicForm();
+		twoTextDyn2.setLayoutAlign(VerticalAlignment.BOTTOM);
+
+		final TextItem numberOfPointsText = new TextItem();
+		numberOfPointsText.setTitle("Number of points");
+		numberOfPointsText.setValue(numberOfPoints);
+		final TextItem spreadingFactorText = new TextItem();
+		spreadingFactorText.setTitle("Spreading Factor");
+		spreadingFactorText.setValue(spreadingFactor);
+
+		twoTextDyn.setFields(numberOfPointsText);
+		twoTextDyn2.setFields(spreadingFactorText);
+
+		Button accept = new Button("OK");
+
+		accept.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				String nopString = numberOfPointsText.getValueAsString();
+				String sfString = spreadingFactorText.getValueAsString();
+
+				try {
+					numberOfPoints = Integer.parseInt(nopString);
+					spreadingFactor = Integer.parseInt(sfString);
+
+					numberOfPointsLabel.setContents("Number of Points: "
+							+ numberOfPoints);
+
+					spreadingFacLabel.setContents("Spreading factor: "
+							+ spreadingFactor);
+					getData();
+				} catch (NumberFormatException e) {
+					SC.say("Error", "Please add a number!");
+				}
+
+			}
+		});
+
+		twoTextItems.addMember(twoTextDyn);
+		twoTextItems.addMember(twoTextDyn2);
+		twoTextItems.addMember(accept);
+
+		settings.addMember(title);
+		settings.addMember(numberOfPointsLabel);
+		settings.addMember(spreadingFacLabel);
+		settings.addMember(twoTextItems);
+		settings.hide();
+
+		panel.add(settings);
+
+	}
 }
