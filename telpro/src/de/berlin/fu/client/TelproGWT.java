@@ -50,6 +50,7 @@ import de.berlin.fu.data.dto.EventType;
 import de.berlin.fu.data.dto.Property;
 import de.berlin.fu.data.dto.PropertyType;
 import de.berlin.fu.data.dto.Sensor;
+import de.berlin.fu.data.dto.Trigger;
 import de.berlin.fu.shared.MyServer;
 import de.berlin.fu.shared.MyServerAsync;
 
@@ -80,7 +81,7 @@ public class TelproGWT implements EntryPoint {
 	/**
 	 * Refresh interval from timer in seconds
 	 */
-	private static final int refreshInterval = 5;
+	private static final int refreshInterval = 3;
 
 	private Timer timer = null;
 
@@ -93,8 +94,9 @@ public class TelproGWT implements EntryPoint {
 	private final Label sensorInfoIp = new Label();
 
 	private Table eventTable;
+	private Table triggerTable;
 	private int eventId = -1;
-	private List<Event> eventList = new LinkedList<Event>();
+	private final List<Event> eventList = new LinkedList<Event>();
 
 	private int selectedType;
 
@@ -106,7 +108,10 @@ public class TelproGWT implements EntryPoint {
 	private final VLayout settings = new VLayout();
 
 	private int numberOfPoints = 30;
-	private int spreadingFactor = 2;
+	private int spreadingFactor = 1;
+
+	// okay-button for chart settings
+	private final Button accept = new Button("OK");
 
 	@Override
 	public void onModuleLoad() {
@@ -174,7 +179,7 @@ public class TelproGWT implements EntryPoint {
 	 */
 	private void createSensorSelection() {
 		HLayout boxWithLayer = new HLayout();
-		boxWithLayer.setMembersMargin(20);
+		boxWithLayer.setMembersMargin(60);
 		boxWithLayer.setLayoutMargin(10);
 		boxWithLayer.setWidth(600);
 
@@ -347,13 +352,16 @@ public class TelproGWT implements EntryPoint {
 					settings.hide();
 
 				} else {
-					currentSensor = sensors.get(sensorBox
-							.getValue(selectedItemIndex));
+
+					String selectedSensor = sensorBox
+							.getValue(selectedItemIndex);
+					// cut the location, because we only need here sensorID
+					String[] splittedInfo = selectedSensor.split(" ");
+					currentSensor = sensors.get(splittedInfo[0]);
 
 					if (firstClick) {
 
 						drawTabMenu(currentSensor.getIdSensor());
-						settings.show();
 						firstClick = false;
 					}
 					sensorInfoAndButton.show();
@@ -370,7 +378,7 @@ public class TelproGWT implements EntryPoint {
 					sensorInfoIp.setContents("<strong> IP: </strong>"
 							+ currentSensor.getIpString());
 					// update the properties periodically
-					startTimer();
+					startUpdateTimer();
 
 				}
 
@@ -426,7 +434,7 @@ public class TelproGWT implements EntryPoint {
 					String sensorID = s.getIdSensor();
 					sensors.put(sensorID, s);
 
-					sensorBox.addItem(sensorID);
+					sensorBox.addItem(sensorID + " (" + s.getLocation() + ")");
 
 				}
 
@@ -447,6 +455,8 @@ public class TelproGWT implements EntryPoint {
 			@Override
 			public void run() {
 				eventTable = new Table();
+				triggerTable = new Table();
+
 				final VerticalPanel vp = new VerticalPanel();
 				vp.getElement().getStyle().setPropertyPx("margin", 15);
 				panel.add(vp);
@@ -470,6 +480,10 @@ public class TelproGWT implements EntryPoint {
 				tabPanel.add(createEventTable(), "Events");
 				// events get -1, because the propertyTypes are positive
 				tabs.put(i, -1);
+				i++;
+
+				tabPanel.add(createTriggerTable(), "Trigger");
+				tabs.put(i, -2);
 
 				tabPanel.selectTab(0);
 				selectedType = tabs.get(0);
@@ -478,7 +492,14 @@ public class TelproGWT implements EntryPoint {
 
 					@Override
 					public void onSelection(SelectionEvent<Integer> event) {
+
 						selectedType = tabs.get(event.getSelectedItem());
+
+						if (selectedType < 0) {
+							accept.disable();
+						} else {
+							accept.enable();
+						}
 						getData();
 
 					}
@@ -508,6 +529,14 @@ public class TelproGWT implements EntryPoint {
 		hPanel.add(flowPanel);
 		flowPanel.add(eventTable);
 		return eventTable;
+	}
+
+	private Table createTriggerTable() {
+		Panel hPanel = new HorizontalPanel();
+		Panel flowPanel = new FlowPanel();
+		hPanel.add(flowPanel);
+		flowPanel.add(triggerTable);
+		return triggerTable;
 	}
 
 	/**
@@ -586,6 +615,36 @@ public class TelproGWT implements EntryPoint {
 	}
 
 	/**
+	 * Create datatable for trigger view.
+	 * 
+	 * @param list
+	 *            of events per sensor
+	 * @return a datatable for event view
+	 */
+	private AbstractDataTable createTriggerTable(List<Trigger> list) {
+		DataTable data = DataTable.create();
+		data.addColumn(ColumnType.STRING, "PropertyType");
+		data.addColumn(ColumnType.STRING, "Eventtype");
+		data.addColumn(ColumnType.STRING, "Eventtype Description");
+		int i = 0;
+		if (list != null) {
+			data.addRows(list.size());
+			for (Trigger t : list) {
+				PropertyType propType = propTypes.get(t
+						.getPropertytypeIdpropertytype());
+				EventType eventType = eventTypes.get(t
+						.getEventtypeIdeventtype());
+				data.setValue(i, 0, propType.getName());
+				data.setValue(i, 1, eventType.getName());
+				data.setValue(i, 2, eventType.getDescription());
+				i++;
+			}
+		}
+
+		return data;
+	}
+
+	/**
 	 * Get the last 30 entries per PropertyType from database and display the
 	 * data in LineChart.
 	 * 
@@ -594,8 +653,8 @@ public class TelproGWT implements EntryPoint {
 	 */
 
 	private void getData() {
-
-		if (selectedType != -1) {
+		System.out.println(selectedType);
+		if (selectedType >= 0) {
 			// events isn't selected
 
 			// TODO add here try catch, if we had no internet access
@@ -620,6 +679,7 @@ public class TelproGWT implements EntryPoint {
 								// and set tab-menu visible
 								tabPanel.setVisible(true);
 								waitingWindow.hide();
+								settings.show();
 
 								firstDBAcc = false;
 							}
@@ -632,9 +692,27 @@ public class TelproGWT implements EntryPoint {
 									"Ups.. you have no access to database. Please reload the page! Property");
 						}
 					});
+		} else if (selectedType == -2) {
+			// user select trigger table
+			server.getTriggers(new AsyncCallback<List<Trigger>>() {
+
+				@Override
+				public void onFailure(Throwable caught) {
+					SC.say("Error",
+							"Ups.. you have no access to database. Please reload the page!");
+
+				}
+
+				@Override
+				public void onSuccess(List<Trigger> result) {
+					AbstractDataTable table = createTriggerTable(result);
+					triggerTable.draw(table);
+
+				}
+			});
 		}
 		// user selected the event-tab
-		// alsways refresh the event stuff
+		// always refresh the event stuff
 		if (eventId == -1) {
 			server.getEventList(currentSensor,
 					new AsyncCallback<List<Event>>() {
@@ -657,6 +735,7 @@ public class TelproGWT implements EntryPoint {
 
 						}
 					});
+
 		} else {
 			server.getNewEvents(currentSensor, eventId,
 					new AsyncCallback<List<Event>>() {
@@ -740,7 +819,7 @@ public class TelproGWT implements EntryPoint {
 	 * @param sensorID
 	 *            ID from sensor
 	 */
-	private void startTimer() {
+	private void startUpdateTimer() {
 		if (timer != null) {
 			// kill the old timer
 			timer.cancel();
@@ -755,8 +834,8 @@ public class TelproGWT implements EntryPoint {
 			}
 		};
 
-		timer.scheduleRepeating(refreshInterval * 1000);
-		// timer.schedule(refreshInterval * 1000);
+		// timer.scheduleRepeating(refreshInterval * 1000);
+		timer.schedule(refreshInterval * 1000);
 	}
 
 	/**
@@ -768,10 +847,11 @@ public class TelproGWT implements EntryPoint {
 		settings.setMembersMargin(10);
 		settings.setLayoutMargin(10);
 		settings.setWidth(150);
+		settings.setHeight(250);
 		settings.setShowEdges(true);
 		settings.setEdgeSize(3);
 
-		Label title = new Label("<strong> Settings for diagrams </strong>");
+		Label title = new Label("<strong> Diagram settings </strong>");
 		title.setHeight(25);
 		final Label numberOfPointsLabel = new Label("Number of Points: "
 				+ numberOfPoints);
@@ -779,6 +859,10 @@ public class TelproGWT implements EntryPoint {
 		final Label spreadingFacLabel = new Label("Spreading factor: "
 				+ spreadingFactor);
 		spreadingFacLabel.setHeight(20);
+
+		final Label updateFeedBack = new Label("Update was successful");
+		updateFeedBack.setHeight(20);
+		updateFeedBack.hide();
 
 		HLayout twoTextItems = new HLayout();
 		twoTextItems.setMembersMargin(10);
@@ -801,8 +885,6 @@ public class TelproGWT implements EntryPoint {
 		twoTextDyn.setFields(numberOfPointsText);
 		twoTextDyn2.setFields(spreadingFactorText);
 
-		Button accept = new Button("OK");
-
 		accept.addClickHandler(new ClickHandler() {
 
 			@Override
@@ -820,6 +902,9 @@ public class TelproGWT implements EntryPoint {
 					spreadingFacLabel.setContents("Spreading factor: "
 							+ spreadingFactor);
 					getData();
+					updateFeedBack.show();
+
+					startLabelTimer(updateFeedBack);
 				} catch (NumberFormatException e) {
 					SC.say("Error", "Please add a number!");
 				}
@@ -835,9 +920,27 @@ public class TelproGWT implements EntryPoint {
 		settings.addMember(numberOfPointsLabel);
 		settings.addMember(spreadingFacLabel);
 		settings.addMember(twoTextItems);
+		settings.addMember(updateFeedBack);
 		settings.hide();
 
 		panel.add(settings);
 
+	}
+
+	/**
+	 * Start Timer which hide the update-label after 3 seconds
+	 * 
+	 * @param updateLabel
+	 */
+	private void startLabelTimer(final Label updateLabel) {
+		Timer updateTimer = new Timer() {
+
+			@Override
+			public void run() {
+				updateLabel.hide();
+
+			}
+		};
+		updateTimer.schedule(3000);
 	}
 }
