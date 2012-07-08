@@ -104,10 +104,14 @@ public class DataInput extends HttpServlet {
 		Sensor s;
 		SensorDao sdao = SensorDaoFactory.create();
 		PropertyDao pdao = PropertyDaoFactory.create();
-		float temp = Float.parseFloat((String) request.getParameter("temp"));
-		float humid = Float.parseFloat((String) request.getParameter("humid"));
-		float tilt = Float.parseFloat((String) request.getParameter("tilt"));
-		float roll = Float.parseFloat((String) request.getParameter("roll"));
+		float temp = (float) (Math.round(1000.0 * Float
+				.parseFloat((String) request.getParameter("temp"))) / 1000.0);
+		float humid = (float) (Math.round(1000.0 * Float
+				.parseFloat((String) request.getParameter("humid"))) / 1000.0);
+		float tilt = (float) (Math.round(1000.0 * Float
+				.parseFloat((String) request.getParameter("tilt"))) / 1000.0);
+		float roll = (float) (Math.round(1000.0 * Float
+				.parseFloat((String) request.getParameter("roll"))) / 1000.0);
 
 		try {
 			// updating ip

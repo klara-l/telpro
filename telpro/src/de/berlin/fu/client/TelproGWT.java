@@ -80,7 +80,7 @@ public class TelproGWT implements EntryPoint {
 	/**
 	 * Refresh interval from timer in seconds
 	 */
-	private static final int refreshInterval = 5;
+	private static final int refreshInterval = 3;
 
 	private Timer timer = null;
 
