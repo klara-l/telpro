@@ -653,7 +653,6 @@ public class TelproGWT implements EntryPoint {
 	 */
 
 	private void getData() {
-		System.out.println(selectedType);
 		if (selectedType >= 0) {
 			// events isn't selected
 
@@ -861,6 +860,7 @@ public class TelproGWT implements EntryPoint {
 		spreadingFacLabel.setHeight(20);
 
 		final Label updateFeedBack = new Label("Update was successful");
+		updateFeedBack.setBackgroundColor("pink");
 		updateFeedBack.setHeight(20);
 		updateFeedBack.hide();
 
