@@ -204,11 +204,12 @@ public class TelproGWT implements EntryPoint {
 		sensorInfoAndButton.setHeight(150);
 		sensorInfoAndButton.setShowEdges(true);
 		sensorInfoAndButton.setEdgeSize(3);
+		sensorInfoAndButton.setBackgroundColor("lightgray");
 
 		sensorInfoAndButton.addMember(sensorInfoLayout);
 
 		Button editSensorInfo = new Button("Edit");
-		// editSensorInfo.setIcon("icons/16/icon_add_files.png");
+		editSensorInfo.setIcon("pencil.png");
 
 		// if user click the edit button
 		editSensorInfo.addClickHandler(new ClickHandler() {
@@ -277,7 +278,9 @@ public class TelproGWT implements EntryPoint {
 		sensorLocation.setValue(currentSensor.getLocation());
 
 		Button submitEdit = new Button("Accept");
+		submitEdit.setIcon("check.png");
 		Button cancel = new Button("Cancel");
+		cancel.setIcon("cancel.png");
 		cancel.addClickHandler(new ClickHandler() {
 
 			@Override
@@ -477,12 +480,12 @@ public class TelproGWT implements EntryPoint {
 
 				}
 
-				tabPanel.add(createEventTable(), "Events");
+				tabPanel.add(createEmptyEventTable(), "Events");
 				// events get -1, because the propertyTypes are positive
 				tabs.put(i, -1);
 				i++;
 
-				tabPanel.add(createTriggerTable(), "Trigger");
+				tabPanel.add(createEmptyTriggerTable(), "Trigger");
 				tabs.put(i, -2);
 
 				tabPanel.selectTab(0);
@@ -523,7 +526,7 @@ public class TelproGWT implements EntryPoint {
 
 	}
 
-	private Table createEventTable() {
+	private Table createEmptyEventTable() {
 		Panel hPanel = new HorizontalPanel();
 		Panel flowPanel = new FlowPanel();
 		hPanel.add(flowPanel);
@@ -531,7 +534,7 @@ public class TelproGWT implements EntryPoint {
 		return eventTable;
 	}
 
-	private Table createTriggerTable() {
+	private Table createEmptyTriggerTable() {
 		Panel hPanel = new HorizontalPanel();
 		Panel flowPanel = new FlowPanel();
 		hPanel.add(flowPanel);
@@ -851,6 +854,7 @@ public class TelproGWT implements EntryPoint {
 		settings.setEdgeSize(3);
 
 		Label title = new Label("<strong> Diagram settings </strong>");
+		title.setStyleName("settingsTitle");
 		title.setHeight(25);
 		final Label numberOfPointsLabel = new Label("Number of Points: "
 				+ numberOfPoints);
@@ -884,6 +888,8 @@ public class TelproGWT implements EntryPoint {
 
 		twoTextDyn.setFields(numberOfPointsText);
 		twoTextDyn2.setFields(spreadingFactorText);
+
+		accept.setIcon("check.png");
 
 		accept.addClickHandler(new ClickHandler() {
 
