@@ -1,0 +1,19 @@
+\BOOKMARK [1][-]{section.1}{Einleitung}{}
+\BOOKMARK [1][-]{section.2}{Verwendetet Technologien}{}
+\BOOKMARK [2][-]{subsection.2.1}{Linux Voyage}{section.2}
+\BOOKMARK [2][-]{subsection.2.2}{GWT}{section.2}
+\BOOKMARK [2][-]{subsection.2.3}{Smart GWT}{section.2}
+\BOOKMARK [2][-]{subsection.2.4}{Charts von Google}{section.2}
+\BOOKMARK [1][-]{section.3}{Architektur}{}
+\BOOKMARK [1][-]{section.4}{Sensor-Knoten}{}
+\BOOKMARK [2][-]{subsection.4.1}{HTTP-Kommunikation}{section.4}
+\BOOKMARK [2][-]{subsection.4.2}{Konfiguration des WLAN-Moduls}{section.4}
+\BOOKMARK [2][-]{subsection.4.3}{Programmierung des Sensor-Knotens}{section.4}
+\BOOKMARK [3][-]{subsubsection.4.3.1}{Initialisierung}{subsection.4.3}
+\BOOKMARK [3][-]{subsubsection.4.3.2}{Betriebssystem}{subsection.4.3}
+\BOOKMARK [3][-]{subsubsection.4.3.3}{Tastendruck}{subsection.4.3}
+\BOOKMARK [1][-]{section.5}{Frontend}{}
+\BOOKMARK [2][-]{subsection.5.1}{Anforderungen}{section.5}
+\BOOKMARK [1][-]{section.6}{Projekt zum Laufen bringen}{}
+\BOOKMARK [1][-]{section.7}{Ausblick}{}
+\BOOKMARK [1][-]{section.8}{Appendix}{}
