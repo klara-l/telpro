@@ -8,8 +8,7 @@
 
 package de.berlin.fu.data.exceptions;
 
-public class TriggerDaoException extends DaoException
-{
+public class TriggerDaoException extends DaoException {
 	/**
 	 * 
 	 */
@@ -20,8 +19,7 @@ public class TriggerDaoException extends DaoException
 	 * 
 	 * @param message
 	 */
-	public TriggerDaoException(String message)
-	{
+	public TriggerDaoException(String message) {
 		super(message);
 	}
 
@@ -31,8 +29,7 @@ public class TriggerDaoException extends DaoException
 	 * @param message
 	 * @param cause
 	 */
-	public TriggerDaoException(String message, Throwable cause)
-	{
+	public TriggerDaoException(String message, Throwable cause) {
 		super(message, cause);
 	}
 

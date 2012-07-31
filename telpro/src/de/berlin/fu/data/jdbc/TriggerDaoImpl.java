@@ -34,7 +34,7 @@ public class TriggerDaoImpl extends AbstractDAO implements TriggerDao {
 	 * All finder methods in this class use this SELECT constant to build their
 	 * queries
 	 */
-	protected final String SQL_SELECT = "SELECT idTrigger, PropertyType_idPropertyType, EventType_idEventType FROM "
+	protected final String SQL_SELECT = "SELECT idTrigger, PropertyType_idPropertyType, EventType_idEventType, TriggerType, Threshold FROM "
 			+ getTableName() + "";
 
 	/**
@@ -47,14 +47,14 @@ public class TriggerDaoImpl extends AbstractDAO implements TriggerDao {
 	 */
 	protected final String SQL_INSERT = "INSERT INTO "
 			+ getTableName()
-			+ " ( idTrigger, PropertyType_idPropertyType, EventType_idEventType ) VALUES ( ?, ?, ? )";
+			+ " ( idTrigger, PropertyType_idPropertyType, EventType_idEventType, TriggerType, Threshold ) VALUES ( ?, ?, ?, ?, ? )";
 
 	/**
 	 * SQL UPDATE statement for this table
 	 */
 	protected final String SQL_UPDATE = "UPDATE "
 			+ getTableName()
-			+ " SET idTrigger = ?, PropertyType_idPropertyType = ?, EventType_idEventType = ? WHERE idTrigger = ?";
+			+ " SET idTrigger = ?, PropertyType_idPropertyType = ?, EventType_idEventType = ?, TriggerType = ?, Threshold = ? WHERE idTrigger = ?";
 
 	/**
 	 * SQL DELETE statement for this table
@@ -78,9 +78,19 @@ public class TriggerDaoImpl extends AbstractDAO implements TriggerDao {
 	protected static final int COLUMN_EVENTTYPE_IDEVENTTYPE = 3;
 
 	/**
+	 * Index of column TriggerType
+	 */
+	protected static final int COLUMN_TRIGGER_TYPE = 4;
+
+	/**
+	 * Index of column Threshold
+	 */
+	protected static final int COLUMN_THRESHOLD = 5;
+
+	/**
 	 * Number of columns
 	 */
-	protected static final int NUMBER_OF_COLUMNS = 3;
+	protected static final int NUMBER_OF_COLUMNS = 5;
 
 	/**
 	 * Index of primary-key column idTrigger
@@ -106,6 +116,8 @@ public class TriggerDaoImpl extends AbstractDAO implements TriggerDao {
 			stmt.setInt(index++, dto.getIdTrigger());
 			stmt.setInt(index++, dto.getPropertytypeIdpropertytype());
 			stmt.setInt(index++, dto.getEventtypeIdeventtype());
+			stmt.setInt(index++, dto.getTriggerType());
+			stmt.setDouble(index++, dto.getThreshold());
 			System.out.println("Executing " + SQL_INSERT + " with DTO: " + dto);
 			int rows = stmt.executeUpdate();
 			long t2 = System.currentTimeMillis();
@@ -146,7 +158,9 @@ public class TriggerDaoImpl extends AbstractDAO implements TriggerDao {
 			stmt.setInt(index++, dto.getIdTrigger());
 			stmt.setInt(index++, dto.getPropertytypeIdpropertytype());
 			stmt.setInt(index++, dto.getEventtypeIdeventtype());
-			stmt.setInt(4, pk.getIdTrigger());
+			stmt.setInt(index++, dto.getTriggerType());
+			stmt.setDouble(index++, dto.getThreshold());
+			stmt.setInt(6, pk.getIdTrigger());
 			int rows = stmt.executeUpdate();
 			reset(dto);
 			long t2 = System.currentTimeMillis();
@@ -213,7 +227,7 @@ public class TriggerDaoImpl extends AbstractDAO implements TriggerDao {
 	public Trigger findByPrimaryKey(int idTrigger) throws TriggerDaoException {
 		Trigger ret[] = findByDynamicSelect(
 				SQL_SELECT + " WHERE idTrigger = ?",
-				new Object[] { Integer.valueOf(idTrigger) });
+				new Object[] { new Integer(idTrigger) });
 		return ret.length == 0 ? null : ret[0];
 	}
 
@@ -226,24 +240,24 @@ public class TriggerDaoImpl extends AbstractDAO implements TriggerDao {
 
 	/**
 	 * Returns all rows from the Trigger table that match the criteria
-	 * 'EventType_idEventType = :eventtypeIdeventtype'.
-	 */
-	public Trigger[] findByEventType(int eventtypeIdeventtype)
-			throws TriggerDaoException {
-		return findByDynamicSelect(SQL_SELECT
-				+ " WHERE EventType_idEventType = ?",
-				new Object[] { Integer.valueOf(eventtypeIdeventtype) });
-	}
-
-	/**
-	 * Returns all rows from the Trigger table that match the criteria
 	 * 'PropertyType_idPropertyType = :propertytypeIdpropertytype'.
 	 */
 	public Trigger[] findByPropertyType(int propertytypeIdpropertytype)
 			throws TriggerDaoException {
 		return findByDynamicSelect(SQL_SELECT
 				+ " WHERE PropertyType_idPropertyType = ?",
-				new Object[] { Integer.valueOf(propertytypeIdpropertytype) });
+				new Object[] { new Integer(propertytypeIdpropertytype) });
+	}
+
+	/**
+	 * Returns all rows from the Trigger table that match the criteria
+	 * 'EventType_idEventType = :eventtypeIdeventtype'.
+	 */
+	public Trigger[] findByEventType(int eventtypeIdeventtype)
+			throws TriggerDaoException {
+		return findByDynamicSelect(SQL_SELECT
+				+ " WHERE EventType_idEventType = ?",
+				new Object[] { new Integer(eventtypeIdeventtype) });
 	}
 
 	/**
@@ -254,7 +268,7 @@ public class TriggerDaoImpl extends AbstractDAO implements TriggerDao {
 			throws TriggerDaoException {
 		return findByDynamicSelect(SQL_SELECT
 				+ " WHERE idTrigger = ? ORDER BY idTrigger",
-				new Object[] { Integer.valueOf(idTrigger) });
+				new Object[] { new Integer(idTrigger) });
 	}
 
 	/**
@@ -266,7 +280,7 @@ public class TriggerDaoImpl extends AbstractDAO implements TriggerDao {
 		return findByDynamicSelect(
 				SQL_SELECT
 						+ " WHERE PropertyType_idPropertyType = ? ORDER BY PropertyType_idPropertyType",
-				new Object[] { Integer.valueOf(propertytypeIdpropertytype) });
+				new Object[] { new Integer(propertytypeIdpropertytype) });
 	}
 
 	/**
@@ -278,7 +292,29 @@ public class TriggerDaoImpl extends AbstractDAO implements TriggerDao {
 		return findByDynamicSelect(
 				SQL_SELECT
 						+ " WHERE EventType_idEventType = ? ORDER BY EventType_idEventType",
-				new Object[] { Integer.valueOf(eventtypeIdeventtype) });
+				new Object[] { new Integer(eventtypeIdeventtype) });
+	}
+
+	/**
+	 * Returns all rows from the Trigger table that match the criteria
+	 * 'TriggerType = :triggerType'.
+	 */
+	public Trigger[] findWhereTriggerTypeEquals(int triggerType)
+			throws TriggerDaoException {
+		return findByDynamicSelect(SQL_SELECT
+				+ " WHERE TriggerType = ? ORDER BY TriggerType",
+				new Object[] { new Integer(triggerType) });
+	}
+
+	/**
+	 * Returns all rows from the Trigger table that match the criteria
+	 * 'Threshold = :threshold'.
+	 */
+	public Trigger[] findWhereThresholdEquals(double threshold)
+			throws TriggerDaoException {
+		return findByDynamicSelect(SQL_SELECT
+				+ " WHERE Threshold = ? ORDER BY Threshold",
+				new Object[] { new Double(threshold) });
 	}
 
 	/**
@@ -358,6 +394,8 @@ public class TriggerDaoImpl extends AbstractDAO implements TriggerDao {
 		dto.setPropertytypeIdpropertytype(rs
 				.getInt(COLUMN_PROPERTYTYPE_IDPROPERTYTYPE));
 		dto.setEventtypeIdeventtype(rs.getInt(COLUMN_EVENTTYPE_IDEVENTTYPE));
+		dto.setTriggerType(rs.getInt(COLUMN_TRIGGER_TYPE));
+		dto.setThreshold(rs.getDouble(COLUMN_THRESHOLD));
 	}
 
 	/**

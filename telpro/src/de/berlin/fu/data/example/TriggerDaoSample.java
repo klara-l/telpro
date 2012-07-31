@@ -12,65 +12,42 @@ import de.berlin.fu.data.dao.TriggerDao;
 import de.berlin.fu.data.dto.Trigger;
 import de.berlin.fu.data.factory.TriggerDaoFactory;
 
-public class TriggerDaoSample
-{
+public class TriggerDaoSample {
 	/**
 	 * Method 'main'
 	 * 
 	 * @param arg
 	 * @throws Exception
 	 */
-	public static void main(String[] arg) throws Exception
-	{
+	public static void main(String[] arg) throws Exception {
 		// Uncomment one of the lines below to test the generated code
-		
+
 		// findAll();
-		// findByEventType(0);
 		// findByPropertyType(0);
+		// findByEventType(0);
 		// findWhereIdTriggerEquals(0);
 		// findWherePropertytypeIdpropertytypeEquals(0);
 		// findWhereEventtypeIdeventtypeEquals(0);
+		// findWhereTriggerTypeEquals(0);
+		// findWhereThresholdEquals(0);
 	}
 
 	/**
 	 * Method 'findAll'
 	 * 
 	 */
-	public static void findAll()
-	{
+	public static void findAll() {
 		try {
 			TriggerDao _dao = getTriggerDao();
 			Trigger _result[] = _dao.findAll();
-			for (int i=0; i<_result.length; i++ ) {
-				display( _result[i] );
+			for (int i = 0; i < _result.length; i++) {
+				display(_result[i]);
 			}
-		
-		}
-		catch (Exception _e) {
-			_e.printStackTrace();
-		}
-		
-	}
 
-	/**
-	 * Method 'findByEventType'
-	 * 
-	 * @param eventtypeIdeventtype
-	 */
-	public static void findByEventType(int eventtypeIdeventtype)
-	{
-		try {
-			TriggerDao _dao = getTriggerDao();
-			Trigger _result[] = _dao.findByEventType(eventtypeIdeventtype);
-			for (int i=0; i<_result.length; i++ ) {
-				display( _result[i] );
-			}
-		
-		}
-		catch (Exception _e) {
+		} catch (Exception _e) {
 			_e.printStackTrace();
 		}
-		
+
 	}
 
 	/**
@@ -78,20 +55,38 @@ public class TriggerDaoSample
 	 * 
 	 * @param propertytypeIdpropertytype
 	 */
-	public static void findByPropertyType(int propertytypeIdpropertytype)
-	{
+	public static void findByPropertyType(int propertytypeIdpropertytype) {
 		try {
 			TriggerDao _dao = getTriggerDao();
-			Trigger _result[] = _dao.findByPropertyType(propertytypeIdpropertytype);
-			for (int i=0; i<_result.length; i++ ) {
-				display( _result[i] );
+			Trigger _result[] = _dao
+					.findByPropertyType(propertytypeIdpropertytype);
+			for (int i = 0; i < _result.length; i++) {
+				display(_result[i]);
 			}
-		
-		}
-		catch (Exception _e) {
+
+		} catch (Exception _e) {
 			_e.printStackTrace();
 		}
-		
+
+	}
+
+	/**
+	 * Method 'findByEventType'
+	 * 
+	 * @param eventtypeIdeventtype
+	 */
+	public static void findByEventType(int eventtypeIdeventtype) {
+		try {
+			TriggerDao _dao = getTriggerDao();
+			Trigger _result[] = _dao.findByEventType(eventtypeIdeventtype);
+			for (int i = 0; i < _result.length; i++) {
+				display(_result[i]);
+			}
+
+		} catch (Exception _e) {
+			_e.printStackTrace();
+		}
+
 	}
 
 	/**
@@ -99,20 +94,18 @@ public class TriggerDaoSample
 	 * 
 	 * @param idTrigger
 	 */
-	public static void findWhereIdTriggerEquals(int idTrigger)
-	{
+	public static void findWhereIdTriggerEquals(int idTrigger) {
 		try {
 			TriggerDao _dao = getTriggerDao();
 			Trigger _result[] = _dao.findWhereIdTriggerEquals(idTrigger);
-			for (int i=0; i<_result.length; i++ ) {
-				display( _result[i] );
+			for (int i = 0; i < _result.length; i++) {
+				display(_result[i]);
 			}
-		
-		}
-		catch (Exception _e) {
+
+		} catch (Exception _e) {
 			_e.printStackTrace();
 		}
-		
+
 	}
 
 	/**
@@ -120,20 +113,20 @@ public class TriggerDaoSample
 	 * 
 	 * @param propertytypeIdpropertytype
 	 */
-	public static void findWherePropertytypeIdpropertytypeEquals(int propertytypeIdpropertytype)
-	{
+	public static void findWherePropertytypeIdpropertytypeEquals(
+			int propertytypeIdpropertytype) {
 		try {
 			TriggerDao _dao = getTriggerDao();
-			Trigger _result[] = _dao.findWherePropertytypeIdpropertytypeEquals(propertytypeIdpropertytype);
-			for (int i=0; i<_result.length; i++ ) {
-				display( _result[i] );
+			Trigger _result[] = _dao
+					.findWherePropertytypeIdpropertytypeEquals(propertytypeIdpropertytype);
+			for (int i = 0; i < _result.length; i++) {
+				display(_result[i]);
 			}
-		
-		}
-		catch (Exception _e) {
+
+		} catch (Exception _e) {
 			_e.printStackTrace();
 		}
-		
+
 	}
 
 	/**
@@ -141,20 +134,58 @@ public class TriggerDaoSample
 	 * 
 	 * @param eventtypeIdeventtype
 	 */
-	public static void findWhereEventtypeIdeventtypeEquals(int eventtypeIdeventtype)
-	{
+	public static void findWhereEventtypeIdeventtypeEquals(
+			int eventtypeIdeventtype) {
 		try {
 			TriggerDao _dao = getTriggerDao();
-			Trigger _result[] = _dao.findWhereEventtypeIdeventtypeEquals(eventtypeIdeventtype);
-			for (int i=0; i<_result.length; i++ ) {
-				display( _result[i] );
+			Trigger _result[] = _dao
+					.findWhereEventtypeIdeventtypeEquals(eventtypeIdeventtype);
+			for (int i = 0; i < _result.length; i++) {
+				display(_result[i]);
 			}
-		
-		}
-		catch (Exception _e) {
+
+		} catch (Exception _e) {
 			_e.printStackTrace();
 		}
-		
+
+	}
+
+	/**
+	 * Method 'findWhereTriggerTypeEquals'
+	 * 
+	 * @param triggerType
+	 */
+	public static void findWhereTriggerTypeEquals(int triggerType) {
+		try {
+			TriggerDao _dao = getTriggerDao();
+			Trigger _result[] = _dao.findWhereTriggerTypeEquals(triggerType);
+			for (int i = 0; i < _result.length; i++) {
+				display(_result[i]);
+			}
+
+		} catch (Exception _e) {
+			_e.printStackTrace();
+		}
+
+	}
+
+	/**
+	 * Method 'findWhereThresholdEquals'
+	 * 
+	 * @param threshold
+	 */
+	public static void findWhereThresholdEquals(double threshold) {
+		try {
+			TriggerDao _dao = getTriggerDao();
+			Trigger _result[] = _dao.findWhereThresholdEquals(threshold);
+			for (int i = 0; i < _result.length; i++) {
+				display(_result[i]);
+			}
+
+		} catch (Exception _e) {
+			_e.printStackTrace();
+		}
+
 	}
 
 	/**
@@ -162,8 +193,7 @@ public class TriggerDaoSample
 	 * 
 	 * @return TriggerDao
 	 */
-	public static TriggerDao getTriggerDao()
-	{
+	public static TriggerDao getTriggerDao() {
 		return TriggerDaoFactory.create();
 	}
 
@@ -172,15 +202,18 @@ public class TriggerDaoSample
 	 * 
 	 * @param dto
 	 */
-	public static void display(Trigger dto)
-	{
+	public static void display(Trigger dto) {
 		StringBuffer buf = new StringBuffer();
-		buf.append( dto.getIdTrigger() );
-		buf.append( ", " );
-		buf.append( dto.getPropertytypeIdpropertytype() );
-		buf.append( ", " );
-		buf.append( dto.getEventtypeIdeventtype() );
-		System.out.println( buf.toString() );
+		buf.append(dto.getIdTrigger());
+		buf.append(", ");
+		buf.append(dto.getPropertytypeIdpropertytype());
+		buf.append(", ");
+		buf.append(dto.getEventtypeIdeventtype());
+		buf.append(", ");
+		buf.append(dto.getTriggerType());
+		buf.append(", ");
+		buf.append(dto.getThreshold());
+		System.out.println(buf.toString());
 	}
 
 }

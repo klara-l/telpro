@@ -836,8 +836,8 @@ public class TelproGWT implements EntryPoint {
 			}
 		};
 
-		// timer.scheduleRepeating(refreshInterval * 1000);
-		timer.schedule(refreshInterval * 1000);
+		timer.scheduleRepeating(refreshInterval * 1000);
+		// timer.schedule(refreshInterval * 1000);
 	}
 
 	/**

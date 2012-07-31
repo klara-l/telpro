@@ -186,7 +186,7 @@ public class MyServerImpl extends RemoteServiceServlet implements MyServer {
 					.asList(PropertyDaoFactory
 							.create()
 							.findByDynamicSelect(
-									"SELECT * FROM Property WHERE Sensor_idSensor = ? AND PropertyType_idPropertyType = ? AND idProperty % ? = 0 AND idProperty > (SELECT max(idProperty - ?) FROM Property)",
+									"SELECT * FROM Property WHERE Sensor_idSensor = ? AND PropertyType_idPropertyType = ? AND idProperty % ? = 0 AND idProperty > (SELECT max(idProperty - 4 * ?) FROM Property)",
 									param));
 		} catch (PropertyDaoException e) {
 			e.printStackTrace();
@@ -202,7 +202,7 @@ public class MyServerImpl extends RemoteServiceServlet implements MyServer {
 					.asList(PropertyDaoFactory
 							.create()
 							.findByDynamicSelect(
-									"SELECT * FROM Property WHERE Sensor_idSensor = ? AND PropertyType_idPropertyType = ? AND idProperty > ((SELECT max(idProperty - ?) FROM Property ))",
+									"SELECT * FROM Property WHERE Sensor_idSensor = ? AND PropertyType_idPropertyType = ? AND idProperty > ((SELECT max(idProperty - 4 * ?) FROM Property ))",
 									param));
 		} catch (PropertyDaoException e) {
 			e.printStackTrace();

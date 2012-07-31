@@ -44,14 +44,14 @@ public interface TriggerDao
 	public Trigger[] findAll() throws TriggerDaoException;
 
 	/** 
-	 * Returns all rows from the Trigger table that match the criteria 'EventType_idEventType = :eventtypeIdeventtype'.
-	 */
-	public Trigger[] findByEventType(int eventtypeIdeventtype) throws TriggerDaoException;
-
-	/** 
 	 * Returns all rows from the Trigger table that match the criteria 'PropertyType_idPropertyType = :propertytypeIdpropertytype'.
 	 */
 	public Trigger[] findByPropertyType(int propertytypeIdpropertytype) throws TriggerDaoException;
+
+	/** 
+	 * Returns all rows from the Trigger table that match the criteria 'EventType_idEventType = :eventtypeIdeventtype'.
+	 */
+	public Trigger[] findByEventType(int eventtypeIdeventtype) throws TriggerDaoException;
 
 	/** 
 	 * Returns all rows from the Trigger table that match the criteria 'idTrigger = :idTrigger'.
@@ -67,6 +67,16 @@ public interface TriggerDao
 	 * Returns all rows from the Trigger table that match the criteria 'EventType_idEventType = :eventtypeIdeventtype'.
 	 */
 	public Trigger[] findWhereEventtypeIdeventtypeEquals(int eventtypeIdeventtype) throws TriggerDaoException;
+
+	/** 
+	 * Returns all rows from the Trigger table that match the criteria 'TriggerType = :triggerType'.
+	 */
+	public Trigger[] findWhereTriggerTypeEquals(int triggerType) throws TriggerDaoException;
+
+	/** 
+	 * Returns all rows from the Trigger table that match the criteria 'Threshold = :threshold'.
+	 */
+	public Trigger[] findWhereThresholdEquals(double threshold) throws TriggerDaoException;
 
 	/** 
 	 * Sets the value of maxRows

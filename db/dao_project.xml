@@ -19,7 +19,6 @@
     <verbose-logging>false</verbose-logging>
     <filter-list>
       <filter>Action</filter>
-      <filter>Devices</filter>
       <filter>Event</filter>
       <filter>EventType</filter>
       <filter>EventType_has_Action</filter>
@@ -157,73 +156,6 @@
                 <java-type>java.lang.String</java-type>
                 <jdbc-type>LONGVARCHAR</jdbc-type>
                 <jdbc-precision>65535</jdbc-precision>
-                <jdbc-scale>0</jdbc-scale>
-              </parameter>
-            </parameter-list>
-          </finder>
-        </finder-list>
-      </table>
-      <table>
-        <sql-name>Devices</sql-name>
-        <java-name>Devices</java-name>
-        <primary-key>
-          <column-list>
-            <column>idDevices</column>
-          </column-list>
-        </primary-key>
-        <column-list>
-          <column>
-            <java-name>idDevices</java-name>
-            <java-type>int</java-type>
-            <java-default-value />
-            <sql-name>idDevices</sql-name>
-            <sql-type>INT</sql-type>
-            <jdbc-type>INTEGER</jdbc-type>
-            <jdbc-precision>10</jdbc-precision>
-            <jdbc-scale>0</jdbc-scale>
-            <nullable>false</nullable>
-            <unique>false</unique>
-            <auto-increment>true</auto-increment>
-            <sequence-name />
-          </column>
-        </column-list>
-        <finder-list>
-          <finder>
-            <name>findByPrimaryKey</name>
-            <multi-finder>false</multi-finder>
-            <where>idDevices = :idDevices</where>
-            <order-by />
-            <query-type>WHERE</query-type>
-            <parameter-list>
-              <parameter>
-                <java-name>idDevices</java-name>
-                <java-type>int</java-type>
-                <jdbc-type>INTEGER</jdbc-type>
-                <jdbc-precision>10</jdbc-precision>
-                <jdbc-scale>0</jdbc-scale>
-              </parameter>
-            </parameter-list>
-          </finder>
-          <finder>
-            <name>findAll</name>
-            <multi-finder>true</multi-finder>
-            <where />
-            <order-by>idDevices</order-by>
-            <query-type>WHERE</query-type>
-            <parameter-list />
-          </finder>
-          <finder>
-            <name>findWhereIdDevicesEquals</name>
-            <multi-finder>true</multi-finder>
-            <where>idDevices = :idDevices</where>
-            <order-by>idDevices</order-by>
-            <query-type>WHERE</query-type>
-            <parameter-list>
-              <parameter>
-                <java-name>idDevices</java-name>
-                <java-type>int</java-type>
-                <jdbc-type>INTEGER</jdbc-type>
-                <jdbc-precision>10</jdbc-precision>
                 <jdbc-scale>0</jdbc-scale>
               </parameter>
             </parameter-list>
@@ -1348,32 +1280,32 @@
         </primary-key>
         <foreign-key-list>
           <foreign-key>
-            <name>fk_Sensor_has_PropertyType_Sensor1</name>
-            <parent-table>Sensor</parent-table>
-            <cardinality>1-many</cardinality>
-            <nav-to-parent-term>Sensor</nav-to-parent-term>
-            <nav-to-child-term>SensorHasPropertytype</nav-to-child-term>
-            <nav-to-parent>true</nav-to-parent>
-            <nav-to-child>false</nav-to-child>
-            <column-list>
-              <column>
-                <column-name>Sensor_idSensor</column-name>
-                <ref-column-name>idSensor</ref-column-name>
-              </column>
-            </column-list>
-          </foreign-key>
-          <foreign-key>
             <name>fk_Sensor_has_PropertyType_PropertyType1</name>
             <parent-table>PropertyType</parent-table>
             <cardinality>1-many</cardinality>
             <nav-to-parent-term>PropertyType</nav-to-parent-term>
-            <nav-to-child-term>SensorHasPropertytype1</nav-to-child-term>
+            <nav-to-child-term>SensorHasPropertytype</nav-to-child-term>
             <nav-to-parent>true</nav-to-parent>
             <nav-to-child>false</nav-to-child>
             <column-list>
               <column>
                 <column-name>PropertyType_idPropertyType</column-name>
                 <ref-column-name>idPropertyType</ref-column-name>
+              </column>
+            </column-list>
+          </foreign-key>
+          <foreign-key>
+            <name>fk_Sensor_has_PropertyType_Sensor1</name>
+            <parent-table>Sensor</parent-table>
+            <cardinality>1-many</cardinality>
+            <nav-to-parent-term>Sensor</nav-to-parent-term>
+            <nav-to-child-term>SensorHasPropertytype1</nav-to-child-term>
+            <nav-to-parent>true</nav-to-parent>
+            <nav-to-child>false</nav-to-child>
+            <column-list>
+              <column>
+                <column-name>Sensor_idSensor</column-name>
+                <ref-column-name>idSensor</ref-column-name>
               </column>
             </column-list>
           </foreign-key>
@@ -1441,22 +1373,6 @@
             <parameter-list />
           </finder>
           <finder>
-            <name>findBySensor</name>
-            <multi-finder>true</multi-finder>
-            <where>Sensor_idSensor = :sensorIdsensor</where>
-            <order-by />
-            <query-type>WHERE</query-type>
-            <parameter-list>
-              <parameter>
-                <java-name>sensorIdsensor</java-name>
-                <java-type>java.lang.String</java-type>
-                <jdbc-type>VARCHAR</jdbc-type>
-                <jdbc-precision>16</jdbc-precision>
-                <jdbc-scale>0</jdbc-scale>
-              </parameter>
-            </parameter-list>
-          </finder>
-          <finder>
             <name>findByPropertyType</name>
             <multi-finder>true</multi-finder>
             <where>PropertyType_idPropertyType = :propertytypeIdpropertytype</where>
@@ -1468,6 +1384,22 @@
                 <java-type>int</java-type>
                 <jdbc-type>INTEGER</jdbc-type>
                 <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findBySensor</name>
+            <multi-finder>true</multi-finder>
+            <where>Sensor_idSensor = :sensorIdsensor</where>
+            <order-by />
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>sensorIdsensor</java-name>
+                <java-type>java.lang.String</java-type>
+                <jdbc-type>VARCHAR</jdbc-type>
+                <jdbc-precision>16</jdbc-precision>
                 <jdbc-scale>0</jdbc-scale>
               </parameter>
             </parameter-list>
@@ -1758,6 +1690,34 @@
             <auto-increment>false</auto-increment>
             <sequence-name />
           </column>
+          <column>
+            <java-name>triggerType</java-name>
+            <java-type>int</java-type>
+            <java-default-value />
+            <sql-name>TriggerType</sql-name>
+            <sql-type>INT</sql-type>
+            <jdbc-type>INTEGER</jdbc-type>
+            <jdbc-precision>10</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>false</nullable>
+            <unique>false</unique>
+            <auto-increment>false</auto-increment>
+            <sequence-name />
+          </column>
+          <column>
+            <java-name>threshold</java-name>
+            <java-type>double</java-type>
+            <java-default-value />
+            <sql-name>Threshold</sql-name>
+            <sql-type>DOUBLE</sql-type>
+            <jdbc-type>DOUBLE</jdbc-type>
+            <jdbc-precision>22</jdbc-precision>
+            <jdbc-scale>0</jdbc-scale>
+            <nullable>false</nullable>
+            <unique>false</unique>
+            <auto-increment>false</auto-increment>
+            <sequence-name />
+          </column>
         </column-list>
         <finder-list>
           <finder>
@@ -1860,6 +1820,38 @@
                 <java-type>int</java-type>
                 <jdbc-type>INTEGER</jdbc-type>
                 <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findWhereTriggerTypeEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>TriggerType = :triggerType</where>
+            <order-by>TriggerType</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>triggerType</java-name>
+                <java-type>int</java-type>
+                <jdbc-type>INTEGER</jdbc-type>
+                <jdbc-precision>10</jdbc-precision>
+                <jdbc-scale>0</jdbc-scale>
+              </parameter>
+            </parameter-list>
+          </finder>
+          <finder>
+            <name>findWhereThresholdEquals</name>
+            <multi-finder>true</multi-finder>
+            <where>Threshold = :threshold</where>
+            <order-by>Threshold</order-by>
+            <query-type>WHERE</query-type>
+            <parameter-list>
+              <parameter>
+                <java-name>threshold</java-name>
+                <java-type>double</java-type>
+                <jdbc-type>DOUBLE</jdbc-type>
+                <jdbc-precision>22</jdbc-precision>
                 <jdbc-scale>0</jdbc-scale>
               </parameter>
             </parameter-list>

@@ -10,34 +10,44 @@ package de.berlin.fu.data.dto;
 
 import java.io.Serializable;
 
-public class Trigger implements Serializable
-{
+public class Trigger implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 2435671469727456562L;
+	private static final long serialVersionUID = 7821470226583573369L;
 
-	/** 
+	/**
 	 * This attribute maps to the column idTrigger in the Trigger table.
 	 */
 	protected int idTrigger;
 
-	/** 
-	 * This attribute maps to the column PropertyType_idPropertyType in the Trigger table.
+	/**
+	 * This attribute maps to the column PropertyType_idPropertyType in the
+	 * Trigger table.
 	 */
 	protected int propertytypeIdpropertytype;
 
-	/** 
-	 * This attribute maps to the column EventType_idEventType in the Trigger table.
+	/**
+	 * This attribute maps to the column EventType_idEventType in the Trigger
+	 * table.
 	 */
 	protected int eventtypeIdeventtype;
+
+	/**
+	 * This attribute maps to the column TriggerType in the Trigger table.
+	 */
+	protected int triggerType;
+
+	/**
+	 * This attribute maps to the column Threshold in the Trigger table.
+	 */
+	protected double threshold;
 
 	/**
 	 * Method 'Trigger'
 	 * 
 	 */
-	public Trigger()
-	{
+	public Trigger() {
 	}
 
 	/**
@@ -45,8 +55,7 @@ public class Trigger implements Serializable
 	 * 
 	 * @return int
 	 */
-	public int getIdTrigger()
-	{
+	public int getIdTrigger() {
 		return idTrigger;
 	}
 
@@ -55,8 +64,7 @@ public class Trigger implements Serializable
 	 * 
 	 * @param idTrigger
 	 */
-	public void setIdTrigger(int idTrigger)
-	{
+	public void setIdTrigger(int idTrigger) {
 		this.idTrigger = idTrigger;
 	}
 
@@ -65,8 +73,7 @@ public class Trigger implements Serializable
 	 * 
 	 * @return int
 	 */
-	public int getPropertytypeIdpropertytype()
-	{
+	public int getPropertytypeIdpropertytype() {
 		return propertytypeIdpropertytype;
 	}
 
@@ -75,8 +82,7 @@ public class Trigger implements Serializable
 	 * 
 	 * @param propertytypeIdpropertytype
 	 */
-	public void setPropertytypeIdpropertytype(int propertytypeIdpropertytype)
-	{
+	public void setPropertytypeIdpropertytype(int propertytypeIdpropertytype) {
 		this.propertytypeIdpropertytype = propertytypeIdpropertytype;
 	}
 
@@ -85,8 +91,7 @@ public class Trigger implements Serializable
 	 * 
 	 * @return int
 	 */
-	public int getEventtypeIdeventtype()
-	{
+	public int getEventtypeIdeventtype() {
 		return eventtypeIdeventtype;
 	}
 
@@ -95,9 +100,44 @@ public class Trigger implements Serializable
 	 * 
 	 * @param eventtypeIdeventtype
 	 */
-	public void setEventtypeIdeventtype(int eventtypeIdeventtype)
-	{
+	public void setEventtypeIdeventtype(int eventtypeIdeventtype) {
 		this.eventtypeIdeventtype = eventtypeIdeventtype;
+	}
+
+	/**
+	 * Method 'getTriggerType'
+	 * 
+	 * @return int
+	 */
+	public int getTriggerType() {
+		return triggerType;
+	}
+
+	/**
+	 * Method 'setTriggerType'
+	 * 
+	 * @param triggerType
+	 */
+	public void setTriggerType(int triggerType) {
+		this.triggerType = triggerType;
+	}
+
+	/**
+	 * Method 'getThreshold'
+	 * 
+	 * @return double
+	 */
+	public double getThreshold() {
+		return threshold;
+	}
+
+	/**
+	 * Method 'setThreshold'
+	 * 
+	 * @param threshold
+	 */
+	public void setThreshold(double threshold) {
+		this.threshold = threshold;
 	}
 
 	/**
@@ -107,33 +147,40 @@ public class Trigger implements Serializable
 	 * @return boolean
 	 */
 	@Override
-	public boolean equals(Object _other)
-	{
+	public boolean equals(Object _other) {
 		if (_other == null) {
 			return false;
 		}
-		
+
 		if (_other == this) {
 			return true;
 		}
-		
+
 		if (!(_other instanceof Trigger)) {
 			return false;
 		}
-		
+
 		final Trigger _cast = (Trigger) _other;
 		if (idTrigger != _cast.idTrigger) {
 			return false;
 		}
-		
+
 		if (propertytypeIdpropertytype != _cast.propertytypeIdpropertytype) {
 			return false;
 		}
-		
+
 		if (eventtypeIdeventtype != _cast.eventtypeIdeventtype) {
 			return false;
 		}
-		
+
+		if (triggerType != _cast.triggerType) {
+			return false;
+		}
+
+		if (threshold != _cast.threshold) {
+			return false;
+		}
+
 		return true;
 	}
 
@@ -143,12 +190,18 @@ public class Trigger implements Serializable
 	 * @return int
 	 */
 	@Override
-	public int hashCode()
-	{
+	public int hashCode() {
 		int _hashCode = 0;
 		_hashCode = 29 * _hashCode + idTrigger;
 		_hashCode = 29 * _hashCode + propertytypeIdpropertytype;
 		_hashCode = 29 * _hashCode + eventtypeIdeventtype;
+		_hashCode = 29 * _hashCode + triggerType;
+		// TODO hotfix
+		// long temp_threshold = Double.doubleToLongBits(threshold);
+		long temp_threshold = Long.valueOf(String.valueOf(threshold));
+
+		_hashCode = 29 * _hashCode
+				+ (int) (temp_threshold ^ (temp_threshold >>> 32));
 		return _hashCode;
 	}
 
@@ -157,8 +210,7 @@ public class Trigger implements Serializable
 	 * 
 	 * @return TriggerPk
 	 */
-	public TriggerPk createPk()
-	{
+	public TriggerPk createPk() {
 		return new TriggerPk(idTrigger);
 	}
 
@@ -168,13 +220,14 @@ public class Trigger implements Serializable
 	 * @return String
 	 */
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		StringBuffer ret = new StringBuffer();
-		ret.append( "de.berlin.fu.data.dto.Trigger: " );
-		ret.append( "idTrigger=" + idTrigger );
-		ret.append( ", propertytypeIdpropertytype=" + propertytypeIdpropertytype );
-		ret.append( ", eventtypeIdeventtype=" + eventtypeIdeventtype );
+		ret.append("de.berlin.fu.data.dto.Trigger: ");
+		ret.append("idTrigger=" + idTrigger);
+		ret.append(", propertytypeIdpropertytype=" + propertytypeIdpropertytype);
+		ret.append(", eventtypeIdeventtype=" + eventtypeIdeventtype);
+		ret.append(", triggerType=" + triggerType);
+		ret.append(", threshold=" + threshold);
 		return ret.toString();
 	}
 
