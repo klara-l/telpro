@@ -174,6 +174,39 @@ Im Rahmen dieses Projektes wurde ein System entwickelt, dass gemessene Daten von
 [TODO]
 
 \section{Architektur}\labelSec{abschnitt}
+Das Software-System besteht aus drei Teilen: 
+\begin{itemize}
+\item Die Sensor-Knoten, welche Events detektieren und verschiedene Größen messen,
+\item das Backend mit Datenbank und Servelets zur Vorverarbeitung und Speicherung der Daten
+\item und dem Frontend, welches die Daten für den Benutzer aufbereitet und präsentiert.
+\end{itemize}
+Figur \ref{architecture} verdeutlicht das Zusammenspiel dieser Komponenten. Die Sensoren versenden Nachrichten per HTTP-Request an ein Servelet, welches auf dem Access-Point läuft. Dort werden die Daten vorverarbeitet und in der MYSQL-Datenbank gespeichert. Das Frontend, welches durch Aufruf der IP-Adresse des Access-Point im Browser erreicht werden kann, greift ebenfalls auf die Daten zu und präsentiert diese mit Grafiken und Event-Listen. 
+
+\subsection{Modellierung}
+Für die Modellierung der Daten wurden folgende Typen identifiziert: 
+\begin{itemize}
+\item 
+\textbf{Property}: Regelmäßig gemessener Wert (temp, humid)
+\item 
+\textbf{Trigger}: Vom Benutzer festgelegtes Verhalten beim
+Erfüllen einer Bedingung (Event schicken, Aktion
+ausführen)
+\item 
+\textbf{Event}: Spontanes Ereignis eines Sensors (Schalter
+offen) oder ausgelöster Trigger (kann
+Benachrichtigung im Browser auslösen)
+\item 
+\textbf{Action}: Aktion die ausgeführt wird
+\end{itemize}
+\paragraph{Property}
+\paragraph{Trigger}
+
+\paragraph{Event}
+
+\paragraph{Action}
+
+
+
 
 \begin{figure}[htbp]
    \centering
