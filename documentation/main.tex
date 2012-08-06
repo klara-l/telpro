@@ -143,7 +143,7 @@
 \maketitle
 
 \begin{center}{ \large
- Dokumentation
+ Projekt-Dokumentation
 } \end{center}
 
 \vspace{10mm}
@@ -168,17 +168,27 @@ Hier ein kleine Zusammenfassung
 
 \section{Einleitung} \labelSec{einleitung}
 Sensoren in dem Haushalt sind für den Nutzer sehr praktisch und erhalten eine immer größer werdende Bedeutung. So hat fast jeder Haushalt mindestens einen Sensor für die Innen- oder Außentemperatur. \\
-Es gibt eine große Auswahl von Sensoren, die im Haushalt behilflich sein können. So könnte ein mobiler Temperatursensor an mehreren Stellen eingesetzt werden, um zum Beispiel rechtzeitig den Temperaturanstieg im Kühlschrank zu erkennen oder den zu starken Temperaturabstieg in der Sauna. Mit einem Vorwarnsystem kann der Nutzer nun eine Nachricht erhalten und frühzeitig reagieren. \\
-Weiterhin wäre es aber auch interessant, wenn der Nutzer selbst prüfen könnte, ob die gemessenen Daten sich noch so verhalten, wie sie sollten. Ob zum Beispiel die Temperatur im Kühlschrank   immer noch konstant 7 Grad beträgt, oder abnimmt bzw. zunimmt. \\
-Im Rahmen dieses Projektes wurde ein System entwickelt, dass gemessene Daten von Sensoren sammelt, welche im Haus verteilt sein können, und diese in Form von Liniendiagrammen auf einer Webseite anzeigt. Des weiteren wird der Nutzer auf dieser Webseite gewarnt, wenn definierte Bedingungen eintreffen (z.B. die Temperatur sinkt unter 40 °C in der Sauna). Dieses Dokument stellt die Idee bis zur Implementierung vor. Dabei wird wie folgt vorgegangen:
+Es gibt eine große Auswahl von Sensoren, die im Haushalt behilflich sein können. So könnte ein mobiler Temperatursensor an mehreren Stellen eingesetzt werden, um zum Beispiel rechtzeitig den Temperaturanstieg im Kühlschrank zu erkennen oder den zu starken Temperaturabfall in der Sauna. Mit einem Vorwarnsystem kann der Nutzer nun alarmiert werden und rechtzeitig reagieren. \\
+Weiterhin wäre es aber auch interessant, wenn der Nutzer selbst prüfen könnte, ob die gemessenen Daten sich noch so verhalten, wie sie sollten. Ob zum Beispiel die Temperatur im Kühlschrank immer noch konstant 7 Grad beträgt, oder abnimmt bzw. zunimmt. \\
+Im Rahmen dieses Projektes wurde ein System entwickelt, dass gemessene Daten von Sensoren sammelt, welche im Haus verteilt sein können, und diese in Form von Liniendiagrammen auf einer Webseite anzeigt. Des weiteren wird der Nutzer auf dieser Webseite gewarnt, wenn definierte Bedingungen eintreffen (z.B. die Temperatur sinkt unter 40°C in der Sauna). Dieses Dokument stellt die Idee bis zur Implementierung vor. Dabei wird wie folgt vorgegangen:
 [TODO]
 
+\section{Architektur}\labelSec{abschnitt}
+
+\begin{figure}[htbp]
+   \centering
+   \includegraphics[width=12cm]{fig/Architektur.png}
+   \caption{Architektur}
+   \label{architecture}
+\end{figure}
+
+
 \section{Verwendetet Technologien} \labelSec{abschnitt}
-\subsection{Linux Voyage}
+\subsection{Linux Voyage \cite{voyage}} 
 Als Betriebssystem für unseren Access Point haben wir uns für Voyage entschieden. Linux Voyage ist eine abgespeckte Version von Linux Debian, die für Access Points, Asterisk/VoIP Gateway und sonstigen Geräten geschrieben wurde. Da wir auf dem Access Point eine Flashkarte von 8 GB zur Verfügung hatten, war sich dieses Betriebssystem besonders gut geeignet, da es sehr  klein ist (128MB). Des weiteren sind alle wichtigen Treiber schon enthalten, welche wir für die WLAN Karte lediglich aktivieren mussten. \\
 Ein weiterer Vorteil ist, dass weitere Software wie gewohnt über die Konsole installiert werden kann. So konnten wir recht einfach MySQL und Tomcat installieren.
 
-\subsection{GWT}
+\subsection{GWT \cite{gwt}}
 Google Web Toolkit ist eine Entwicklungsumgebung zur Entwicklung von Webseiten. Der Client-Code wird in Java geschrieben und das GWT-Framework generiert daraus dann web-freundliches Javascript. So kann man möglichst einfach komplexe Webseiten entwickeln und hat eine einfach Anbindung an das Backend gegeben. \\
 Die Vorteile bei GWT sind:
 \begin{itemize}
@@ -188,7 +198,7 @@ Die Vorteile bei GWT sind:
  \item viele Zusatz-Frameworks (z.B. Smart GWT)
 \end{itemize}
 
-Der Nachteil an GWT ist, dass es relativ komplex ist und es muss sich erst eingearbeitet werden um zu verstehen, an welchen Stellen im Code Änderungen vorgenommen werden müssen. Dafür gibt es allerdings eine Menge Tutorien, die weiter helfen. \\
+Der Nachteil an GWT ist, dass es relativ komplex ist und es muss sich erst eingearbeitet werden um zu verstehen, an welchen Stellen im Code Änderungen vorgenommen werden müssen. Dafür gibt es allerdings eine Menge Tutorials, die weiter helfen. \\
 GWT war für unser Projekt sehr hilfreich, da die Webseite abhängig von dem Backend aufgebaut wurde und durch GWT-RPC eine einfache Anbindung an das Backend (unsere Datenbank) gegeben war. \\
 \newline
 Im Rahmen dieses Projektes wurde GWT als Plugin für Eclipse verwendet. Dies lässt sich sehr leicht installieren... [TODO]
@@ -204,14 +214,6 @@ Google Visualization bietet viele Möglichkeiten, Charts und Tabellen in GWT zu 
 Um ein Chart zu erstellen, muss der Nutzer lediglich eine Datentabelle (DataTable) von Google erstellen und dabei die Formate der Eingabedaten festlegen. Diese Daten werden dem gewünschten Chart mitgegeben und dieser wird auf der Oberfläche dargestellt. Alles weitere wird mitgeliefert wie zum Beispiel die „Clickevents“, oder die dynamische Größenanpassung der Charts an die Menge der Daten.\\
 Aber auch hier ist der Nachteil, dass man Charts von Google nicht einfach mit Smart GWT Elementen kombinieren kann, dafür aber mit GWT Elementen.
 
-\section{Architektur}\labelSec{abschnitt}
-
-\begin{figure}[htbp]
-   \centering
-   \includegraphics[width=12cm]{fig/Architektur.png}
-   \caption{Architektur}
-   \label{architecture}
-\end{figure}
 
 \section{Sensor-Knoten}
 Der verwendete Sensor-Knoten basiert auf dem MSB430H-Board. Es enthält mehrere Sensoren. Diese sind der SHT11-Sensor , welcher die Temperatur und Luftfeuchtigkeit misst und der MMA 7260Q G-Sensor, 
@@ -220,6 +222,7 @@ Die Kommunikation zwischen dem programmierbaren Board und dem WLAN-Modul erfolgt
 welche es ermöglichen, den Daten-Austausch zwischen Board und Modul zu verfolgen. Damit fiel das Debuggen der Kommunikation leichter.
 
 \subsection{HTTP-Kommunikation}
+\label{ssec:HTTP}
 Bei der Erprobung des WLAN-Moduls über eine serielle Schnittstelle haben wir verschiedene Übertragungsverfahren getestet: 
 
 \begin{itemize}
@@ -263,12 +266,18 @@ Das „Betriebsystem“ besteht aus einer Endlos-Schleife, in der folgende Aktio
 \begin{itemize}
  \item Überprüfung, ob bereits 20 Abfragen gesendet wurden; ggf. Trennung und erneuter Aufbau der TCP-Verbindung (der Server würde die Verbindung nach ca. 5 Minuten trennen)
  \item Auslesen der Sensoren, Aufbereitung der gelesenen Werte und Speicherung des Requests in einer Warteschlange, welche alle zu sendenden GET-Anfragen enthält
- \item Falls die Verbindung nicht gerade neu geöffnet wurde, wird „GET “ dem Request voran gestellt (Grund s.o.)  [REF EINFÜGEN]
+ \item Falls die Verbindung nicht gerade neu geöffnet wurde, wird „GET “ dem Request voran gestellt (Grund siehe Abschnitt \ref{ssec:HTTP})
  \item Solange noch weitere Requests in der Warteschlange sind, werden diese ebenfalls entfernt und dann versendet
 \end{itemize}
 
 \subsubsection{Tastendruck}
 Die Erkennung eines Tastendrucks geschieht in dem in der Initialisierung definierten Interrupt. Dort wird direkt beim Interrupt und 0.5 Sekunden nach dem Auslösen gemessen, welcher Taster gedrückt wurde und dann beide Messungen logisch verodert. Damit können wir mit einem Interrupt ebenfalls feststellen, falls beide Taster gleichzeitig gedrückt wurden. Weiterhin kann damit ausgeschlossen werden, dass die analog gemessene Größe am Anfang noch etwas flackert und eventuell beim ersten Auslesen den falschen Wert liefert. Danach wird ein GET-Request für das Taster-Event erstellt und in die Warteschlange eingereiht. Beim nächsten Durchlauf der Betriebssystem-Schleife wird dieser Request dann ebenfalls mit verschickt. Die Auflösung der Tasten-Events ist damit gleich einem Schleifendurchlauf, der bei durchschnittlich 3 Sekunden, maximal bei 7 Sekunden (Trennen und neuer Aufbau der Verbindung) liegt. 
+
+\section{Backend}
+
+\subsection{Daten-Verarbeitung}
+
+\subsection{Daten-Bereitstellung}
 
 \section{Frontend}
 Die Sensoren, die im Haushalt verteilt sind, schicken die gemessenen Daten an den Access Point. Nun müssen diese Daten in geeigneter Weise aufbereitet werden und den Nutzer zur Verfügung gestellt werden. Hierfür wurde eine Webseite gebaut, die es den Nutzer ermöglicht, die gemessenen Daten in Diagrammen darstellen zu lassen. \\
