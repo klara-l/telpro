@@ -169,9 +169,39 @@ Hier ein kleine Zusammenfassung
 \section{Einleitung} \labelSec{einleitung}
 Sensoren in dem Haushalt sind für den Nutzer sehr praktisch und erhalten eine immer größer werdende Bedeutung. So hat fast jeder Haushalt mindestens einen Sensor für die Innen- oder Außentemperatur. \\
 Es gibt eine große Auswahl von Sensoren, die im Haushalt behilflich sein können. So könnte ein mobiler Temperatursensor an mehreren Stellen eingesetzt werden, um zum Beispiel rechtzeitig den Temperaturanstieg im Kühlschrank zu erkennen oder den zu starken Temperaturabfall in der Sauna. Mit einem Vorwarnsystem kann der Nutzer nun alarmiert werden und rechtzeitig reagieren. \\
-Weiterhin wäre es aber auch interessant, wenn der Nutzer selbst prüfen könnte, ob die gemessenen Daten sich noch so verhalten, wie sie sollten. Ob zum Beispiel die Temperatur im Kühlschrank immer noch konstant 7 Grad beträgt, oder abnimmt bzw. zunimmt. \\
+Weiterhin wäre es aber auch interessant, wenn der Nutzer selbst prüfen könnte, ob die gemessenen Daten sich noch so verhalten, wie sie sollten. Ob zum Beispiel die Temperatur im Kühlschrank immer noch konstant 7°C beträgt, oder abnimmt bzw. zunimmt. \\
 Im Rahmen dieses Projektes wurde ein System entwickelt, dass gemessene Daten von Sensoren sammelt, welche im Haus verteilt sein können, und diese in Form von Liniendiagrammen auf einer Webseite anzeigt. Des weiteren wird der Nutzer auf dieser Webseite gewarnt, wenn definierte Bedingungen eintreffen (z.B. die Temperatur sinkt unter 40°C in der Sauna). Dieses Dokument stellt die Idee bis zur Implementierung vor. Dabei wird wie folgt vorgegangen:
 [TODO]
+
+\section{Projektbeschreibung}\labelSec{abschnitt}
+
+\subsection{Beschreibung}
+
+Im Rahmen dieses Projekts sollte ein System einwickelt werden, welches die Überwachung von Sensordaten im Haus ermöglicht. Die Sensoren werden im Haushalt verteilt, welche in periodischen Abständen die gemessenen Daten an den Access Point schicken. Um welche Art von Sensoren es sich handelt ist nicht relevant. Es können unterschiedliche Sensoren, welche unterschiedliche Daten messen, an das System angebunden werden.\\
+Die gemessenen Daten werden beim Access Point in geeigneter Weise verarbeitet und werden über das Web zur Verfügung gestellt. Dabei werden die Daten in eine Datenbank abgespeichert und in Form von Liniendiagrammen und Tabellen für den Nutzer in einem Browser zur Verfügung gestellt. Der Benutzer hat so die Möglichkeit die Sensordaten und somit den Haushalt zu überwachen.
+Des weiteren sollte ein Warnsystem eingebaut werden, indem der Anwender gewarnt wird, wenn ein Sensorwert einen vordefinierten Wert über- oder unterschreitet.
+
+\subsection{Szenarien}
+Für dieses System kann man sich eine Reihe von Szenarien überlegen, in der dieses System relevant für den Alltag ist. Diese sollen hier vorgestellt werden.
+
+\subsubsection{Szenario 1(Kühlschranküberwachung)}
+Es wird ein Sensorboard mit einem Temperatursensor und einen Taster an einer Kühlschranktür befestigt. Durch den Temperatursensor wird die Temperatur im Kühlschrank periodisch gemessen und an den Access Point über das WLAN-Modul geschickt. Durch den Taster am Sensorboard wird registriert, ob die Kühlschranktür geöffnet oder geschlossen ist. Auch diese Daten werden an den Access Point geschickt. \\
+Über den Webbrowser kann der Nutzer sich die gespeicherten Daten der Sensoren ansehen und überwachen. Dabei werden die gemessenen Temperaturen in einem Liniendiagramm und die Werte des Tasters in einer Tabelle angezeigt. Da der Anwender im System eingestellt hat, dass er gewarnt werden möchte, wenn die Temperatur im Kühlschrank über 9°C beträgt, zeigt das System ein Dialogfenster an, sobald der Sensor einen Wert über 9°C misst und an das System schickt. Nun sieht der Benutzer in der Tabelle mit den Einträgen für den Taster (Eventtabelle), dass die Kühlschranktür geöffnet ist und kann rechtzeitig reagieren.
+
+
+\subsubsection{Szenario 2(Zimmertemperaturüberwachung)}
+Es wird ein Sensorboard mit einem Temperatursensor und einem G-Sensor an das Schlafzimmer- oder Wohnzimmerfenster angebracht. Durch den Temperatursensor wird die aktuelle Temperatur und durch den G-Sensor die Neigung des Fensters gemessen und über das WLAN-Modul an den Access Point geschickt. \\
+In dem Diagramm für die Temperatur kann der Anwender nun den Temperaturabfall beobachten, aber auch im Diagramm für den Neigungswert verfolgen, ob das Fenster angekippt ist oder nicht.
+Wird ein bestimmter Wert der Temperatur unterschritten, so wird dem Benutzer über eine Dialogbox Bescheid gegeben. Des weiteren kann der Benutzer auch definieren, dass eine Dialogbox angezeigt wird, wenn sich der Neigungswert grundlegend ändert (das Fenster also angekippt wird). \\
+Wird das System weiter entwickelt, so kann man zum Beispiel über Fernzugriff die Heizung abstellen oder das Fenster schließen lassen, damit nicht unnötig Energie verbraucht wird.
+
+\subsubsection{Szenario 3(Waschmaschinenüberwachung)}
+An der Waschmaschine wird ein Sensorboard mit einem Feuchtigkeitssensor angebracht. Über ein Diagramm kann sich der Nutzer die Werte des Feuchtigkeitssensors in einem Browser anzeigen lassen. Läuft die Waschmaschine über, so erhöht sich der Feuchtigkeitswert und es wird ab einen bestimmten Wert eine Dialogbox im Browser angezeigt, indem der Nutzer bei überhöhter Feuchtigkeit gewarnt wird. \\
+Wird das System weiterentwickelt, so kann man sich vorstellen, dass der Nutzer per Fernzugriff die Waschmaschine ausstellen kann und sogar ein Nummer für den Klempner in der Nähe erhält.
+
+\subsection{Projektvorgehen}
+Für dieses Projekt wurde zum einen ein Sensorboard mit einem Temperatursensor, Feuchtigkeitssensor und G-Sensor zur Verfügung gestellt, welcher im Rahmen dieses Projekts programmiert werden muss. An dem Sensorknoten wurde ein WLAN-Modul abgebracht, welches konfiguriert werden musste.\\
+Die Daten der Sensoren werden über das WLAN-Modul an den Access Point geschickt. Dieser Access Point wurde uns zur Verfügung gestellt. Dieser musste konfiguriert und programmiert werden, da auf diesen der Server läuft, der die Daten speichert. Diese Daten werden für das Frontend zur Verfügung gestellt, welches mit Google Webtoolkit programmiert wurde. 
 
 \section{Architektur}\labelSec{abschnitt}
 Das Software-System besteht aus drei Teilen: 
@@ -313,20 +343,36 @@ Die Erkennung eines Tastendrucks geschieht in dem in der Initialisierung definie
 \subsection{Daten-Bereitstellung}
 
 \section{Frontend}
-Die Sensoren, die im Haushalt verteilt sind, schicken die gemessenen Daten an den Access Point. Nun müssen diese Daten in geeigneter Weise aufbereitet werden und den Nutzer zur Verfügung gestellt werden. Hierfür wurde eine Webseite gebaut, die es den Nutzer ermöglicht, die gemessenen Daten in Diagrammen darstellen zu lassen. \\
+Die Sensoren, die im Haushalt verteilt sind, schicken die gemessenen Daten an den Access Point. Nun müssen diese Daten in geeigneter Weise aufbereitet werden und dem Nutzer zur Verfügung gestellt werden. Hierfür wurde eine Webseite gebaut, welche die gemessenen Daten in Diagrammen darstellen. \\
 In diesem Kapitel wird dieses Frontend vorgestellt und beschrieben.
 
 \subsection{Anforderungen}
 
 An die Webseite, die es den Nutzer ermöglicht, die Daten der Sensoren zu überwachen, gibt es eine Reihe von Anforderungen. \\
 Eine wichtige Anforderung ist die benutzerfreundliche Oberfläche, die in sich einfach gehalten ist und es den Anwender ermöglicht, sich schnell einzuarbeiten. Aus diesen Grund wurde die Oberfläche sehr schlicht gehalten und auf das Wesentliche reduziert.\\
-Über eine Drop-down-Box kann der Nutzer zwischen den verschiedenen Sensoren auswählen und sich Daten anzeigen lassen. Dabei werden unterschiedliche Diagramme für die unterschiedlichen gemessenen Daten angezeigt. In unseren Fall hatten wir ein Diagramm für die Temperatur, Feuchtigkeit und 2 Diagramme für die Neigung des Sensors. Da es aber möglich sein soll, andere Sensoren an das System anzuschließen, welche andere Daten (Propertries) messen, passt sich die Oberfläche mit den Diagrammen an die jeweiligen Daten an. Es werden in die Diagramme angezeigt und mit Daten gefüllt, welche vom Sensor gemessen werden.\\
+Über eine Drop-down-Box kann der Nutzer zwischen den verschiedenen Sensoren auswählen und sich Daten anzeigen lassen. Dabei werden unterschiedliche Diagramme für die unterschiedlichen gemessenen Daten angezeigt. In unseren Fall hatten wir ein Diagramm für die Temperatur, Feuchtigkeit und 2 Diagramme für die Neigung des Sensors. Da es aber möglich sein soll, andere Sensoren an das System anzuschließen, welche andere Daten (Propertries) messen, passt sich die Oberfläche mit den Diagrammen an die jeweiligen Daten an.\\
 Nun kann der Nutzer die gemessene Werte überwachen. Dabei hat dieser aber nur ein Diagramm gleichzeitig im Blick (da pro Diagramm ein Tab in einem Tab-Menü zur Verfügung steht). Es kann passieren, dass der Anwender so zum Beispiel nicht beobachten kann, dass die Temperatur im Kühlschrank stetig zunimmt, weil dieser das Diagramm mit der Neigung des Sensors geöffnet hat. Damit der Nutzer gewarnt wird, wurden Trigger in unser System integriert. Dabei wird in serverseitiger und clientseitiger Trigger unterschieden. Wird eine Aktion auf der Clientseite ausgelöst, so wird eine Dialogbox auf der Webseite angezeigt. Wird eine serverseitige Aktion ausgelöst, so wird eine System-Ausgabe auf der Konsole ausgegeben.\\
 Eine weitere Anforderung an das System war es, dass der Standort eines Sensors bearbeitet werden kann und dieser dann in die Datenbank abgespeichert wird. Es kann passieren, dass der mobile Sensorknoten an einen anderen Ort platziert wird. Bei der Anzeige der Sensordaten kann der Benutzer auf „Edit“ klicken und den Ort des Sensors bearbeiten. Die ID und die IP sollen nicht geändert werden. \\
 Alle diese Anforderungen sind für die leichte Bedienbarkeit der Oberfläche und wurde in diesem System umgesetzt.
 
-\section{Projekt zum Laufen bringen} \labelSec{abschnitt}
+\subsection{Projektaufbau}
 
+Da für dieses Projekt GWT genutzt wurde, war der Aufbau des Frontends zum Teil durch die Struktur von GWT vorgegeben. \\
+Unter dem Ordner „src/de/berlin/fu/client“ befindet sich die Datei „TelproGWT.java“ in der man Hauptteil des Frontends findet. In der Datei „TelproGWT.gwt.xml“, welche man in dem Verzeichnis „src/de/berlin/fu/berlin“ findet, wird definiert welche onModuleLoad-Methode welcher Klasse (in unserem Fall TeproGWT) aufgerufen werden soll. \\
+Eine wichtiges Interface in diesem Projekt ist das Service-Interface„MyServer.java“, welche sich in dem Ordner „src/de/berlin/fu/shared“ findet. Diese gibt vor, welche Methoden von der Clientseite genutzt werden können und somit mit der Backendseite kommunizieren. Damit nun die Clientseite die Methoden der Serverseite nutzen kann, muss ein sogenanntes Async-Interface implementiert werden. Dieses befindet sich auch in dem Ordner „src/de/berlin/fu/shared“ und heißt „MyServerAsync.java“. Es wird ein asynchrones Interface definiert, da man vermeiden möchte, dass die Anwendung beim Aufruf der Methoden der Serverseite einfriert und der Anwender warten muss. Google Webtoolkit gibt diese Art von Interface beim GWT-RPC immer vor. In der Klasse, welche die Benutzeroberfläche implementiert, wird dieses Async-Interface initialisiert. 
+In den anderen Packages befindet sich die Implementation der Backendseite, welche in dem Kapitel Backend [TODO REF] näher erläutert wird.
+
+
+\subsection{Code}
+Die Klasse TelproGWT.java ist die Klasse, in der der Code der Clientseite steht. Jede Klasse in GWT, welche den Client-Code enthält, implementiert das Interface „EntryPoint“. Dabei wird von GWT vorgeschrieben, dass die Methode „onModuleLoad“ implementiert werden muss. Diese Methode wird aufrufen, sobald der Anwender die Webseite in dem Browser aufruft.\\
+Wird die onModuleLoad-Methode aufgerufen, so holt sich die Clientseite als erstes alle Propertytypen und Eventtypen die in der Datenbank abgespeichert wurden. Diese Typen werden an mehreren Stelle im Code benötigt. Um nicht mehre Datenbankanfragen und somit die Anwendung langsamer zu machen, werden die Typen einmal abgefragt und in einer HashMap abgespeichert. \\
+Mit den Propertytyen kann nun dynamisch die Ansicht für die Liniendiagramme aufgebaut werden. Pro Propertytyp wird ein Tab mit einem Liniendiagramm aufgebaut und in das Tab-Menü eingepflegt. Dieses Tab-Menü ermöglicht es, dass nur das Diagramm aktualisiert wird, welches gerade angezeigt wird. Da dieses alle 3 Sekunden aktualisiert wird, war dieser Schritt nötig, da dieses den Datenverkehr verringert und damit auch die Anwendung schneller macht.\\
+Die Events werden in den 3 Sekunden immer mit aktualisiert und es ist egal, ob der Nutzer sich die Eventtabelle ansieht oder nicht. Löst ein Event nun eine Aktion aus (welche in dem Trigger definiert wurde), so soll der Anwender informiert werden (zum Beispiel über ein Dialogfenster), wenn dieser eintritt. So erhält man ein Warnsystem, welche wichtig für dieses System ist.\\
+Durch GWT können nicht nur Oberflächenelemente eingefügt werden, sondern auch gestaltet werden. Zum Beispiel kann die Größe, Farbe, mit oder ohne Rahmen und vieles mehr eingestellt werden. Wie die Oberfläche aussieht, kann dem nächsten Kapitel und den darin enthaltenden Bildern entnommen werden.
+
+\subsection{Screenshots}
+
+Um einen Überblick über das Interface zu bekommen, sollen hier einige Screenshots gezeigt  werden.   
   
 \section{Ausblick} \labelSec{ausblick}
 
