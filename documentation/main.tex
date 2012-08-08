@@ -318,7 +318,7 @@ Das Zurücksetzen hat ebenfalls den Vorteil, dass das Modul nicht vor dem ersten
 
 
 \subsection{Programmierung des Sensor-Knotens}
-Für die Programmierung des Sensor-Knotens wurde der Code Composer  [TODO: INSERT REAL NAME HERE] verwendet. Die Programmiersprache ist ein C-Dialekt, welcher fast alle Funktionen des Standards bereit stellt. \\
+Für die Programmierung des Sensor-Knotens wurde der Code Composer Essentials Professional (Version: CCE v3.1, Build: 3.2.4.3.8)  verwendet. Die Programmiersprache ist ein C-Dialekt, welcher fast alle Funktionen des Standards bereit stellt. \\
 Das Programm des Sensor-Knotens besteht aus zwei Teilen: Zuerst wird eine Initalisierungs-Phase durchlaufen in der Interrupts angeschaltet werden, nötiger Speicher allociiert und das WLAN-Modul konfiguriert wird. Danach beginnt eine Endlos-Schleife, die das „Betriebssystem“ darstellt. 
 In dieser Schleife werden die Sensor-Werte ermittelt und dann per WLAN verschickt.
 
@@ -386,6 +386,12 @@ Durch GWT können nicht nur Oberflächenelemente eingefügt werden, sondern auch
 \subsection{Screenshots}
 
 Um einen Überblick über das Interface zu bekommen, sollen hier einige Screenshots gezeigt  werden.   
+\begin{description}
+\item[Abbildung \ref{screen1}:] Auswahl der Sensoren in einer Drop-down-Box. 
+\item[Abbildung \ref{screen2}:] Wurde ein Sensor ausgewählt, so wird diese Ansicht angezeigt. Oben rechts befinden sich die Sensorinformationen, welche man bearbeiten kann. In der Mitte findet man die Einstellungsmöglichkeiten für Ansicht der Diagramme. Zum einen kann die Anzahl der Punkte in dem Diagramm eingestellt werden, zum anderen wie viele Punkte übersprungen werden sollen („spreading factor“).
+\item[Abbildung \ref{screen3}:] Das ist die Eventliste-Ansicht. Die Einstellungsmöglichkeiten für die Diagramme sind ausgestellt.
+\item[Abbildung \ref{screen4}:] Diese Ansicht wird gezeigt, wenn der Nutzer auf Bearbeiten des Sensorknotens klickt. Der Ort des Sensors kann bearbeitet werden, die IP und die ID allerdings nicht.
+\end{description}
 
 \begin{figure}[htbp]
    \centering
@@ -398,21 +404,21 @@ Um einen Überblick über das Interface zu bekommen, sollen hier einige Screensh
    \centering
    \includegraphics[width=12cm]{fig/screen2.png}
    \caption{Screenshot}
-   \label{screen1}
+   \label{screen2}
 \end{figure}
 
 \begin{figure}[htbp]
    \centering
    \includegraphics[width=12cm]{fig/screen3.png}
    \caption{Screenshot}
-   \label{screen1}
+   \label{screen3}
 \end{figure}
 
 \begin{figure}[htbp]
    \centering
    \includegraphics[width=12cm]{fig/screen4.png}
    \caption{Screenshot}
-   \label{screen1}
+   \label{screen4}
 \end{figure}
   
 \section{Ausblick} \labelSec{ausblick}
