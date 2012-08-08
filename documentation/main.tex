@@ -252,31 +252,44 @@ Als Betriebssystem für unseren Access Point haben wir uns für Voyage entschied
 Ein weiterer Vorteil ist, dass weitere Software wie gewohnt über die Konsole installiert werden kann. So konnten wir recht einfach MySQL und Tomcat installieren.
 
 \subsection{GWT \cite{gwt}}
-Google Web Toolkit ist eine Entwicklungsumgebung zur Entwicklung von Webseiten. Der Client-Code wird in Java geschrieben und das GWT-Framework generiert daraus dann web-freundliches Javascript. So kann man möglichst einfach komplexe Webseiten entwickeln und hat eine einfach Anbindung an das Backend gegeben. \\
+Google Web Toolkit ist ein Toolkit zur Entwicklung und Optimierung von Browser-basierten Anwendungen \cite{gwt}. Der Code wird dabei vom Entwickler in Java geschrieben und anschließend vom GWT-Compiler in Javascript-Code umgewandelt. \\
 Die Vorteile bei GWT sind:
 \begin{itemize}
  \item Browser-Kompatibilität
- \item Besseres debuggen, da sich Javacode besser debuggen lässt
- \item einfacheres entwickeln, wenn man nicht Javascript kann
+ \item Testen in Java (Unit-Tests sind auch möglich)
+ \item Entwickler benötigt keine Javascript Kenntnisse, da der Code in Java geschrieben wird
  \item viele Zusatz-Frameworks (z.B. Smart GWT)
+ \item umfangreiche Dokumentation und Beispielanwendungen
 \end{itemize}
 
-Der Nachteil an GWT ist, dass es relativ komplex ist und es muss sich erst eingearbeitet werden um zu verstehen, an welchen Stellen im Code Änderungen vorgenommen werden müssen. Dafür gibt es allerdings eine Menge Tutorials, die weiter helfen. \\
-GWT war für unser Projekt sehr hilfreich, da die Webseite abhängig von dem Backend aufgebaut wurde und durch GWT-RPC eine einfache Anbindung an das Backend (unsere Datenbank) gegeben war. \\
+Man muss allerdings erst den Aufbau von GWT verstehen, was am Anfang sehr aufwendig sein kann. So ist dieses Framework nicht unbedingt bei kleinen Anwendung zu empfehlen. \\
+GWT war für unser Projekt sehr hilfreich, da die Webseite abhängig von dem Backend aufgebaut wurde und durch GWT-RPC eine einfache Anbindung an das Backend gegeben war.\\
 \newline
-Im Rahmen dieses Projektes wurde GWT als Plugin für Eclipse verwendet. Dies lässt sich sehr leicht installieren... [TODO]
+Im Rahmen dieses Projektes wurde GWT als Plugin für Eclipse verwendet. Der Link für das Plugin ist der folgende: \cite{gwtplugin}.
 
 \subsection{Smart GWT}
 Smart GWT ist ein Framework, welches, basierend auf GWT, eine Vielzahl von Erweiterungen der Oberfläche anbietet. Da es viele Widgets anbietet, die GWT nicht besitzt, wurde es für dieses Projekt verwendet.\\
 Dabei bietet Smart GWT über die Showcases (hier ein Link: \cite{smartgwt}) viele Codeschnipsel, die die Entwicklung  einfach gestalten. Des weiteren lässt sich Smart GWT sehr leicht in den Code einbinden. Der Nutzer lädt lediglich Jars herunter, die eingebunden werden müssen. \\
-Der Nachteil von Smart GWT ist allerdings, dass man die Komponenten nicht mit Komponenten von GWT kombinieren sollte (also zum Beispiel sollte man keine Smart GWT Buttons in Layouts von GWT involvieren), da dies zu unerwarteten Effekten führen kann.
-[TODO: installation]
+Der Nachteil von Smart GWT ist allerdings, dass man die Komponenten nicht mit Komponenten von GWT kombinieren sollte (also zum Beispiel sollte man keine Smart GWT Buttons in Layouts von GWT involvieren), da dies zu unerwarteten Effekten führen kann.\\
+\newline
+Möchte man Smart GWT nutzen, so muss die Jar-Datei (unter: \cite{smartgwtdown}) heruntergeladen werden und in den „Build Path“ eingebunden werden.\\
+In der Datei „*.gwt.xml“ \footnote{steht f"ur den Namen des Web Application Projekts} muss nun noch die folgende Zeile eingefügt werden:
+
+\lstset{language=HTML}
+\begin{lstlisting}
+<inherits name="com.smartgwt.SmartGwt"/>
+\end{lstlisting}
 
 \subsection{Charts von Google}
 Google Visualization bietet viele Möglichkeiten, Charts und Tabellen in GWT zu erstellen. Dabei werden die Charts in Javascript geschrieben. Allerdings bietet Google auch ein Jar für GWT-Dateien an, so das an dieser Stelle der Programmierer Java-Code schreiben kann. \\
 Um ein Chart zu erstellen, muss der Nutzer lediglich eine Datentabelle (DataTable) von Google erstellen und dabei die Formate der Eingabedaten festlegen. Diese Daten werden dem gewünschten Chart mitgegeben und dieser wird auf der Oberfläche dargestellt. Alles weitere wird mitgeliefert wie zum Beispiel die „Clickevents“, oder die dynamische Größenanpassung der Charts an die Menge der Daten.\\
-Aber auch hier ist der Nachteil, dass man Charts von Google nicht einfach mit Smart GWT Elementen kombinieren kann, dafür aber mit GWT Elementen.
-
+Aber auch hier ist der Nachteil, dass man Charts von Google nicht einfach mit Smart GWT Elementen kombinieren kann, dafür aber mit GWT Elementen.\\
+\newline
+Um Google Charts nutzen zu können, muss man die Jar-Datei (unter: \cite{charts}) herunterladen und in das Projekt im „Build Path“ einbinden. In der Datei „*.gwt.xml“ muss nun die folgende Zeile eingefügt werden.
+\lstset{language=HTML}
+\begin{lstlisting}
+<inherits name='com.google.gwt.visualization.Visualization'/>
+\end{lstlisting}
 
 \section{Sensor-Knoten}
 Der verwendete Sensor-Knoten basiert auf dem MSB430H-Board. Es enthält mehrere Sensoren. Diese sind der SHT11-Sensor , welcher die Temperatur und Luftfeuchtigkeit misst und der MMA 7260Q G-Sensor, 
@@ -336,7 +349,7 @@ Das „Betriebsystem“ besteht aus einer Endlos-Schleife, in der folgende Aktio
 \subsubsection{Tastendruck}
 Die Erkennung eines Tastendrucks geschieht in dem in der Initialisierung definierten Interrupt. Dort wird direkt beim Interrupt und 0.5 Sekunden nach dem Auslösen gemessen, welcher Taster gedrückt wurde und dann beide Messungen logisch verodert. Damit können wir mit einem Interrupt ebenfalls feststellen, falls beide Taster gleichzeitig gedrückt wurden. Weiterhin kann damit ausgeschlossen werden, dass die analog gemessene Größe am Anfang noch etwas flackert und eventuell beim ersten Auslesen den falschen Wert liefert. Danach wird ein GET-Request für das Taster-Event erstellt und in die Warteschlange eingereiht. Beim nächsten Durchlauf der Betriebssystem-Schleife wird dieser Request dann ebenfalls mit verschickt. Die Auflösung der Tasten-Events ist damit gleich einem Schleifendurchlauf, der bei durchschnittlich 3 Sekunden, maximal bei 7 Sekunden (Trennen und neuer Aufbau der Verbindung) liegt. 
 
-\section{Backend}
+\section{Backend}\label{sec:backend}
 
 \subsection{Daten-Verarbeitung}
 
@@ -360,7 +373,7 @@ Alle diese Anforderungen sind für die leichte Bedienbarkeit der Oberfläche und
 Da für dieses Projekt GWT genutzt wurde, war der Aufbau des Frontends zum Teil durch die Struktur von GWT vorgegeben. \\
 Unter dem Ordner „src/de/berlin/fu/client“ befindet sich die Datei „TelproGWT.java“ in der man Hauptteil des Frontends findet. In der Datei „TelproGWT.gwt.xml“, welche man in dem Verzeichnis „src/de/berlin/fu/berlin“ findet, wird definiert welche onModuleLoad-Methode welcher Klasse (in unserem Fall TeproGWT) aufgerufen werden soll. \\
 Eine wichtiges Interface in diesem Projekt ist das Service-Interface„MyServer.java“, welche sich in dem Ordner „src/de/berlin/fu/shared“ findet. Diese gibt vor, welche Methoden von der Clientseite genutzt werden können und somit mit der Backendseite kommunizieren. Damit nun die Clientseite die Methoden der Serverseite nutzen kann, muss ein sogenanntes Async-Interface implementiert werden. Dieses befindet sich auch in dem Ordner „src/de/berlin/fu/shared“ und heißt „MyServerAsync.java“. Es wird ein asynchrones Interface definiert, da man vermeiden möchte, dass die Anwendung beim Aufruf der Methoden der Serverseite einfriert und der Anwender warten muss. Google Webtoolkit gibt diese Art von Interface beim GWT-RPC immer vor. In der Klasse, welche die Benutzeroberfläche implementiert, wird dieses Async-Interface initialisiert. 
-In den anderen Packages befindet sich die Implementation der Backendseite, welche in dem Kapitel Backend [TODO REF] näher erläutert wird.
+In den anderen Packages befindet sich die Implementation der Backendseite, welche in dem Kapitel \ref{sec:backend} (Backend) näher erläutert wird.
 
 
 \subsection{Code}
@@ -373,6 +386,34 @@ Durch GWT können nicht nur Oberflächenelemente eingefügt werden, sondern auch
 \subsection{Screenshots}
 
 Um einen Überblick über das Interface zu bekommen, sollen hier einige Screenshots gezeigt  werden.   
+
+\begin{figure}[htbp]
+   \centering
+   \includegraphics[width=12cm]{fig/screen1.png}
+   \caption{Screenshot}
+   \label{screen1}
+\end{figure}
+
+\begin{figure}[htbp]
+   \centering
+   \includegraphics[width=12cm]{fig/screen2.png}
+   \caption{Screenshot}
+   \label{screen1}
+\end{figure}
+
+\begin{figure}[htbp]
+   \centering
+   \includegraphics[width=12cm]{fig/screen3.png}
+   \caption{Screenshot}
+   \label{screen1}
+\end{figure}
+
+\begin{figure}[htbp]
+   \centering
+   \includegraphics[width=12cm]{fig/screen4.png}
+   \caption{Screenshot}
+   \label{screen1}
+\end{figure}
   
 \section{Ausblick} \labelSec{ausblick}
 
