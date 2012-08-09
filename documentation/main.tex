@@ -171,8 +171,8 @@ Hier ein kleine Zusammenfassung
 Sensoren in dem Haushalt sind für den Nutzer sehr praktisch und erhalten eine immer größer werdende Bedeutung. So hat fast jeder Haushalt mindestens einen Sensor für die Innen- oder Außentemperatur. \\
 Es gibt eine große Auswahl von Sensoren, die im Haushalt behilflich sein können. So könnte ein mobiler Temperatursensor an mehreren Stellen eingesetzt werden, um zum Beispiel rechtzeitig den Temperaturanstieg im Kühlschrank zu erkennen oder den zu starken Temperaturabfall in der Sauna. Mit einem Vorwarnsystem kann der Nutzer nun alarmiert werden und rechtzeitig reagieren. \\
 Weiterhin wäre es aber auch interessant, wenn der Nutzer selbst prüfen könnte, ob die gemessenen Daten sich noch so verhalten, wie sie sollten. Ob zum Beispiel die Temperatur im Kühlschrank immer noch konstant 7°C beträgt, oder abnimmt bzw. zunimmt. \\
-Im Rahmen dieses Projektes wurde ein System entwickelt, dass gemessene Daten von Sensoren sammelt, welche im Haus verteilt sein können, und diese in Form von Liniendiagrammen auf einer Webseite anzeigt. Des weiteren wird der Nutzer auf dieser Webseite gewarnt, wenn definierte Bedingungen eintreffen (z.B. die Temperatur sinkt unter 40°C in der Sauna). Dieses Dokument stellt die Idee bis zur Implementierung vor. Dabei wird wie folgt vorgegangen:
-\todo{edit here}
+Im Rahmen dieses Projektes wurde ein System entwickelt, dass gemessene Daten von Sensoren sammelt, welche im Haus verteilt sein können, und diese in Form von Liniendiagrammen auf einer Webseite anzeigt. Des weiteren wird der Nutzer auf dieser Webseite gewarnt, wenn definierte Bedingungen eintreffen (z.B. die Temperatur sinkt unter 40°C in der Sauna). Dieses Dokument stellt die Idee bis zur Implementierung vor. Dabei wird wie folgt vorgegangen:\\
+Im nächsten Kapitel wird beschrieben, was das Ziel des Projekts war und wie vorgegangen wurde. In Kapitel 3 wird die Architektur des Projekts erklärt und im besonderen auf die Modellierung eingegangen. In den nächsten 3 Kapiteln wird die Implementierung erklärt, wobei diese in Sensor-Knoten, Backend und Frontend eingeteilt wurden. Am Ende der Dokumentation wird darauf eingegangen, wie man das Projekt erweitern kann und was für Erfahrungen damit gemacht wurden.
 
 \section{Projektbeschreibung}\labelSec{abschnitt}
 
@@ -180,7 +180,7 @@ Im Rahmen dieses Projektes wurde ein System entwickelt, dass gemessene Daten von
 
 Im Rahmen dieses Projekts sollte ein System einwickelt werden, welches die Überwachung von Sensordaten im Haus ermöglicht. Die Sensoren werden im Haushalt verteilt, welche in periodischen Abständen die gemessenen Daten an den Access Point schicken. Um welche Art von Sensoren es sich handelt ist nicht relevant. Es können unterschiedliche Sensoren, welche unterschiedliche Daten messen, an das System angebunden werden.\\
 Die gemessenen Daten werden beim Access Point in geeigneter Weise verarbeitet und werden über das Web zur Verfügung gestellt. Dabei werden die Daten in eine Datenbank abgespeichert und in Form von Liniendiagrammen und Tabellen für den Nutzer in einem Browser zur Verfügung gestellt. Der Benutzer hat so die Möglichkeit die Sensordaten und somit den Haushalt zu überwachen.
-Des weiteren sollte ein Warnsystem eingebaut werden, indem der Anwender gewarnt wird, wenn ein Sensorwert einen vordefinierten Wert über- oder unterschreitet.
+Des weiteren sollte ein Warnsystem eingebaut werden, indem der Anwender gewarnt wird, wenn ein Sensorwert einen vordefinierten Wert über- oder unterschreitet. 
 
 \subsection{Szenarien}
 Für dieses System kann man sich eine Reihe von Szenarien überlegen, in der dieses System relevant für den Alltag ist. Diese sollen hier vorgestellt werden.
