@@ -48,6 +48,7 @@
 %pseudocode import
 \usepackage{algorithm}
 \usepackage{algorithmic}
+\usepackage{todonotes}
 
 \usepackage{listings}
 
@@ -91,7 +92,7 @@
 % Some useful commands. (At the moment there is just one but...)
 \newcommand{\code}[1]{\texttt{#1}}
 % eine Randnote fuer fehlende Teile
-\usepackage[usenames,dvipsnames]{color}
+%\usepackage[usenames,dvipsnames]{color}
 \newcommand{\missing}[1]{\marginpar[\hfill \colorbox{Red}{\bfseries ! $\longrightarrow$}]{\colorbox{Red}{\bfseries $\longleftarrow$ !}}\textcolor{Red}{\{Fehlt: \emph{#1}\}}}
 \newcommand{\note}[1]{\marginpar[\hfill \colorbox{Orange}{\bfseries ! $\longrightarrow$}]{\colorbox{Orange}{\bfseries $\longleftarrow$ !}}\textcolor{Orange}{\{\emph{#1}\}}}
 
@@ -171,7 +172,7 @@ Sensoren in dem Haushalt sind für den Nutzer sehr praktisch und erhalten eine i
 Es gibt eine große Auswahl von Sensoren, die im Haushalt behilflich sein können. So könnte ein mobiler Temperatursensor an mehreren Stellen eingesetzt werden, um zum Beispiel rechtzeitig den Temperaturanstieg im Kühlschrank zu erkennen oder den zu starken Temperaturabfall in der Sauna. Mit einem Vorwarnsystem kann der Nutzer nun alarmiert werden und rechtzeitig reagieren. \\
 Weiterhin wäre es aber auch interessant, wenn der Nutzer selbst prüfen könnte, ob die gemessenen Daten sich noch so verhalten, wie sie sollten. Ob zum Beispiel die Temperatur im Kühlschrank immer noch konstant 7°C beträgt, oder abnimmt bzw. zunimmt. \\
 Im Rahmen dieses Projektes wurde ein System entwickelt, dass gemessene Daten von Sensoren sammelt, welche im Haus verteilt sein können, und diese in Form von Liniendiagrammen auf einer Webseite anzeigt. Des weiteren wird der Nutzer auf dieser Webseite gewarnt, wenn definierte Bedingungen eintreffen (z.B. die Temperatur sinkt unter 40°C in der Sauna). Dieses Dokument stellt die Idee bis zur Implementierung vor. Dabei wird wie folgt vorgegangen:
-[TODO]
+\todo{edit here}
 
 \section{Projektbeschreibung}\labelSec{abschnitt}
 
@@ -186,7 +187,7 @@ Für dieses System kann man sich eine Reihe von Szenarien überlegen, in der die
 
 \subsubsection{Szenario 1(Kühlschranküberwachung)}
 Es wird ein Sensorboard mit einem Temperatursensor und einen Taster an einer Kühlschranktür befestigt. Durch den Temperatursensor wird die Temperatur im Kühlschrank periodisch gemessen und an den Access Point über das WLAN-Modul geschickt. Durch den Taster am Sensorboard wird registriert, ob die Kühlschranktür geöffnet oder geschlossen ist. Auch diese Daten werden an den Access Point geschickt. \\
-Über den Webbrowser kann der Nutzer sich die gespeicherten Daten der Sensoren ansehen und überwachen. Dabei werden die gemessenen Temperaturen in einem Liniendiagramm und die Werte des Tasters in einer Tabelle angezeigt. Da der Anwender im System eingestellt hat, dass er gewarnt werden möchte, wenn die Temperatur im Kühlschrank über 9°C beträgt, zeigt das System ein Dialogfenster an, sobald der Sensor einen Wert über 9°C misst und an das System schickt. Nun sieht der Benutzer in der Tabelle mit den Einträgen für den Taster (Eventtabelle), dass die Kühlschranktür geöffnet ist und kann rechtzeitig reagieren.
+Über den Webbrowser kann der Nutzer sich die gespeicherten Daten der Sensoren ansehen und überwachen. Dabei werden die gemessenen Temperaturen in einem Liniendiagramm und die Werte des Tasters in einer Tabelle angezeigt. Da der Anwender im System eingestellt hat, dass er gewarnt werden möchte, wenn die Temperatur im Kühlschrank über 9°C beträgt, zeigt das System ein Dialogfenster an, sobald der Sensor einen Wert über 9°C misst und an das System schickt. Nun sieht der Benutzer in der Tabelle mit den Einträgen für den Taster (Event-Tabelle), dass die Kühlschranktür geöffnet ist und kann rechtzeitig reagieren.
 
 
 \subsubsection{Szenario 2(Zimmertemperaturüberwachung)}
@@ -201,42 +202,16 @@ Wird das System weiterentwickelt, so kann man sich vorstellen, dass der Nutzer p
 
 \subsection{Projektvorgehen}
 Für dieses Projekt wurde zum einen ein Sensorboard mit einem Temperatursensor, Feuchtigkeitssensor und G-Sensor zur Verfügung gestellt, welcher im Rahmen dieses Projekts programmiert werden muss. An dem Sensorknoten wurde ein WLAN-Modul abgebracht, welches konfiguriert werden musste.\\
-Die Daten der Sensoren werden über das WLAN-Modul an den Access Point geschickt. Dieser Access Point wurde uns zur Verfügung gestellt. Dieser musste konfiguriert und programmiert werden, da auf diesen der Server läuft, der die Daten speichert. Diese Daten werden für das Frontend zur Verfügung gestellt, welches mit Google Webtoolkit programmiert wurde. 
+Die Daten der Sensoren werden über das WLAN-Modul an den Access Point geschickt. Dieser Access Point wurde uns zur Verfügung gestellt. Dieser musste konfiguriert und programmiert werden, da auf diesen der Server läuft, der die Daten speichert. Diese Daten werden für das Frontend zur Verfügung gestellt, welches mit dem Google Webtoolkit programmiert wurde. 
 
 \section{Architektur}\labelSec{abschnitt}
 Das Software-System besteht aus drei Teilen: 
 \begin{itemize}
 \item Die Sensor-Knoten, welche Events detektieren und verschiedene Größen messen,
-\item das Backend mit Datenbank und Servelets zur Vorverarbeitung und Speicherung der Daten
+\item das Backend mit Datenbank und Servlets zur Vorverarbeitung und Speicherung der Daten
 \item und dem Frontend, welches die Daten für den Benutzer aufbereitet und präsentiert.
 \end{itemize}
-Figur \ref{architecture} verdeutlicht das Zusammenspiel dieser Komponenten. Die Sensoren versenden Nachrichten per HTTP-Request an ein Servelet, welches auf dem Access-Point läuft. Dort werden die Daten vorverarbeitet und in der MYSQL-Datenbank gespeichert. Das Frontend, welches durch Aufruf der IP-Adresse des Access-Point im Browser erreicht werden kann, greift ebenfalls auf die Daten zu und präsentiert diese mit Grafiken und Event-Listen. 
-
-\subsection{Modellierung}
-Für die Modellierung der Daten wurden folgende Typen identifiziert: 
-\begin{itemize}
-\item 
-\textbf{Property}: Regelmäßig gemessener Wert (temp, humid)
-\item 
-\textbf{Trigger}: Vom Benutzer festgelegtes Verhalten beim
-Erfüllen einer Bedingung (Event schicken, Aktion
-ausführen)
-\item 
-\textbf{Event}: Spontanes Ereignis eines Sensors (Schalter
-offen) oder ausgelöster Trigger (kann
-Benachrichtigung im Browser auslösen)
-\item 
-\textbf{Action}: Aktion die ausgeführt wird
-\end{itemize}
-\paragraph{Property}
-\paragraph{Trigger}
-
-\paragraph{Event}
-
-\paragraph{Action}
-
-
-
+Figur \ref{architecture} verdeutlicht das Zusammenspiel dieser Komponenten. Die Sensoren versenden Nachrichten per HTTP-Request an ein Servlet, welches auf dem Access Point läuft. Dort werden die Daten vorverarbeitet und in der MYSQL-Datenbank gespeichert. Das Frontend, welches durch Aufruf der IP-Adresse des Access Point im Browser erreicht werden kann, greift ebenfalls auf die Daten zu und präsentiert diese mit Grafiken und Event-Listen. 
 
 \begin{figure}[htbp]
    \centering
@@ -245,40 +220,72 @@ Benachrichtigung im Browser auslösen)
    \label{architecture}
 \end{figure}
 
+\subsection{Modellierung}
+Für die Modellierung der Daten wurden folgende Typen identifiziert: 
+\begin{itemize}
+\item 
+\textbf{Property}: Regelmäßig gemessener Wert, wie z.B. Temperatur oder Luftfeuchtigkeit
+\item 
+\textbf{Trigger}: Vom Benutzer festgelegtes Verhalten beim
+Erfüllen einer Bedingung
+\item 
+\textbf{Event}: Spontanes Ereignis eines Sensors oder eines ausgelöster Trigger
+\item 
+\textbf{Action}: Aktion die bei einem Event ausgeführt wird
+\end{itemize}
+
+\paragraph{Eine Property} beschreibt einen regelmäßig von einem Sensor gemessenen Wert. Der bei diesem Projekt eingesetzte Sensor-Knoten \ref{sec:sensor} misst Temperatur, Luftfeuchtigkeit und Lage im Raum. Das System kann aber leicht auf weitere Properties, wie z.B. Rotation mit einem Gyroskop, oder Koordinaten eines GPS-Senders erweitert werden. 
+\paragraph{Ein Trigger} definiert eine Regel, die auf Properties angewandt wird. Z.B. Überschreitung oder Unterschreitung eines Messwertes. Diese Trigger wurden in dem Software-System implementiert. Weitere Trigger könnten Vergleiche auf bestimmte Referenzwerte sein, Zeitabstand der Messwerte, Bereichs-Überprüfung, Auswertung mit komplizierteren Formeln, Anwendung von (Kalman-)Filtern  und vieles mehr. 
+\paragraph{Ein Event} beschreibt einen Zeitpunkt zu dem etwas Bestimmtes passiert ist. Zum Beispiel ein Knopfdruck am Sensor oder aber das Auslösen eines Triggers. Dabei kann ein Trigger auch viele verschiedene Ereignisse auslösen. Weitere Events, die in diesem Projekt aber nicht implementiert wurden, sind z.B. Zeit-Ticks, Events von externen Generatoren (SMS, Mail, ...) oder manuelles Erstellen eines Events durch einen Benutzer.
+
+\paragraph{Eine Action} besteht aus Programm-Code, welcher ausgeführt wird, sobald ein Event eintritt. Diese Actions können weitere Events generieren, den Benutzer benachrichtigen oder beliebige Aktionen durchführen. Dabei kann unterschieden werden, zwischen Code, welcher auf dem Server ausgeführt wird oder aber beim Client im Browser. In diesem Projekt wurden zu Demonstrationszwecken zwei Aktionen implementiert: Zum einen eine serverseitige sysout-Benachrichtigung, zum anderen ein Dialogfenster, welches beim Client im Browser angezeigt wird. 
 
 \section{Verwendetet Technologien} \labelSec{abschnitt}
 \subsection{Linux Voyage \cite{voyage}} 
 Als Betriebssystem für unseren Access Point haben wir uns für Voyage entschieden. Linux Voyage ist eine abgespeckte Version von Linux Debian, die für Access Points, Asterisk/VoIP Gateway und sonstigen Geräten geschrieben wurde. Da wir auf dem Access Point eine Flashkarte von 8 GB zur Verfügung hatten, war sich dieses Betriebssystem besonders gut geeignet, da es sehr  klein ist (128MB). Des weiteren sind alle wichtigen Treiber schon enthalten, welche wir für die WLAN Karte lediglich aktivieren mussten. \\
-Ein weiterer Vorteil ist, dass weitere Software wie gewohnt über die Konsole installiert werden kann. So konnten wir recht einfach MySQL und Tomcat installieren.
+Ein weiterer Vorteil ist, dass weitere Software wie gewohnt über die Konsole installiert werden kann. So konnten wir ohne weitere Umstände MySQL und Tomcat installieren.
 
 \subsection{GWT \cite{gwt}}
-Google Web Toolkit ist eine Entwicklungsumgebung zur Entwicklung von Webseiten. Der Client-Code wird in Java geschrieben und das GWT-Framework generiert daraus dann web-freundliches Javascript. So kann man möglichst einfach komplexe Webseiten entwickeln und hat eine einfach Anbindung an das Backend gegeben. \\
+Google Web Toolkit ist ein Toolkit zur Entwicklung und Optimierung von Browser-basierten Anwendungen \cite{gwt}. Der Code wird dabei vom Entwickler in Java geschrieben und anschließend vom GWT-Compiler in Javascript-Code umgewandelt. \\
 Die Vorteile bei GWT sind:
 \begin{itemize}
  \item Browser-Kompatibilität
- \item Besseres debuggen, da sich Javacode besser debuggen lässt
- \item einfacheres entwickeln, wenn man nicht Javascript kann
+ \item Testen in Java (Unit-Tests sind auch möglich)
+ \item Entwickler benötigt keine Javascript Kenntnisse, da der Code in Java geschrieben wird
  \item viele Zusatz-Frameworks (z.B. Smart GWT)
+ \item umfangreiche Dokumentation und Beispielanwendungen
 \end{itemize}
 
-Der Nachteil an GWT ist, dass es relativ komplex ist und es muss sich erst eingearbeitet werden um zu verstehen, an welchen Stellen im Code Änderungen vorgenommen werden müssen. Dafür gibt es allerdings eine Menge Tutorials, die weiter helfen. \\
-GWT war für unser Projekt sehr hilfreich, da die Webseite abhängig von dem Backend aufgebaut wurde und durch GWT-RPC eine einfache Anbindung an das Backend (unsere Datenbank) gegeben war. \\
+Man muss allerdings erst den Aufbau von GWT verstehen, was am Anfang sehr aufwendig sein kann. So ist dieses Framework nicht unbedingt bei kleinen Anwendung zu empfehlen. \\
+GWT war für unser Projekt sehr hilfreich, da die Webseite abhängig von dem Backend aufgebaut wurde und durch GWT-RPC eine einfache Anbindung an das Backend gegeben war.\\
 \newline
-Im Rahmen dieses Projektes wurde GWT als Plugin für Eclipse verwendet. Dies lässt sich sehr leicht installieren... [TODO]
+Im Rahmen dieses Projektes wurde GWT als Plugin für Eclipse verwendet. Der Link für das Plugin ist der folgende: \cite{gwtplugin}.
 
 \subsection{Smart GWT}
 Smart GWT ist ein Framework, welches, basierend auf GWT, eine Vielzahl von Erweiterungen der Oberfläche anbietet. Da es viele Widgets anbietet, die GWT nicht besitzt, wurde es für dieses Projekt verwendet.\\
 Dabei bietet Smart GWT über die Showcases (hier ein Link: \cite{smartgwt}) viele Codeschnipsel, die die Entwicklung  einfach gestalten. Des weiteren lässt sich Smart GWT sehr leicht in den Code einbinden. Der Nutzer lädt lediglich Jars herunter, die eingebunden werden müssen. \\
-Der Nachteil von Smart GWT ist allerdings, dass man die Komponenten nicht mit Komponenten von GWT kombinieren sollte (also zum Beispiel sollte man keine Smart GWT Buttons in Layouts von GWT involvieren), da dies zu unerwarteten Effekten führen kann.
-[TODO: installation]
+Der Nachteil von Smart GWT ist allerdings, dass man die Komponenten nicht mit Komponenten von GWT kombinieren sollte (also zum Beispiel sollte man keine Smart GWT Buttons in Layouts von GWT involvieren), da dies zu unerwarteten Effekten führen kann.\\
+\newline
+Möchte man Smart GWT nutzen, so muss die Jar-Datei (unter: \cite{smartgwtdown}) heruntergeladen werden und in den „Build Path“ eingebunden werden.\\
+In der Datei „*.gwt.xml“ \footnote{steht f"ur den Namen des Web Application Projekts} muss nun noch die folgende Zeile eingefügt werden:
+
+\lstset{language=HTML}
+\begin{lstlisting}
+<inherits name="com.smartgwt.SmartGwt"/>
+\end{lstlisting}
 
 \subsection{Charts von Google}
 Google Visualization bietet viele Möglichkeiten, Charts und Tabellen in GWT zu erstellen. Dabei werden die Charts in Javascript geschrieben. Allerdings bietet Google auch ein Jar für GWT-Dateien an, so das an dieser Stelle der Programmierer Java-Code schreiben kann. \\
 Um ein Chart zu erstellen, muss der Nutzer lediglich eine Datentabelle (DataTable) von Google erstellen und dabei die Formate der Eingabedaten festlegen. Diese Daten werden dem gewünschten Chart mitgegeben und dieser wird auf der Oberfläche dargestellt. Alles weitere wird mitgeliefert wie zum Beispiel die „Clickevents“, oder die dynamische Größenanpassung der Charts an die Menge der Daten.\\
-Aber auch hier ist der Nachteil, dass man Charts von Google nicht einfach mit Smart GWT Elementen kombinieren kann, dafür aber mit GWT Elementen.
+Aber auch hier ist der Nachteil, dass man Charts von Google nicht einfach mit Smart GWT Elementen kombinieren kann, dafür aber mit GWT Elementen.\\
+\newline
+Um Google Charts nutzen zu können, muss man die Jar-Datei (unter: \cite{charts}) herunterladen und in das Projekt im „Build Path“ einbinden. In der Datei „*.gwt.xml“ muss nun die folgende Zeile eingefügt werden.
+\lstset{language=HTML}
+\begin{lstlisting}
+<inherits name='com.google.gwt.visualization.Visualization'/>
+\end{lstlisting}
 
-
-\section{Sensor-Knoten}
+\section{Sensor-Knoten} \label{sec:sensor}
 Der verwendete Sensor-Knoten basiert auf dem MSB430H-Board. Es enthält mehrere Sensoren. Diese sind der SHT11-Sensor , welcher die Temperatur und Luftfeuchtigkeit misst und der MMA 7260Q G-Sensor, 
 mit dem die relative Lage des Sensor-Knotens im Raum festgestellt werden kann. Der Sensor-Knoten wurde mit dem WLAN-Modul RN-134 der Firma Roving Networks über die UART-Schnittstelle fest verlötet. 
 Die Kommunikation zwischen dem programmierbaren Board und dem WLAN-Modul erfolgt also über die serielle Schnittstelle. An dieser Schnittstelle wurde ein Kipp-Schalter und  ein serielles Kabel angebracht, 
@@ -305,8 +312,8 @@ Das Zurücksetzen hat ebenfalls den Vorteil, dass das Modul nicht vor dem ersten
 
 
 \subsection{Programmierung des Sensor-Knotens}
-Für die Programmierung des Sensor-Knotens wurde der Code Composer  [TODO: INSERT REAL NAME HERE] verwendet. Die Programmiersprache ist ein C-Dialekt, welcher fast alle Funktionen des Standards bereit stellt. \\
-Das Programm des Sensor-Knotens besteht aus zwei Teilen: Zuerst wird eine Initalisierungs-Phase durchlaufen in der Interrupts angeschaltet werden, nötiger Speicher allociiert und das WLAN-Modul konfiguriert wird. Danach beginnt eine Endlos-Schleife, die das „Betriebssystem“ darstellt. 
+Für die Programmierung des Sensor-Knotens wurde der Code Composer Essentials Professional (Version: CCE v3.1, Build: 3.2.4.3.8)  verwendet. Die Programmiersprache ist ein C-Dialekt, welcher fast alle Funktionen des Standards bereit stellt. \\
+Das Programm des Sensor-Knotens besteht aus zwei Teilen: Zuerst wird eine Initalisierungs-Phase durchlaufen in der Interrupts angeschaltet werden, nötiger Speicher alloziert und das WLAN-Modul konfiguriert wird. Danach beginnt eine Endlos-Schleife, die das „Betriebssystem“ darstellt. 
 In dieser Schleife werden die Sensor-Werte ermittelt und dann per WLAN verschickt.
 
 \subsubsection{Initialisierung}
@@ -319,7 +326,7 @@ Bei der Initialisierung werden folgende Schritte chronologisch ausgeführt:
  \item Einschalten der Interrupts für die beiden Taster, Freigeben der Interrupts und  Aktivierung der Interrupt-Routinen
  \item Zurücksetzen des WLAN-Moduls in den Auslieferungszustand
  \item Setzen von WLAN-SSID, Passwort und anderen Parametern
- \item Verbindungsaufbau mit dem Access-Point und einrichten der TCP-Verbindung zum Tomcat-Server
+ \item Verbindungsaufbau mit dem Access Point und einrichten der TCP-Verbindung zum Tomcat-Server
 \end{itemize}
 Dann tritt das System in die zweite Phase ein.
 
@@ -336,17 +343,35 @@ Das „Betriebsystem“ besteht aus einer Endlos-Schleife, in der folgende Aktio
 \subsubsection{Tastendruck}
 Die Erkennung eines Tastendrucks geschieht in dem in der Initialisierung definierten Interrupt. Dort wird direkt beim Interrupt und 0.5 Sekunden nach dem Auslösen gemessen, welcher Taster gedrückt wurde und dann beide Messungen logisch verodert. Damit können wir mit einem Interrupt ebenfalls feststellen, falls beide Taster gleichzeitig gedrückt wurden. Weiterhin kann damit ausgeschlossen werden, dass die analog gemessene Größe am Anfang noch etwas flackert und eventuell beim ersten Auslesen den falschen Wert liefert. Danach wird ein GET-Request für das Taster-Event erstellt und in die Warteschlange eingereiht. Beim nächsten Durchlauf der Betriebssystem-Schleife wird dieser Request dann ebenfalls mit verschickt. Die Auflösung der Tasten-Events ist damit gleich einem Schleifendurchlauf, der bei durchschnittlich 3 Sekunden, maximal bei 7 Sekunden (Trennen und neuer Aufbau der Verbindung) liegt. 
 
-\section{Backend}
-Das Backend des Projekts nimmt die von Sensoren gemessenen Größen entgegen, verarbeitet diese Daten vor, speichert sie und gibt bei Bedarf Zugriff darauf. Es ist in zwei Teile aufgeteilt.  
+\section{Backend}\label{sec:backend}
+Das Backend des Projekts nimmt die von Sensoren gemessenen Größen entgegen, verarbeitet diese Daten vor, speichert sie und gibt bei Bedarf Zugriff darauf. Es ist in zwei Teile aufgeteilt. Zuerst wird dabei auf die Daten-Verarbeitung eingegangen, welche in einem Java-Servlet auf dem Tomcat-Server läuft, und danach auf die Bereitstellung der Daten für das GWT-Frontend \ref{sec:frontend} mittels GWT-RPC.
+
+\subsection{Datenbank-Zugriff}
+Um bequemen Zugriff auf die Datenbank zu erhalten, benutzen wir spezielle Proxy-Klassen, welche die MYSQL-Datenbank in Klassen abstrahiert. Damit wir diese Klassen nicht selbst schreiben mussten (das dazugehörige Entwurfsmuster heißt DAO - DataAccessObjects in Kombination mit DTO - DataTransferObjects), haben wir einen DAO-Generator benutzt, welcher ein gegebenes SQL-Schema interpretiert und dann daraus Java-Klassen generiert. Der Generator, den wir benutzt haben, hieß FireStormDAO 4.0.1. \todo{ Wollen wir Code-Beispiele?}
 
 \subsection{Daten-Verarbeitung}
-\paragraph{Event-Erkennung}
-\paragraph{Auswertung der HTTP-GET-Requests}
+Die Daten-Verarbeitung besteht aus drei Dingen : 
+\paragraph{Bei der Auswertung der HTTP-GET-Requests} wird zuerst der Typ der gesendeten Daten überprüft. Dieser Typ ist in dem Parameter \textit{action} gespeichert. Anhand dieses Parameters wird dann entschieden, welche Methode zur Verarbeitung aufgerufen wird. Im Moment gibt es zwei zuständige Methoden: doKeyEvent und doProperty (Die Namensgebung orientiert sich an dem Servlet-Interface).\\
+Die doKeyEvent-Methode speichert den Zeitpunkt des Events zusammen mit dem gedrückten Knopf (1: schwarz, 2: gelb, 3: beide) in der Datenbank ab. Danach wird die handleEvent-Methode zur Abarbeitung eventueller Aktionen bei einem Key-Event aufgerufen. (s.u.)\\
+Die doProperty-Methode extrahiert die gemessenen Werte aus dem GET-Request. Im Moment sind diese Werte Temperatur, Feuchtigkeit und Lage im Raum (2 Werte). Zuerst müssen die Werte erneut gerundet werden, da die Floating-Point-Unit des Sensor-Knotens nicht besonders genau ist. Dann wird jeder einzelne Wert mit Zeitstempel und einer Referenz auf den sendenden Knoten in der Datenbank abgelegt. 
+
+\paragraph{Die Event-Erkennung} wird direkt im Anschluss gestartet. Hierbei werden die Trigger für den entsprechenden Sensor-Knoten und die dazugehörige Property geladen und dann verglichen, ob die Property den definierten Schwellwert $s$ des Triggers überschreitet. Abbildung \ref{event-detection} verdeutlicht unseren Mechanismus: Der im Trigger definierte Wert von 30°C (schwarze Linie) wurde überschritten. Bei der Ankunft des ersten gemessenen Wertes, der $s$ übertrifft, wird vom Backend ein Start-Event generiert. Dieses bedeutet, dass der Schwellwert überschritten wurde. Damit ein Zittern um den Schwellwert herum ausgeschaltet werden kann, haben wir einen zweiten Schwellwert eingestellt (rote Linie). Dieser liegt um $\Delta$ verschoben in Richtung des normalen Wertebereiches, also bei einem Trigger für Wert-Überschreitung bei $s - \Delta$.
+Wird dieser zweite Schwellwert wieder unterschritten, so wird ein Stop-Event generiert. 
+
+\begin{figure}[htbp]
+   \centering
+   \includegraphics[width=12cm]{fig/threshold.png}
+   \caption{Event-Erkennung mit Thresholds}
+   \label{event-detection}
+\end{figure}
+\missingfigure{die Grafik sollte neu gemacht, das Delta hinzugefügt und in höherer auflösung gespeichert werden }
+
+\paragraph{Das Event-Handling} wird nach jeder Event-Generation gestartet. Dabei wird überprüft, welche Actions für diesen Event-Typ registriert sind und führt diese aus. Es wird zwischen serverseitigen Aktionen und clientseitigen Aktionen unterschieden. Damit könnte das System mit anderen Komponenten gekoppelt werden, z.B. eine Benachrichtigung per SMS, E-Mail oder eben ein clientseitiger Alarm/Notifikation.
+
+\subsection{Daten-Bereitstellung}Die Daten-Bereitstellung für das Frontend geschieht mit GWT-RPC. Eine genauere Erklärung findet sich in Abschnitt \ref{ssec:aufbau}. Die bereitgestellten Methoden dienen der Abfrage der Datenbank und lassen außerdem Manipulationen zu. Hier wird starker Gebrauch von den DataAccessObjects gemacht. \todo{Beispiel-Code?}
 
 
-\subsection{Daten-Bereitstellung}
-
-\section{Frontend}
+\section{Frontend}\label{sec:frontend}
 Die Sensoren, die im Haushalt verteilt sind, schicken die gemessenen Daten an den Access Point. Nun müssen diese Daten in geeigneter Weise aufbereitet werden und dem Nutzer zur Verfügung gestellt werden. Hierfür wurde eine Webseite gebaut, welche die gemessenen Daten in Diagrammen darstellen. \\
 In diesem Kapitel wird dieses Frontend vorgestellt und beschrieben.
 
@@ -360,11 +385,11 @@ Eine weitere Anforderung an das System war es, dass der Standort eines Sensors b
 Alle diese Anforderungen sind für die leichte Bedienbarkeit der Oberfläche und wurde in diesem System umgesetzt.
 
 \subsection{Projektaufbau}
-
+\label{ssec:aufbau}
 Da für dieses Projekt GWT genutzt wurde, war der Aufbau des Frontends zum Teil durch die Struktur von GWT vorgegeben. \\
 Unter dem Ordner „src/de/berlin/fu/client“ befindet sich die Datei „TelproGWT.java“ in der man Hauptteil des Frontends findet. In der Datei „TelproGWT.gwt.xml“, welche man in dem Verzeichnis „src/de/berlin/fu/berlin“ findet, wird definiert welche onModuleLoad-Methode welcher Klasse (in unserem Fall TeproGWT) aufgerufen werden soll. \\
-Eine wichtiges Interface in diesem Projekt ist das Service-Interface„MyServer.java“, welche sich in dem Ordner „src/de/berlin/fu/shared“ findet. Diese gibt vor, welche Methoden von der Clientseite genutzt werden können und somit mit der Backendseite kommunizieren. Damit nun die Clientseite die Methoden der Serverseite nutzen kann, muss ein sogenanntes Async-Interface implementiert werden. Dieses befindet sich auch in dem Ordner „src/de/berlin/fu/shared“ und heißt „MyServerAsync.java“. Es wird ein asynchrones Interface definiert, da man vermeiden möchte, dass die Anwendung beim Aufruf der Methoden der Serverseite einfriert und der Anwender warten muss. Google Webtoolkit gibt diese Art von Interface beim GWT-RPC immer vor. In der Klasse, welche die Benutzeroberfläche implementiert, wird dieses Async-Interface initialisiert. 
-In den anderen Packages befindet sich die Implementation der Backendseite, welche in dem Kapitel Backend [TODO REF] näher erläutert wird.
+Eine wichtiges Interface in diesem Projekt ist das Service-Interface „MyServer.java“, welches sich in dem Ordner „src/de/berlin/fu/shared“ findet. Dieses gibt vor, welche Methoden von der Clientseite genutzt werden können um mit dem Backend zu kommunizieren. Damit nun die Clientseite die Methoden der Serverseite nutzen kann, muss ein sogenanntes Async-Interface erstellt werden. Dieses befindet sich auch in dem Ordner „src/de/berlin/fu/shared“ und heißt „MyServerAsync.java“. Es wird ein asynchrones Interface definiert, da man vermeiden möchte, dass die Anwendung beim Aufruf der Methoden der Serverseite einfriert und der Anwender warten muss. Google Webtoolkit gibt diese Art von Interface beim GWT-RPC immer vor. In der Klasse, welche die Benutzeroberfläche implementiert, wird dieses Async-Interface initialisiert. 
+In den anderen Packages befindet sich die Implementation der Backendseite, welche in dem Kapitel \ref{sec:backend} (Backend) näher erläutert wird.
 
 
 \subsection{Code}
@@ -377,8 +402,48 @@ Durch GWT können nicht nur Oberflächenelemente eingefügt werden, sondern auch
 \subsection{Screenshots}
 
 Um einen Überblick über das Interface zu bekommen, sollen hier einige Screenshots gezeigt  werden.   
+\begin{description}
+\item[Abbildung \ref{screen1}:] Auswahl der Sensoren in einer Drop-down-Box. 
+\item[Abbildung \ref{screen2}:] Wurde ein Sensor ausgewählt, so wird diese Ansicht angezeigt. Oben rechts befinden sich die Sensorinformationen, welche man bearbeiten kann. In der Mitte findet man die Einstellungsmöglichkeiten für Ansicht der Diagramme. Zum einen kann die Anzahl der Punkte in dem Diagramm eingestellt werden, zum anderen wie viele Punkte übersprungen werden sollen („spreading factor“).
+\item[Abbildung \ref{screen3}:] Das ist die Eventliste-Ansicht. Die Einstellungsmöglichkeiten für die Diagramme sind ausgestellt.
+\item[Abbildung \ref{screen4}:] Diese Ansicht wird gezeigt, wenn der Nutzer auf Bearbeiten des Sensorknotens klickt. Der Ort des Sensors kann bearbeitet werden, die IP und die ID allerdings nicht.
+\end{description}
+
+\begin{figure}[htbp]
+   \centering
+   \includegraphics[width=12cm]{fig/screen1.png}
+   \caption{Screenshot}
+   \label{screen1}
+\end{figure}
+
+\begin{figure}[htbp]
+   \centering
+   \includegraphics[width=12cm]{fig/screen2.png}
+   \caption{Screenshot}
+   \label{screen2}
+\end{figure}
+
+\begin{figure}[htbp]
+   \centering
+   \includegraphics[width=12cm]{fig/screen3.png}
+   \caption{Screenshot}
+   \label{screen3}
+\end{figure}
+
+\begin{figure}[htbp]
+   \centering
+   \includegraphics[width=12cm]{fig/screen4.png}
+   \caption{Screenshot}
+   \label{screen4}
+\end{figure}
   
-\section{Ausblick} \labelSec{ausblick}
+\section{Zusammenfassung und Ausblick} \labelSec{ausblick}
+Ziel dieses Projektes war es für uns, sich mit verschiedenen Technologien zu befassen und verschiedene Ebenen der Programmierung zu benutzen. Wir haben Konzepte von administrativen Dingen, wie MYSQL-Datenbanken, Linux und Tomcat-Servern, über die hardwarenahe Programmierung und Arbeit mit externen Hardware-Modulen (WLAN) bis hin zu hochsprachigen Web-Plattformen, welche viele Dinge abstrahieren, aber auch neue Schwierigkeiten bereiten, erlernt und zum ersten Mal viele kleine Systeme zu einem großen Ganzen zusammengefügt. Der entstandene Prototyp ist so sicher nicht praktikabel, allerdings haben wir so weit, wie möglich, die Erweiterbarkeit in den Vordergrund gestellt, sodass es leicht zu einem simplen Home-Automatisation-Framework werden kann. Wir haben im Verlauf des Projekts viele Erfahrungen gesammelt, von denen wir einige hier beschreiben wollen.
+\subsection{Erfahrungen}
+\todo{insert stuff here}
+\subsection{Erweiterungen}
+Abschließend wollen wir aufzeigen, welche Erweiterungen interessant für das System wären. 
+\todo{teilweise siehe architektur, sonst blablabla}
 
 \clearpage
 
