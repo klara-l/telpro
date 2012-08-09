@@ -171,8 +171,8 @@ Hier ein kleine Zusammenfassung
 Sensoren in dem Haushalt sind für den Nutzer sehr praktisch und erhalten eine immer größer werdende Bedeutung. So hat fast jeder Haushalt mindestens einen Sensor für die Innen- oder Außentemperatur. \\
 Es gibt eine große Auswahl von Sensoren, die im Haushalt behilflich sein können. So könnte ein mobiler Temperatursensor an mehreren Stellen eingesetzt werden, um zum Beispiel rechtzeitig den Temperaturanstieg im Kühlschrank zu erkennen oder den zu starken Temperaturabfall in der Sauna. Mit einem Vorwarnsystem kann der Nutzer nun alarmiert werden und rechtzeitig reagieren. \\
 Weiterhin wäre es aber auch interessant, wenn der Nutzer selbst prüfen könnte, ob die gemessenen Daten sich noch so verhalten, wie sie sollten. Ob zum Beispiel die Temperatur im Kühlschrank immer noch konstant 7°C beträgt, oder abnimmt bzw. zunimmt. \\
-Im Rahmen dieses Projektes wurde ein System entwickelt, dass gemessene Daten von Sensoren sammelt, welche im Haus verteilt sein können, und diese in Form von Liniendiagrammen auf einer Webseite anzeigt. Des weiteren wird der Nutzer auf dieser Webseite gewarnt, wenn definierte Bedingungen eintreffen (z.B. die Temperatur sinkt unter 40°C in der Sauna). Dieses Dokument stellt die Idee bis zur Implementierung vor. Dabei wird wie folgt vorgegangen:
-\todo{edit here}
+Im Rahmen dieses Projektes wurde ein System entwickelt, dass gemessene Daten von Sensoren sammelt, welche im Haus verteilt sein können, und diese in Form von Liniendiagrammen auf einer Webseite anzeigt. Des weiteren wird der Nutzer auf dieser Webseite gewarnt, wenn definierte Bedingungen eintreffen (z.B. die Temperatur sinkt unter 40°C in der Sauna). Dieses Dokument stellt die Idee bis zur Implementierung vor. Dabei wird wie folgt vorgegangen:\\
+Im nächsten Kapitel wird beschrieben, was das Ziel des Projekts war und wie vorgegangen wurde. In Kapitel 3 wird die Architektur des Projekts erklärt und im besonderen auf die Modellierung eingegangen. In den nächsten 3 Kapiteln wird die Implementierung erklärt, wobei diese in Sensor-Knoten, Backend und Frontend eingeteilt wurden. Am Ende der Dokumentation wird darauf eingegangen, wie man das Projekt erweitern kann und was für Erfahrungen damit gemacht wurden.
 
 \section{Projektbeschreibung}\labelSec{abschnitt}
 
@@ -211,7 +211,7 @@ Das Software-System besteht aus drei Teilen:
 \item das Backend mit Datenbank und Servlets zur Vorverarbeitung und Speicherung der Daten
 \item und dem Frontend, welches die Daten für den Benutzer aufbereitet und präsentiert.
 \end{itemize}
-Figur \ref{architecture} verdeutlicht das Zusammenspiel dieser Komponenten. Die Sensoren versenden Nachrichten per HTTP-Request an ein Servlet, welches auf dem Access Point läuft. Dort werden die Daten vorverarbeitet und in der MYSQL-Datenbank gespeichert. Das Frontend, welches durch Aufruf der IP-Adresse des Access Point im Browser erreicht werden kann, greift ebenfalls auf die Daten zu und präsentiert diese mit Grafiken und Event-Listen. 
+Figur \ref{architecture} verdeutlicht das Zusammenspiel dieser Komponenten. Die Sensoren versenden Nachrichten per HTTP-Request an ein Servlet, welches auf dem Access Point läuft. Dort werden die Daten vorverarbeitet und in der MySQL-Datenbank gespeichert. Das Frontend, welches durch Aufruf der IP-Adresse des Access Point im Browser erreicht werden kann, greift ebenfalls auf die Daten zu und präsentiert diese mit Grafiken und Event-Listen. 
 
 \begin{figure}[htbp]
    \centering
@@ -220,7 +220,7 @@ Figur \ref{architecture} verdeutlicht das Zusammenspiel dieser Komponenten. Die 
    \label{architecture}
 \end{figure}
 
-\subsection{Modellierung}
+\subsection*{Modellierung}
 Für die Modellierung der Daten wurden folgende Typen identifiziert: 
 \begin{itemize}
 \item 
@@ -236,7 +236,6 @@ Erfüllen einer Bedingung
 
 \paragraph{Eine Property} beschreibt einen regelmäßig von einem Sensor gemessenen Wert. Der bei diesem Projekt eingesetzte Sensor-Knoten \ref{sec:sensor} misst Temperatur, Luftfeuchtigkeit und Lage im Raum. Das System kann aber leicht auf weitere Properties, wie z.B. Rotation mit einem Gyroskop, oder Koordinaten eines GPS-Senders erweitert werden. 
 \paragraph{Ein Trigger} definiert eine Regel, die auf Properties angewandt wird. Z.B. Überschreitung oder Unterschreitung eines Messwertes. Diese Trigger wurden in dem Software-System implementiert. Weitere Trigger könnten Vergleiche auf bestimmte Referenzwerte sein, Zeitabstand der Messwerte, Bereichs-Überprüfung, Auswertung mit komplizierteren Formeln, Anwendung von (Kalman-)Filtern  und vieles mehr. 
-
 \paragraph{Ein Event} beschreibt ein Vorkommnis eines bestimmten Event-Typs zu einem  Zeitpunkt. Ein Event-Typ kann ein Knopfdruck am Sensor oder aber das Auslösen eines Triggers sein. Dabei kann ein Trigger auch viele verschiedene Event-Typen auslösen. Weitere Event-Typen, die in diesem Projekt aber nicht implementiert wurden, sind z.B. Zeit-Ticks, Events von externen Generatoren (SMS, Mail, ...) oder manuelles Erstellen eines Events durch einen Benutzer.
 
 \paragraph{Eine Action} besteht aus Programm-Code, welcher ausgeführt wird, sobald ein Event eintritt. Diese Actions können weitere Events generieren, den Benutzer benachrichtigen oder beliebige Aktionen durchführen. Dabei kann zwischen Actions unterschieden werden, welche auf dem Server ausgeführt werden oder aber beim Client im Browser. In diesem Projekt wurden zu Demonstrationszwecken zwei Aktionen implementiert: Zum einen eine serverseitige Konsolen-Benachrichtigung, zum anderen ein Dialogfenster, welches beim Client im Browser angezeigt wird. 
@@ -276,8 +275,8 @@ In der Datei „*.gwt.xml“ \footnote{steht f"ur den Namen des Web Application 
 \end{lstlisting}
 
 \subsection{Charts von Google}
-Google Visualization bietet viele Möglichkeiten, Diagramme und Tabellen in GWT zu erstellen. Dabei werden die Diagramme in Javascript geschrieben. Allerdings bietet Google auch ein Jar-Archiv für GWT-Projekte an, sodass an dieser Stelle der Programmierer Java-Code schreiben kann. \\
-Um ein Diagramm zu erstellen, muss der Entwickler eine Datentabelle (DataTable) erstellen und dabei die Formate der Eingabedaten festlegen. Diese Daten werden dem gewünschten Diagramm übergeben und es wird auf der Oberfläche dargestellt. Alles weitere wird mitgeliefert wie zum Beispiel die „Clickevents“, oder die dynamische Größenanpassung des Diagramms an die Menge der Daten.\\
+Google Visualization bietet viele Möglichkeiten, Charts und Tabellen in GWT zu erstellen. Dabei werden die Charts in Javascript geschrieben. Allerdings bietet Google auch ein Jar für GWT-Dateien an, so das an dieser Stelle der Programmierer Java-Code schreiben kann. \\
+Um ein Chart zu erstellen, muss der Nutzer lediglich eine Datentabelle (DataTable) von Google erstellen und dabei die Formate der Eingabedaten festlegen. Diese Daten werden dem gewünschten Chart mitgegeben und dieser wird auf der Oberfläche dargestellt. Alles weitere wird mitgeliefert wie zum Beispiel die „Clickevents“, oder die dynamische Größenanpassung der Charts an die Menge der Daten.\\
 Aber auch hier ist der Nachteil, dass man Charts von Google nicht einfach mit Smart GWT Elementen kombinieren kann, dafür aber mit GWT Elementen.\\
 \newline
 Um Google Charts nutzen zu können, muss man die Jar-Datei (unter: \cite{charts}) herunterladen und in das Projekt im „Build Path“ einbinden. In der Datei „*.gwt.xml“ muss nun die folgende Zeile eingefügt werden.
@@ -307,7 +306,7 @@ Das WLAN-Modul verschickt einen festgelegten String (Default: „*HELLO* “) be
 
 \subsection{Konfiguration des WLAN-Moduls}
 Bei jedem Start des Sensor-Knotens muss das WLAN-Modul in einen wohldefinierten Zustand gebracht werden. Da beim Booten des Knotens nur schwer verifiziert werden kann, 
-ob alle Einstellungen korrekt vorgenommen sind, haben wir uns dafür entschieden, dass das WLAN-Modul bei jedem Start auf die Fabrikeinstellungen  zurück gesetzt und dann neu konfiguriert wird. 
+ob alle Einstellungen korrekt vorgenommen wurden, haben wir uns dafür entschieden, dass das WLAN-Modul bei jedem Start auf die Fabrikeinstellungen  zurück gesetzt und dann neu konfiguriert wird. 
 Dies ist nötig, da beim Programmieren der Sensor-Knoten zwar neu gestartet, beim Debuggen die Stromversorgung des WLAN-Moduls aber nicht unterbrochen wurde und es so in einem beliebigen Zustand sein könnte. 
 Das Zurücksetzen hat ebenfalls den Vorteil, dass das Modul nicht vor dem ersten Betrieb explizit initiiert werden muss, allerdings dauert jeder Boot-Vorgang etwas länger. Insgesamt jedoch werden bereits ca. 10 Sekunden nach dem Einschalten die ersten Sensor-Werte gesendet. 
 
@@ -333,7 +332,7 @@ Dann tritt das System in die zweite Phase ein.
 
 \subsubsection{Betriebssystem}
 
-Das Betriebssystem besteht aus einer Endlos-Schleife, in der folgende Aktionen ausgeführt werden:
+Das „Betriebssystem“ besteht aus einer Endlos-Schleife, in der folgende Aktionen ausgeführt werden:
 \begin{itemize}
  \item Überprüfung, ob bereits 20 Abfragen gesendet wurden; ggf. Trennung und erneuter Aufbau der TCP-Verbindung (der Server würde die Verbindung nach ca. 5 Minuten trennen)
  \item Auslesen der Sensoren, Aufbereitung der gelesenen Werte und Speicherung des Requests in einer Warteschlange, welche alle zu sendenden GET-Anfragen enthält
@@ -342,21 +341,21 @@ Das Betriebssystem besteht aus einer Endlos-Schleife, in der folgende Aktionen a
 \end{itemize}
 
 \subsubsection{Tastendruck}
-Die Erkennung eines Tastendrucks geschieht in dem in der Initialisierung definierten Interrupt. Dort wird direkt beim Interrupt und 0.5 Sekunden nach dem Auslösen gemessen, welcher Taster gedrückt wurde und dann beide Messungen logisch verodert. Damit können wir mit einem Interrupt ebenfalls feststellen, falls beide Taster gleichzeitig gedrückt wurden. Weiterhin kann damit ausgeschlossen werden, dass die analog gemessene Größe am Anfang noch etwas flackert und eventuell beim ersten Auslesen den falschen Wert liefert. Danach wird ein GET-Request für das Taster-Event erstellt und in die Warteschlange eingereiht. Beim nächsten Durchlauf der Betriebssystem-Schleife wird dieser Request dann ebenfalls mit verschickt. Die Auflösung der Tasten-Events ist damit gleich einem Schleifendurchlauf, der bei durchschnittlich 3 Sekunden, maximal bei 7 Sekunden (Trennen und neuer Aufbau der Verbindung) liegt. 
+Die Erkennung eines Tastendrucks geschieht in dem Interrupt, welcher in der Initialisierung definiert wurde. Dort wird direkt beim Interrupt und 0.5 Sekunden nach dem Auslösen gemessen, welcher Taster gedrückt wurde und dann beide Messungen logisch verodert. Damit können wir mit einem Interrupt ebenfalls feststellen, ob beide Taster gleichzeitig gedrückt wurden. Weiterhin kann damit ausgeschlossen werden, dass die analog gemessene Größe am Anfang noch etwas flackert und eventuell beim ersten Auslesen den falschen Wert liefert. Danach wird ein GET-Request für das Taster-Event erstellt und in die Warteschlange eingereiht. Beim nächsten Durchlauf der Betriebssystem-Schleife wird dieser Request dann ebenfalls mit verschickt. Die Auflösung der Tasten-Events ist damit gleich einem Schleifendurchlauf, der bei durchschnittlich 3 Sekunden, maximal bei 7 Sekunden (Trennen und neuer Aufbau der Verbindung) liegt. 
 
 \section{Backend}\label{sec:backend}
-Das Backend des Projekts nimmt die von Sensoren gemessenen Größen entgegen, verarbeitet diese Daten vor, speichert sie und gibt bei Bedarf Zugriff darauf. Es ist in zwei Teile aufgeteilt. Zuerst wird dabei auf die Daten-Verarbeitung eingegangen, welche in einem Java-Servlet auf dem Tomcat-Server läuft, und danach auf die Bereitstellung der Daten für das GWT-Frontend \ref{sec:frontend} mittels GWT-RPC.
+Das Backend des Projekts nimmt die von Sensoren gemessenen Größen entgegen, verarbeitet diese Daten vor, speichert sie und stellt diese Daten zur Verfügung. Das Backend ist in zwei Teile aufgeteilt. Im ersten Teil des Kapitels wird auf die Daten-Verarbeitung eingegangen, welche in einem Java-Servlet auf dem Tomcat-Server läuft, danach auf die Bereitstellung der Daten für das GWT-Frontend \ref{sec:frontend} mittels GWT-RPC.
 
 \subsection{Datenbank-Zugriff}
-Um bequemen Zugriff auf die Datenbank zu erhalten, benutzen wir spezielle Proxy-Klassen, welche die MYSQL-Datenbank in Klassen abstrahiert. Damit wir diese Klassen nicht selbst schreiben mussten (das dazugehörige Entwurfsmuster heißt DAO - DataAccessObjects in Kombination mit DTO - DataTransferObjects), haben wir einen DAO-Generator benutzt, welcher ein gegebenes SQL-Schema interpretiert und dann daraus Java-Klassen generiert. Der Generator, den wir benutzt haben, hieß FireStormDAO 4.0.1. \todo{ Wollen wir Code-Beispiele?}
+Um bequemen Zugriff auf die Datenbank zu erhalten, benutzen wir spezielle Proxy-Klassen, welche die MySQL-Datenbank in Klassen abstrahiert. Damit wir diese Klassen nicht selbst schreiben mussten (das dazugehörige Entwurfsmuster heißt DAO - DataAccessObjects in Kombination mit DTO - DataTransferObjects), haben wir einen DAO-Generator benutzt, welcher ein gegebenes SQL-Schema interpretiert und dann daraus Java-Klassen generiert. Der Generator, den wir benutzt haben, heißt FireStormDAO 4.0.1.
 
 \subsection{Daten-Verarbeitung}
 Die Daten-Verarbeitung besteht aus drei Dingen : 
 \paragraph{Bei der Auswertung der HTTP-GET-Requests} wird zuerst der Typ der gesendeten Daten überprüft. Dieser Typ ist in dem Parameter \textit{action} gespeichert. Anhand dieses Parameters wird dann entschieden, welche Methode zur Verarbeitung aufgerufen wird. Im Moment gibt es zwei zuständige Methoden: doKeyEvent und doProperty (Die Namensgebung orientiert sich an dem Servlet-Interface).\\
-Die doKeyEvent-Methode speichert den Zeitpunkt des Events zusammen mit dem gedrückten Knopf (1: schwarz, 2: gelb, 3: beide) in der Datenbank ab. Danach wird die handleEvent-Methode zur Abarbeitung eventueller Aktionen bei einem Key-Event aufgerufen. (s.u.)\\
+Die doKeyEvent-Methode speichert den Zeitpunkt des Events zusammen mit dem gedrückten Knopf (1: schwarz, 2: gelb, 3: beide) in der Datenbank ab. Danach wird die handleEvent-Methode zur Abarbeitung eventueller Aktionen bei einem Key-Event aufgerufen (s.u.). \\
 Die doProperty-Methode extrahiert die gemessenen Werte aus dem GET-Request. Im Moment sind diese Werte Temperatur, Feuchtigkeit und Lage im Raum (2 Werte). Zuerst müssen die Werte erneut gerundet werden, da die Floating-Point-Unit des Sensor-Knotens nicht besonders genau ist. Dann wird jeder einzelne Wert mit Zeitstempel und einer Referenz auf den sendenden Knoten in der Datenbank abgelegt. 
 
-\paragraph{Die Event-Erkennung} wird direkt im Anschluss gestartet. Hierbei werden die Trigger für den entsprechenden Sensor-Knoten und die dazugehörige Property geladen und dann verglichen, ob die Property den definierten Schwellwert $s$ des Triggers überschreitet. Abbildung \ref{event-detection} verdeutlicht unseren Mechanismus: Der im Trigger definierte Wert von 30°C (schwarze Linie) wurde überschritten. Bei der Ankunft des ersten gemessenen Wertes, der $s$ übertrifft, wird vom Backend ein Start-Event generiert. Dieses bedeutet, dass der Schwellwert überschritten wurde. Damit ein Zittern um den Schwellwert herum ausgeschaltet werden kann, haben wir einen zweiten Schwellwert eingestellt (rote Linie). Dieser liegt um $\Delta$ verschoben in Richtung des normalen Wertebereiches, also bei einem Trigger für Wert-Überschreitung bei $s - \Delta$.
+\paragraph{Die Event-Erkennung} wird direkt im Anschluss gestartet. Hierbei werden die Trigger für den entsprechenden Sensor-Knoten und die dazugehörige Property geladen und dann verglichen, ob die Property den definierten Schwellwert $s$ des Triggers überschreitet. Abbildung \ref{event-detection} verdeutlicht unseren Mechanismus: Der im Trigger definierte Wert von 30°C (schwarze Linie) wurde überschritten. Bei der Ankunft des ersten gemessenen Wertes, der $s$ übertrifft, wird vom Backend ein Start-Event generiert. Dieses bedeutet, dass der Schwellwert überschritten wurde. Damit ein Zittern um den Schwellwert herum ausgeschlossen werden kann, haben wir einen zweiten Schwellwert eingestellt (rote Linie). Dieser liegt um $\Delta$ verschoben in Richtung des normalen Wertebereiches, also bei einem Trigger für Wert-Überschreitung bei $s - \Delta$.
 Wird dieser zweite Schwellwert wieder unterschritten, so wird ein Stop-Event generiert. 
 
 \begin{figure}[htbp]
@@ -369,8 +368,7 @@ Wird dieser zweite Schwellwert wieder unterschritten, so wird ein Stop-Event gen
 
 \paragraph{Das Event-Handling} wird nach jeder Event-Generation gestartet. Dabei wird überprüft, welche Actions für diesen Event-Typ registriert sind und führt diese aus. Es wird zwischen serverseitigen Aktionen und clientseitigen Aktionen unterschieden. Damit könnte das System mit anderen Komponenten gekoppelt werden, z.B. eine Benachrichtigung per SMS, E-Mail oder eben ein clientseitiger Alarm/Notifikation.
 
-\subsection{Daten-Bereitstellung}Die Daten-Bereitstellung für das Frontend geschieht mit GWT-RPC. Eine genauere Erklärung findet sich in Abschnitt \ref{ssec:aufbau}. Die bereitgestellten Methoden dienen der Abfrage der Datenbank und lassen außerdem Manipulationen zu. Hier wird starker Gebrauch von den DataAccessObjects gemacht. \todo{Beispiel-Code?}
-
+\subsection{Daten-Bereitstellung}Die Daten-Bereitstellung für das Frontend geschieht mit GWT-RPC. Eine genauere Erklärung findet sich in Abschnitt \ref{ssec:aufbau}. Die bereitgestellten Methoden dienen der Abfrage der Datenbank und lassen außerdem Manipulationen zu. Hier wird starker Gebrauch von den DataAccessObjects gemacht.
 
 \section{Frontend}\label{sec:frontend}
 Die Sensoren, die im Haushalt verteilt sind, schicken die gemessenen Daten an den Access Point. Nun müssen diese Daten in geeigneter Weise aufbereitet und dem Nutzer zur Verfügung gestellt werden. Hierfür wurde ein web-basiertes Frontend gebaut, welches die gemessenen Daten in Diagrammen darstellt. \\
@@ -439,7 +437,7 @@ Um einen Überblick über das Interface zu bekommen, werden hier einige Screensh
 \end{figure}
   
 \section{Zusammenfassung und Ausblick} \labelSec{ausblick}
-Ziel dieses Projektes war es für uns, sich mit verschiedenen Technologien zu befassen und verschiedene Ebenen der Programmierung zu benutzen. Wir haben Konzepte von administrativen Dingen, wie MYSQL-Datenbanken, Linux und Tomcat-Servern, über die hardwarenahe Programmierung und Arbeit mit externen Hardware-Modulen (WLAN) bis hin zu hochsprachigen Web-Plattformen, welche viele Dinge abstrahieren, aber auch neue Schwierigkeiten bereiten, erlernt und zum ersten Mal viele kleine Systeme zu einem großen Ganzen zusammengefügt. Der entstandene Prototyp ist so sicher nicht praktikabel, allerdings haben wir so weit, wie möglich, die Erweiterbarkeit in den Vordergrund gestellt, sodass es leicht zu einem simplen Home-Automatisation-Framework werden kann. Wir haben im Verlauf des Projekts viele Erfahrungen gesammelt, von denen wir einige hier beschreiben wollen.
+Ziel dieses Projektes war es, sich mit verschiedenen Technologien zu befassen und verschiedene Ebenen der Programmierung zu benutzen. Wir haben Konzepte von administrativen Tätigkeiten, wie MySQL-Datenbanken, Linux und Tomcat-Servern, über die hardwarenahe Programmierung und Arbeit mit externen Hardware-Modulen (WLAN) bis hin zu hochsprachigen Web-Plattformen, welche viele Dinge abstrahieren, aber auch neue Schwierigkeiten bereiten, erlernt und zum ersten Mal viele kleine Systeme zu einem großen Ganzen zusammengefügt. Der entstandene Prototyp ist so sicher nicht praktikabel, allerdings haben wir so weit, wie möglich, die Erweiterbarkeit in den Vordergrund gestellt, sodass es leicht zu einem simplen Home-Automatisation-Framework werden kann. Wir haben im Verlauf des Projekts viele Erfahrungen gesammelt, von denen wir einige hier beschreiben wollen.
 \subsection{Erfahrungen}
 \todo{insert stuff here}
 \subsection{Erweiterungen}
