@@ -408,28 +408,28 @@ Um einen Überblick über das Interface zu bekommen, werden hier einige Screensh
 \item[Abbildung \ref{screen4}:] Diese Ansicht wird gezeigt, wenn der Nutzer auf „Bearbeiten“ des Sensorknotens klickt. Der Ort des Sensors kann bearbeitet werden, die IP und die ID allerdings nicht.
 \end{description}
 
-\begin{figure}[htbp]
+\begin{figure}[h!]
    \centering
    \includegraphics[width=12cm]{fig/screen1.png}
    \caption{Screenshot Drop-down-Box}
    \label{screen1}
 \end{figure}
 
-\begin{figure}[htbp]
+\begin{figure}[h!]
    \centering
    \includegraphics[width=12cm]{fig/screen2.png}
    \caption{Screenshot Hauptansicht}
    \label{screen2}
 \end{figure}
 
-\begin{figure}[htbp]
+\begin{figure}[h!]
    \centering
    \includegraphics[width=12cm]{fig/screen3.png}
    \caption{Screenshot Eventlisten-Ansicht}
    \label{screen3}
 \end{figure}
 
-\begin{figure}[htbp]
+\begin{figure}[h!]
    \centering
    \includegraphics[width=12cm]{fig/screen4.png}
    \caption{Screenshot „Bearbeiten“}
@@ -439,9 +439,17 @@ Um einen Überblick über das Interface zu bekommen, werden hier einige Screensh
 \section{Zusammenfassung und Ausblick} \labelSec{ausblick}
 Ziel dieses Projektes war es, sich mit verschiedenen Technologien zu befassen und verschiedene Ebenen der Programmierung zu benutzen. Wir haben Konzepte von administrativen Tätigkeiten, wie MySQL-Datenbanken, Linux und Tomcat-Servern, über die hardwarenahe Programmierung und Arbeit mit externen Hardware-Modulen (WLAN) bis hin zu hochsprachigen Web-Plattformen, welche viele Dinge abstrahieren, aber auch neue Schwierigkeiten bereiten, erlernt und zum ersten Mal viele kleine Systeme zu einem großen Ganzen zusammengefügt. Der entstandene Prototyp ist so sicher nicht praktikabel, allerdings haben wir so weit, wie möglich, die Erweiterbarkeit in den Vordergrund gestellt, sodass es leicht zu einem simplen Home-Automatisation-Framework werden kann. Wir haben im Verlauf des Projekts viele Erfahrungen gesammelt, von denen wir einige hier beschreiben wollen.
 \subsection{Erfahrungen}
-\todo{insert stuff here}
+
+\paragraph{Tomcat Webserver}
+Die Benutzung und Konfiguration von Appache Tomcat Webserver ist sehr aufwendig und nicht sehr intuitiv. Wir haben sehr viel Zeit damit verbracht, alle Einstellungen vorzunehmen und danach unser Projekt als War-Archiv zu installieren. Diesen Installations-Vorgang mussten wir mehrfach wiederholen, weil manche Dateien nicht aktualisiert wurden. Wie genau der Deployment-Vorgang funktioniert, ist uns bis heute nicht klar. Wir empfinden großen Respekt für die Administratoren, die alle Parameter solcher Programme kennen und genau wissen, wie dieses gigantische Stück Software funktioniert. 
+
+\paragraph{Hardwarenahe Programmierung}
+Die Programmierung des Sensor-Knotens war ebenfalls sehr zeitaufwendig. Aufgrund unzureichender Kenntnisse über die Funktionsweise von Mikrocontrollern, ist es uns zunächst schwer gefallen, genau zu durchschauen, was passiert. Man muss seine (Java-)Denkweise komplett umstellen: Es ist nur sehr wenig Speicher vorhanden, man muss nicht objekt-orientiert programmieren und es sind so gut, wie keine Abstraktionen vorhanden. Nachdem die ersten Schritte aber gemeistert waren, konnten wir doch recht gut nachvollziehen, was auf dem Controller-Board passiert und dem entsprechend programmieren.
 \subsection{Erweiterungen}
-Abschließend wollen wir aufzeigen, welche Erweiterungen interessant für das System wären. 
+Abschließend wollen wir aufzeigen, welche Erweiterungen interessant für das System wären. Teilweise wurden diese schon im Abschnitt \ref{architecture} aufgezeigt. \\
+Weitere 
+android app (mit push notifications)
+befehle an Sensor senden
 \todo{teilweise siehe architektur, sonst blablabla}
 
 \clearpage
