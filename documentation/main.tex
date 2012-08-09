@@ -337,8 +337,12 @@ Das „Betriebsystem“ besteht aus einer Endlos-Schleife, in der folgende Aktio
 Die Erkennung eines Tastendrucks geschieht in dem in der Initialisierung definierten Interrupt. Dort wird direkt beim Interrupt und 0.5 Sekunden nach dem Auslösen gemessen, welcher Taster gedrückt wurde und dann beide Messungen logisch verodert. Damit können wir mit einem Interrupt ebenfalls feststellen, falls beide Taster gleichzeitig gedrückt wurden. Weiterhin kann damit ausgeschlossen werden, dass die analog gemessene Größe am Anfang noch etwas flackert und eventuell beim ersten Auslesen den falschen Wert liefert. Danach wird ein GET-Request für das Taster-Event erstellt und in die Warteschlange eingereiht. Beim nächsten Durchlauf der Betriebssystem-Schleife wird dieser Request dann ebenfalls mit verschickt. Die Auflösung der Tasten-Events ist damit gleich einem Schleifendurchlauf, der bei durchschnittlich 3 Sekunden, maximal bei 7 Sekunden (Trennen und neuer Aufbau der Verbindung) liegt. 
 
 \section{Backend}
+Das Backend des Projekts nimmt die von Sensoren gemessenen Größen entgegen, verarbeitet diese Daten vor, speichert sie und gibt bei Bedarf Zugriff darauf. Es ist in zwei Teile aufgeteilt.  
 
 \subsection{Daten-Verarbeitung}
+\paragraph{Event-Erkennung}
+\paragraph{Auswertung der HTTP-GET-Requests}
+
 
 \subsection{Daten-Bereitstellung}
 
